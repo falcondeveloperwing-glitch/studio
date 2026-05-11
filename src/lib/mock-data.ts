@@ -8,6 +8,8 @@ export const MOCK_CHATS = [
     unread: true,
     updatedAt: new Date().toISOString(),
     avatarSeed: 'marcus',
+    sentiment: 'Positive',
+    intent: 'High Purchase Intent',
     messages: [
       { role: 'customer', content: 'Hey, I love the new high-performance collection!', type: 'text', timestamp: new Date(Date.now() - 3600000).toISOString() },
       { role: 'ai', content: 'Thank you Marcus! We designed it specifically for high-intensity training. Are you looking for the hoodies or the compression gear?', type: 'automated', timestamp: new Date(Date.now() - 3500000).toISOString() },
@@ -25,6 +27,8 @@ export const MOCK_CHATS = [
     unread: false,
     updatedAt: new Date(Date.now() - 7200000).toISOString(),
     avatarSeed: 'elena',
+    sentiment: 'Neutral',
+    intent: 'Information Seeking',
     messages: [
       { role: 'customer', content: 'Hi! What is the price for the limited designer set?', type: 'text', timestamp: new Date(Date.now() - 7200000).toISOString() },
       { role: 'ai', content: 'The Designer Set is currently $249. It includes the premium canvas bag and the signed lookbook. We have it in stock in all sizes!', type: 'automated', timestamp: new Date(Date.now() - 7100000).toISOString() },
@@ -39,6 +43,8 @@ export const MOCK_CHATS = [
     unread: true,
     updatedAt: new Date(Date.now() - 14400000).toISOString(),
     avatarSeed: 'jordan',
+    sentiment: 'Frustrated',
+    intent: 'Support Escalation',
     messages: [
       { role: 'customer', content: 'I ordered 3 days ago and havent seen tracking. Order #8492.', type: 'text', timestamp: new Date(Date.now() - 14400000).toISOString() },
       { role: 'ai', content: 'I apologize for the delay, Jordan. Checking our dispatch logs... It seems the carrier is experiencing delays in your region. I am escalating this to our logistics team for a manual update.', type: 'automated', timestamp: new Date(Date.now() - 14300000).toISOString() },

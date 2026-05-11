@@ -16,7 +16,9 @@ import {
   Play,
   TrendingUp,
   ShieldCheck,
-  Globe
+  Globe,
+  BrainCircuit,
+  Command
 } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -34,8 +36,8 @@ export default function LandingPage() {
   const heroImg = PlaceHolderImages.find(img => img.id === 'hero-dashboard');
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden bg-background">
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-mesh opacity-70 pointer-events-none" />
+    <div className="min-h-screen relative overflow-x-hidden bg-background selection:bg-primary/30">
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-mesh opacity-80 pointer-events-none" />
       <div className="absolute top-[-15%] left-[-5%] w-[60%] h-[60%] bg-primary/20 blur-[180px] rounded-full pointer-events-none animate-pulse" />
       <div className="absolute inset-0 noise z-0" />
 
@@ -47,41 +49,41 @@ export default function LandingPage() {
           <span className="font-headline text-3xl font-bold tracking-tighter text-white">ReplyRush<span className="text-primary">AI</span></span>
         </motion.div>
         
-        <div className="hidden lg:flex items-center gap-12 text-[11px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+        <div className="hidden lg:flex items-center gap-12 text-[11px] font-black uppercase tracking-[0.4em] text-muted-foreground/50">
           <Link href="#features" className="hover:text-white transition-colors">Neural Logic</Link>
-          <Link href="#pricing" className="hover:text-white transition-colors">Enterprise</Link>
+          <Link href="#enterprise" className="hover:text-white transition-colors">Enterprise</Link>
           <Link href="#demo" className="hover:text-white transition-colors">Showcase</Link>
         </div>
 
         <div className="flex items-center gap-6">
           <Link href="/login" className="hidden sm:block">
-            <Button variant="ghost" className="text-muted-foreground hover:text-white font-bold text-xs uppercase tracking-widest">Client Portal</Button>
+            <Button variant="ghost" className="text-muted-foreground hover:text-white font-bold text-[10px] uppercase tracking-widest">Client Portal</Button>
           </Link>
           <Link href="/signup">
-            <Button className="bg-primary hover:bg-primary/90 glow-primary rounded-[1.25rem] font-bold h-14 px-10 text-sm tracking-tight transition-all duration-500 hover:scale-105 active:scale-95 shadow-2xl">
+            <Button className="bg-primary hover:bg-primary/90 glow-primary rounded-2xl font-bold h-14 px-10 text-xs uppercase tracking-widest transition-all duration-500 hover:scale-105 active:scale-95 shadow-2xl text-white">
               Get Started
             </Button>
           </Link>
         </div>
       </nav>
 
-      <section className="container mx-auto px-8 pt-24 lg:pt-40 pb-40 text-center relative z-10">
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-primary text-[10px] font-black tracking-[0.3em] mb-12 uppercase">
+      <section className="container mx-auto px-8 pt-32 lg:pt-48 pb-40 text-center relative z-10">
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-primary text-[10px] font-black tracking-[0.4em] mb-12 uppercase">
           <Sparkles size={12} className="animate-pulse" />
-          Next-Gen AI Fleet Deployment is Live
+          Next-Gen AI Sales Fleet is Live
         </motion.div>
         
-        <motion.h1 {...fadeInUp} className="font-headline text-5xl sm:text-7xl md:text-9xl font-bold mb-10 max-w-7xl mx-auto leading-[0.9] tracking-tighter text-gradient pb-6">
+        <motion.h1 {...fadeInUp} className="font-headline text-6xl sm:text-8xl md:text-9xl font-bold mb-10 max-w-7xl mx-auto leading-[0.85] tracking-tighter text-gradient pb-6">
           Your AI Instagram <br className="hidden lg:block" /> Sales Employee.
         </motion.h1>
         
-        <motion.p {...fadeInUp} transition={{ delay: 0.2 }} className="text-xl lg:text-3xl text-muted-foreground max-w-3xl mx-auto mb-20 font-body leading-relaxed opacity-80">
-          Reply in milliseconds, recover 40% more lost sales, and automate every conversation with a "neural agent" that knows your brand perfectly.
+        <motion.p {...fadeInUp} transition={{ delay: 0.2 }} className="text-xl lg:text-3xl text-muted-foreground max-w-3xl mx-auto mb-20 font-body leading-relaxed opacity-70 font-light">
+          Reply in milliseconds, recover 40% more lost sales, and automate negotiations with a neural agent that knows your brand perfectly.
         </motion.p>
         
-        <motion.div {...fadeInUp} transition={{ delay: 0.3 }} className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-32">
+        <motion.div {...fadeInUp} transition={{ delay: 0.3 }} className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-40">
           <Link href="/signup" className="w-full sm:w-auto">
-            <Button size="lg" className="w-full h-20 px-14 text-xl font-bold bg-primary hover:bg-primary/90 glow-primary rounded-[2rem] group transition-all duration-500 hover:scale-[1.02] shadow-2xl">
+            <Button size="lg" className="w-full h-20 px-14 text-xl font-bold bg-primary hover:bg-primary/90 glow-primary rounded-[2rem] group transition-all duration-500 hover:scale-[1.02] shadow-2xl text-white">
               Deploy Free Trial <ArrowRight className="ml-3 group-hover:translate-x-2 transition-transform" />
             </Button>
           </Link>
@@ -95,7 +97,7 @@ export default function LandingPage() {
           <div className="rounded-[3.5rem] p-2 bg-gradient-to-b from-white/20 to-transparent">
             <div className="rounded-[3rem] overflow-hidden border border-white/10 relative aspect-[16/10] bg-black/60 shadow-[0_50px_100px_-20px_rgba(0,0,0,1)]">
               {heroImg ? (
-                <Image src={heroImg.imageUrl} alt="Neural Dashboard" fill className="object-cover opacity-80 group-hover:scale-[1.02] transition-transform duration-[3s]" priority />
+                <Image src={heroImg.imageUrl} alt="Neural Dashboard" fill className="object-cover opacity-80 group-hover:scale-[1.02] transition-transform duration-[4s]" priority />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center"><Zap className="text-white/10 animate-pulse" size={80} /></div>
               )}
@@ -118,41 +120,46 @@ export default function LandingPage() {
 
       <section id="features" className="container mx-auto px-8 py-40 relative">
         <div className="flex flex-col lg:flex-row items-end justify-between gap-10 mb-32">
-          <div className="max-w-2xl">
+          <div className="max-w-3xl">
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="inline-block px-5 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-8">
               Neural Precision Fleet
             </motion.div>
-            <h2 className="font-headline text-5xl lg:text-8xl font-bold tracking-tighter leading-[0.95]">Enterprise Intelligence <br/> at Startup Speed.</h2>
+            <h2 className="font-headline text-6xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-gradient">Enterprise Intelligence <br/> at Startup Speed.</h2>
           </div>
-          <p className="max-w-md text-xl text-muted-foreground leading-relaxed opacity-70">We built ReplyRush to give Instagram brands a dedicated sales army that never sleeps, never misses a lead, and closes deals exactly like you do.</p>
+          <p className="max-w-md text-xl text-muted-foreground leading-relaxed opacity-60 font-light">We built ReplyRush to give Instagram brands a dedicated sales army that never sleeps, never misses a lead, and closes deals exactly like you do.</p>
         </div>
 
         <motion.div variants={stagger} initial="initial" whileInView="animate" viewport={{ once: true }} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {[
-            { title: 'Neural Intent', icon: Zap, color: 'primary', desc: 'Our logic engine reads between the lines, understanding intent, sentiment, and buying signals instantly.' },
-            { title: 'Sales Recovery', icon: TrendingUp, color: 'emerald-500', desc: 'Auto-pilot abandoned cart recovery that re-engages customers with intelligent, personalized incentives.' },
-            { title: 'Brand Sync', icon: Globe, color: 'accent', desc: 'Sync your Shopify, PDFs, or policy docs. The AI trains in minutes to provide perfect responses every time.' }
+            { title: 'Neural Intent', icon: BrainCircuit, color: 'primary', desc: 'Our logic engine reads between the lines, understanding buyer sentiment and urgency instantly.' },
+            { title: 'Sales Recovery', icon: TrendingUp, color: 'emerald-500', desc: 'Auto-pilot recovery that re-engages abandoned leads with intelligent, personalized incentives.' },
+            { title: 'Brand Sync', icon: Command, color: 'accent', desc: 'Sync Shopify, PDFs, or policy docs. The AI trains in minutes to provide pixel-perfect responses.' }
           ].map((feature, i) => (
             <motion.div key={i} variants={fadeInUp}>
-              <GlassCard className="h-full p-12 border-white/[0.05] hover:border-white/20">
+              <GlassCard className="h-full p-12 border-white/[0.05] hover:border-white/20 rounded-[3rem]">
                 <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center mb-10 shadow-2xl ${feature.color === 'primary' ? 'bg-primary/20 text-primary' : feature.color === 'accent' ? 'bg-accent/20 text-accent' : 'bg-emerald-500/20 text-emerald-500'}`}>
                   <feature.icon size={36} />
                 </div>
                 <h3 className="font-headline text-3xl font-bold mb-6 tracking-tight">{feature.title}</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed opacity-80">{feature.desc}</p>
+                <p className="text-muted-foreground text-lg leading-relaxed opacity-60 font-light">{feature.desc}</p>
               </GlassCard>
             </motion.div>
           ))}
         </motion.div>
       </section>
 
-      <footer className="container mx-auto px-10 py-24 border-t border-white/[0.05] text-center">
-        <div className="flex flex-col items-center gap-10">
+      <footer className="container mx-auto px-10 py-32 border-t border-white/[0.05] text-center">
+        <div className="flex flex-col items-center gap-12">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center"><Zap className="text-white fill-white" size={20} /></div>
-            <span className="font-headline text-2xl font-bold">ReplyRush<span className="text-primary">AI</span></span>
+            <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center glow-primary"><Zap className="text-white fill-white" size={24} /></div>
+            <span className="font-headline text-3xl font-bold">ReplyRush<span className="text-primary">AI</span></span>
           </div>
-          <p className="text-[10px] font-black text-muted-foreground/30 uppercase tracking-[0.6em]">© 2025 ReplyRush AI — Global Neural Commerce Leader.</p>
+          <div className="flex gap-12 text-[10px] font-black text-muted-foreground uppercase tracking-[0.4em]">
+            <Link href="#" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="#" className="hover:text-white transition-colors">Terms</Link>
+            <Link href="#" className="hover:text-white transition-colors">API</Link>
+          </div>
+          <p className="text-[10px] font-black text-muted-foreground/30 uppercase tracking-[0.6em] mt-10">© 2025 ReplyRush AI — Global Neural Commerce Leader.</p>
         </div>
       </footer>
     </div>
