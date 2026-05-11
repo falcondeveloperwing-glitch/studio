@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -47,16 +46,16 @@ export default function LandingPage() {
       <div className="absolute inset-0 noise z-0" />
 
       {/* Navigation */}
-      <nav className="container mx-auto px-8 py-8 flex items-center justify-between relative z-50">
+      <nav className="container mx-auto px-6 lg:px-8 py-6 lg:py-8 flex items-center justify-between relative z-50">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-3 group cursor-pointer"
         >
-          <div className="w-11 h-11 rounded-2xl bg-primary flex items-center justify-center glow-primary group-hover:scale-110 transition-transform duration-500">
-            <Zap className="text-white fill-white" size={22} />
+          <div className="w-10 h-10 lg:w-11 lg:h-11 rounded-xl lg:rounded-2xl bg-primary flex items-center justify-center glow-primary group-hover:scale-110 transition-transform duration-500">
+            <Zap className="text-white fill-white" size={20} />
           </div>
-          <span className="font-headline text-2xl font-bold tracking-tighter text-white">ReplyRush<span className="text-primary">AI</span></span>
+          <span className="font-headline text-xl lg:text-2xl font-bold tracking-tighter text-white">ReplyRush<span className="text-primary">AI</span></span>
         </motion.div>
         
         <div className="hidden lg:flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">
@@ -65,33 +64,33 @@ export default function LandingPage() {
           <Link href="#demo" className="hover:text-white transition-colors">Showcase</Link>
         </div>
 
-        <div className="flex items-center gap-4">
-          <Link href="/login">
+        <div className="flex items-center gap-3 lg:gap-4">
+          <Link href="/login" className="hidden sm:block">
             <Button variant="ghost" className="text-muted-foreground hover:text-white font-bold text-xs uppercase tracking-widest">Login</Button>
           </Link>
           <Link href="/signup">
-            <Button className="bg-primary hover:bg-primary/90 glow-primary rounded-2xl font-bold h-12 px-8 text-sm tracking-tight transition-all duration-500 hover:scale-105 active:scale-95">
-              Start Free Trial
+            <Button className="bg-primary hover:bg-primary/90 glow-primary rounded-xl lg:rounded-2xl font-bold h-10 lg:h-12 px-5 lg:px-8 text-xs lg:text-sm tracking-tight transition-all duration-500 hover:scale-105 active:scale-95">
+              Start <span className="hidden sm:inline">Free Trial</span>
             </Button>
           </Link>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-8 pt-32 pb-48 text-center relative z-10">
+      <section className="container mx-auto px-6 lg:px-8 pt-20 lg:pt-32 pb-32 lg:pb-48 text-center relative z-10">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
-          className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-primary text-[10px] font-black tracking-[0.2em] mb-12 uppercase"
+          className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] text-primary text-[8px] lg:text-[10px] font-black tracking-[0.2em] mb-8 lg:mb-12 uppercase"
         >
-          <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-          Neural Sales Engine v4.0 is Live
+          <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+          Neural Sales Engine v4.2 is Live
         </motion.div>
         
         <motion.h1 
           {...fadeInUp}
-          className="font-headline text-6xl md:text-8xl lg:text-9xl font-bold mb-10 max-w-6xl mx-auto leading-[0.85] tracking-tighter text-gradient py-4"
+          className="font-headline text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-bold mb-6 lg:mb-10 max-w-6xl mx-auto leading-[1] lg:leading-[0.85] tracking-tighter text-gradient py-2 lg:py-4"
         >
           Your AI Instagram <br className="hidden lg:block" /> Sales Team
         </motion.h1>
@@ -99,7 +98,7 @@ export default function LandingPage() {
         <motion.p 
           {...fadeInUp}
           transition={{ delay: 0.2 }}
-          className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-16 font-body leading-relaxed"
+          className="text-lg lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-10 lg:mb-16 font-body leading-relaxed"
         >
           Reply instantly, recover lost customers, and automate every conversation 24/7 with a sales agent that sounds like you.
         </motion.p>
@@ -107,29 +106,29 @@ export default function LandingPage() {
         <motion.div 
           {...fadeInUp}
           transition={{ delay: 0.3 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-32"
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 lg:gap-6 mb-20 lg:mb-32"
         >
-          <Link href="/signup">
-            <Button size="lg" className="h-20 px-12 text-xl font-bold bg-primary hover:bg-primary/90 glow-primary rounded-3xl group transition-all duration-500 hover:scale-[1.02] shadow-2xl">
+          <Link href="/signup" className="w-full sm:w-auto">
+            <Button size="lg" className="w-full h-16 lg:h-20 px-10 lg:px-12 text-lg lg:text-xl font-bold bg-primary hover:bg-primary/90 glow-primary rounded-2xl lg:rounded-3xl group transition-all duration-500 hover:scale-[1.02] shadow-2xl">
               Launch Agent <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
-          <Button variant="outline" size="lg" className="h-20 px-12 text-xl font-bold border-white/10 glass rounded-3xl hover:bg-white/10 transition-all duration-500 group">
+          <Button variant="outline" size="lg" className="w-full sm:w-auto h-16 lg:h-20 px-10 lg:px-12 text-lg lg:text-xl font-bold border-white/10 glass rounded-2xl lg:rounded-3xl hover:bg-white/10 transition-all duration-500 group">
             <Play className="mr-3 fill-white group-hover:scale-110 transition-transform" size={20} /> Watch Demo
           </Button>
         </motion.div>
 
         {/* Cinematic Dashboard Preview */}
         <motion.div 
-          initial={{ opacity: 0, y: 100 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.4 }}
-          className="relative max-w-7xl mx-auto px-4"
+          className="relative max-w-7xl mx-auto"
         >
-          <div className="absolute inset-0 bg-primary/20 blur-[180px] rounded-[4rem] -z-10 animate-pulse" />
-          <div className="gradient-border-mask rounded-[3rem]">
-            <GlassCard variant="darker" className="p-3 border-none shadow-[0_40px_100px_rgba(0,0,0,0.8)] rounded-[3rem]">
-              <div className="rounded-[2.5rem] overflow-hidden border border-white/5 relative aspect-[16/9] bg-black/40">
+          <div className="absolute inset-0 bg-primary/20 blur-[100px] lg:blur-[180px] rounded-[2rem] lg:rounded-[4rem] -z-10 animate-pulse" />
+          <div className="gradient-border-mask rounded-[1.5rem] lg:rounded-[3rem]">
+            <GlassCard variant="darker" className="p-1 lg:p-3 border-none shadow-[0_20px_60px_rgba(0,0,0,0.8)] rounded-[1.5rem] lg:rounded-[3rem]">
+              <div className="rounded-[1.25rem] lg:rounded-[2.5rem] overflow-hidden border border-white/5 relative aspect-[16/10] sm:aspect-[16/9] bg-black/40">
                 {heroImg ? (
                   <Image 
                     src={heroImg.imageUrl} 
@@ -137,19 +136,18 @@ export default function LandingPage() {
                     fill
                     className="object-cover opacity-90"
                     priority
-                    data-ai-hint="futuristic SaaS dashboard"
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Zap className="text-white/10 animate-pulse" size={80} />
+                    <Zap className="text-white/10 animate-pulse" size={60} />
                   </div>
                 )}
                 
-                {/* Overlay Floating Card */}
+                {/* Overlay Floating Card - Hidden on Mobile */}
                 <motion.div 
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute bottom-12 left-12 p-6 glass rounded-3xl w-72 text-left border-primary/20"
+                  className="hidden md:block absolute bottom-12 left-12 p-6 glass rounded-3xl w-72 text-left border-primary/20"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 rounded-xl bg-primary/20 text-primary">
@@ -157,7 +155,7 @@ export default function LandingPage() {
                     </div>
                     <span className="text-xs font-bold uppercase tracking-widest text-white">AI Suggestion</span>
                   </div>
-                  <p className="text-sm text-white/90 leading-relaxed italic">"I see Jordan asked about the XL black hoodie. I've sent the sizing guide and a 10% discount link."</p>
+                  <p className="text-sm text-white/90 leading-relaxed italic">"I see Marcus asked about sizing. I've sent the guide and a recovery discount."</p>
                 </motion.div>
               </div>
             </GlassCard>
@@ -166,12 +164,12 @@ export default function LandingPage() {
       </section>
 
       {/* Feature Section */}
-      <section id="features" className="container mx-auto px-8 py-40 relative">
-        <div className="text-center mb-32 max-w-3xl mx-auto">
+      <section id="features" className="container mx-auto px-6 lg:px-8 py-20 lg:py-40 relative">
+        <div className="text-center mb-16 lg:mb-32 max-w-3xl mx-auto">
           <motion.div {...fadeInUp} className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-            Advanced Automations
+            Advanced Neural Intelligence
           </motion.div>
-          <motion.h2 {...fadeInUp} className="font-headline text-5xl md:text-7xl font-bold mb-8 tracking-tighter leading-[0.9]">
+          <motion.h2 {...fadeInUp} className="font-headline text-4xl lg:text-7xl font-bold mb-6 lg:mb-8 tracking-tighter leading-[1] lg:leading-[0.9]">
             Scale without <br className="hidden md:block" /> the headcount.
           </motion.h2>
         </div>
@@ -181,18 +179,18 @@ export default function LandingPage() {
           initial="initial"
           whileInView="animate"
           viewport={{ once: true }}
-          className="grid md:grid-cols-3 gap-10"
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10"
         >
           {[
             { 
               title: 'Contextual Logic', 
-              icon: BrainCircuit, 
+              icon: Zap, 
               color: 'primary',
               desc: 'Our AI understands intent, tone, and slang. It closes deals using your specific brand voice and store policies.'
             },
             { 
               title: 'Visual Workflow', 
-              icon: Zap, 
+              icon: MessageSquare, 
               color: 'accent',
               desc: 'Design complex multi-step DMs without code. Qualify leads, fetch order data, and send checkout links instantly.'
             },
@@ -204,58 +202,22 @@ export default function LandingPage() {
             }
           ].map((feature, i) => (
             <motion.div key={i} variants={fadeInUp}>
-              <GlassCard className="h-full p-12 border-white/[0.04] hover:border-white/10 group cursor-pointer transition-all duration-700">
-                <div className={`w-16 h-16 rounded-[2rem] flex items-center justify-center mb-10 transition-all duration-700 group-hover:scale-110 shadow-2xl ${feature.color === 'primary' ? 'bg-primary/20 text-primary' : feature.color === 'accent' ? 'bg-accent/20 text-accent' : 'bg-emerald-500/20 text-emerald-500'}`}>
-                  <feature.icon size={32} />
+              <GlassCard className="h-full p-8 lg:p-12 border-white/[0.04] hover:border-white/10 group cursor-pointer transition-all duration-700">
+                <div className={`w-12 h-12 lg:w-16 lg:h-16 rounded-xl lg:rounded-[2rem] flex items-center justify-center mb-8 lg:mb-10 transition-all duration-700 group-hover:scale-110 shadow-2xl ${feature.color === 'primary' ? 'bg-primary/20 text-primary' : feature.color === 'accent' ? 'bg-accent/20 text-accent' : 'bg-emerald-500/20 text-emerald-500'}`}>
+                  <feature.icon size={28} />
                 </div>
-                <h3 className="font-headline text-3xl font-bold mb-6 tracking-tight text-white">{feature.title}</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed">{feature.desc}</p>
+                <h3 className="font-headline text-2xl lg:text-3xl font-bold mb-4 lg:mb-6 tracking-tight text-white">{feature.title}</h3>
+                <p className="text-muted-foreground text-base lg:text-lg leading-relaxed">{feature.desc}</p>
               </GlassCard>
             </motion.div>
           ))}
         </motion.div>
       </section>
 
-      {/* CTA Section */}
-      <section className="container mx-auto px-8 py-48">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-br from-primary/30 via-black to-transparent border border-white/[0.05] p-24 rounded-[4rem] text-center relative overflow-hidden shadow-2xl"
-        >
-          <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-primary/10 blur-[150px] rounded-full animate-pulse" />
-          <h2 className="font-headline text-6xl md:text-8xl font-bold mb-10 tracking-tighter text-gradient py-2">Ready to scale?</h2>
-          <p className="text-2xl text-muted-foreground mb-16 max-w-2xl mx-auto leading-relaxed font-body">Join 500+ premium Instagram brands automating their growth today.</p>
-          <Link href="/signup">
-            <Button size="lg" className="h-24 px-16 text-3xl font-black bg-primary hover:bg-primary/90 glow-primary rounded-[2rem] transition-all duration-500 hover:scale-[1.05] shadow-[0_20px_60px_rgba(104,20,247,0.4)]">
-              Start Free Trial <ArrowRight className="ml-4" size={32} />
-            </Button>
-          </Link>
-          <div className="mt-16 flex flex-wrap items-center justify-center gap-12 text-[11px] font-black text-muted-foreground uppercase tracking-[0.3em]">
-            <span className="flex items-center gap-3"><CheckCircle2 size={18} className="text-primary" /> Instant Setup</span>
-            <span className="flex items-center gap-3"><Users size={18} className="text-primary" /> 24/7 Support</span>
-            <span className="flex items-center gap-3"><ShieldCheck size={18} className="text-primary" /> Enterprise Security</span>
-          </div>
-        </motion.div>
-      </section>
-
-      <footer className="container mx-auto px-8 py-24 border-t border-white/[0.05] text-center">
-        <p className="text-[11px] font-black text-muted-foreground/40 uppercase tracking-[0.6em]">© 2025 ReplyRush AI — The Future of Commerce.</p>
+      {/* Footer */}
+      <footer className="container mx-auto px-8 py-12 lg:py-24 border-t border-white/[0.05] text-center">
+        <p className="text-[9px] lg:text-[11px] font-black text-muted-foreground/40 uppercase tracking-[0.4em] lg:tracking-[0.6em]">© 2025 ReplyRush AI — The Future of Commerce.</p>
       </footer>
     </div>
-  );
-}
-
-function BrainCircuit({ size, className }: { size?: number, className?: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0 .3 4.96 2.5 2.5 0 0 0 3.32 1.45 2.5 2.5 0 0 0 4.96.46 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0-.3-4.96 2.5 2.5 0 0 0-3.32-1.45z"></path>
-      <path d="M15 13a6 6 0 0 1-6-6"></path>
-      <circle cx="9" cy="7" r="1"></circle>
-      <circle cx="15" cy="13" r="1"></circle>
-      <path d="M12 12v10"></path>
-      <path d="M9 22h6"></path>
-    </svg>
   );
 }
