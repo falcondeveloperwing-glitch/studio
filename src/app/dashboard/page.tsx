@@ -17,7 +17,8 @@ import {
   ExternalLink,
   ChevronRight,
   BrainCircuit,
-  Command
+  Command,
+  ArrowRight
 } from 'lucide-react';
 import { 
   XAxis, 
@@ -46,87 +47,89 @@ export default function DashboardOverview() {
   const { user } = useLocalAuth();
 
   return (
-    <div className="p-8 lg:p-14 space-y-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
-        <div>
-          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3 mb-6">
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 rounded-full px-5 py-1.5 text-[10px] font-black tracking-[0.4em] uppercase">
-              Neural Network Active
+    <div className="p-8 lg:p-16 space-y-20 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+      <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-12">
+        <div className="space-y-6">
+          <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-4">
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 rounded-full px-6 py-2 text-[10px] font-black tracking-[0.4em] uppercase">
+              Neural Fleet: Operational
             </Badge>
-            <span className="text-[10px] text-muted-foreground font-black tracking-[0.2em] uppercase opacity-40">Load: 0.12ms</span>
+            <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-black tracking-widest uppercase opacity-40">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Latency: 0.12ms
+            </div>
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="font-headline text-6xl lg:text-8xl font-bold tracking-tighter mb-6">
-            Operational, {user?.displayName?.split(' ')[0] || 'Chief'}.
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="font-headline text-6xl lg:text-8xl font-bold tracking-tighter leading-[0.85] text-white">
+            System Online, <br/> {user?.displayName?.split(' ')[0] || 'Director'}.
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-muted-foreground text-2xl lg:text-3xl max-w-2xl opacity-50 leading-relaxed font-light">
-            Your AI sales fleet is currently managing <span className="text-white font-bold underline decoration-primary/40 underline-offset-8">142</span> active customer negotiations.
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-muted-foreground text-2xl lg:text-3xl max-w-2xl opacity-50 font-light leading-relaxed">
+            Your AI fleet is currently negotiating with <span className="text-white font-bold underline decoration-primary/40 underline-offset-8">142</span> high-intent shoppers.
           </motion.p>
         </div>
         
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}>
-          <GlassCard variant="darker" className="py-8 px-12 flex items-center gap-10 border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.8)] rounded-[3rem]">
-            <div className="flex -space-x-5">
+          <GlassCard variant="darker" className="py-10 px-14 flex items-center gap-12 border-white/5 shadow-3xl rounded-[3rem]">
+            <div className="flex -space-x-6">
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className="w-16 h-16 rounded-full border-4 border-[#0a0a0c] bg-muted overflow-hidden transition-transform hover:scale-110 hover:z-10 cursor-pointer shadow-2xl">
-                  <img src={`https://picsum.photos/seed/user${i}/100/100`} alt="Active Shopper" className="w-full h-full object-cover" />
+                <div key={i} className="w-20 h-20 rounded-full border-8 border-[#020203] bg-muted overflow-hidden transition-all hover:scale-110 hover:z-10 cursor-pointer shadow-2xl">
+                  <img src={`https://picsum.photos/seed/user${i}/150/150`} alt="Active Shopper" className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>
             <div>
-              <p className="font-headline font-bold text-white text-3xl tracking-tight">42 Live</p>
-              <p className="text-muted-foreground text-[10px] uppercase font-black tracking-[0.3em] opacity-40">Neural Shoppers</p>
+              <p className="font-headline font-bold text-white text-4xl tracking-tight">42 Live</p>
+              <p className="text-muted-foreground text-[10px] uppercase font-black tracking-[0.4em] opacity-40">Active Threads</p>
             </div>
           </GlassCard>
         </motion.div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         {[
-          { label: 'Revenue Recovered', value: MOCK_STATS.revenueRecovered, change: '+31.4%', icon: DollarSign, color: 'emerald-500', glow: true },
-          { label: 'AI Negotiations', value: MOCK_STATS.aiReplies, change: '+18.2%', icon: MessageCircle, color: 'primary' },
-          { label: 'Neural Accuracy', value: '99.8%', change: 'Elite', icon: BrainCircuit, color: 'accent' },
-          { label: 'Closure Velocity', value: '0.3s', change: '-42%', icon: Clock, color: 'primary' }
+          { label: 'Revenue Recovered', value: MOCK_STATS.revenueRecovered, change: '+31.4%', icon: DollarSign, color: 'primary', glow: true },
+          { label: 'Neural Negotiations', value: MOCK_STATS.aiReplies, change: '+18.2%', icon: MessageCircle, color: 'accent' },
+          { label: 'Accuracy Rating', value: '99.8%', change: 'Elite', icon: BrainCircuit, color: 'primary' },
+          { label: 'Closure Velocity', value: '0.24s', change: '-42%', icon: Clock, color: 'emerald-500' }
         ].map((stat, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 + (i * 0.1) }}>
-            <GlassCard className={stat.glow ? "border-primary/30 bg-primary/[0.04] glow-primary group rounded-[2.5rem]" : "border-white/[0.04] group hover:border-white/15 rounded-[2.5rem]"}>
-              <div className="flex justify-between items-start mb-12">
-                <div className={`p-5 rounded-[1.75rem] transition-all duration-700 group-hover:scale-110 group-hover:rotate-6 shadow-2xl ${stat.color === 'primary' ? 'bg-primary/20 text-primary' : stat.color === 'accent' ? 'bg-accent/20 text-accent' : 'bg-emerald-500/20 text-emerald-500'}`}>
-                  <stat.icon size={30} />
+            <GlassCard className={stat.glow ? "border-primary/20 bg-primary/[0.04] group rounded-[2.75rem]" : "border-white/[0.04] group hover:border-white/10 rounded-[2.75rem]"}>
+              <div className="flex justify-between items-start mb-16">
+                <div className={`p-6 rounded-[2rem] transition-all duration-700 group-hover:scale-110 group-hover:rotate-6 shadow-2xl ${stat.color === 'primary' ? 'bg-primary/20 text-primary' : stat.color === 'accent' ? 'bg-accent/20 text-accent' : 'bg-emerald-500/20 text-emerald-500'}`}>
+                  <stat.icon size={32} />
                 </div>
-                <Badge variant="outline" className={`border-none font-black text-[10px] tracking-widest px-3 h-7 ${stat.change.startsWith('+') ? 'text-emerald-500 bg-emerald-500/10' : 'text-primary bg-primary/10'}`}>
+                <Badge variant="outline" className={`border-none font-black text-[10px] tracking-widest px-4 h-8 ${stat.change.startsWith('+') ? 'text-emerald-500 bg-emerald-500/10' : 'text-primary bg-primary/10'}`}>
                   {stat.change}
                 </Badge>
               </div>
               <p className="text-muted-foreground text-[11px] uppercase tracking-[0.4em] font-black mb-2 opacity-40">{stat.label}</p>
-              <p className="text-5xl font-bold font-headline tracking-tighter text-white">{stat.value}</p>
+              <p className="text-6xl font-bold font-headline tracking-tighter text-white">{stat.value}</p>
             </GlassCard>
           </motion.div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
-        <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="lg:col-span-2">
-          <GlassCard className="h-full border-white/[0.05] p-12 lg:p-16 rounded-[3.5rem]" variant="darker">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8 mb-20">
-              <div>
-                <h3 className="font-headline font-bold text-4xl lg:text-5xl tracking-tight mb-3">Conversion Velocity</h3>
-                <p className="text-[10px] text-muted-foreground tracking-[0.5em] uppercase font-black opacity-40">Revenue Recovery Attribution Flow</p>
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-14">
+        <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="xl:col-span-2">
+          <GlassCard className="h-full border-white/[0.05] p-16 rounded-[4rem]" variant="darker">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-10 mb-24">
+              <div className="space-y-3">
+                <h3 className="font-headline font-bold text-5xl tracking-tight text-white">Conversion Velocity</h3>
+                <p className="text-[10px] text-muted-foreground tracking-[0.5em] uppercase font-black opacity-30">Neural Recovery Performance Index</p>
               </div>
-              <div className="flex gap-10">
-                <div className="flex items-center gap-3 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
-                  <div className="w-3 h-3 rounded-full bg-primary glow-primary" /> Recovered
+              <div className="flex gap-12">
+                <div className="flex items-center gap-4 text-[11px] font-black text-muted-foreground uppercase tracking-widest">
+                  <div className="w-3.5 h-3.5 rounded-full bg-primary glow-primary" /> Recovered
                 </div>
-                <div className="flex items-center gap-3 text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">
-                  <div className="w-3 h-3 rounded-full bg-accent shadow-[0_0_15px_#3b82f6]" /> Volume
+                <div className="flex items-center gap-4 text-[11px] font-black text-muted-foreground uppercase tracking-widest">
+                  <div className="w-3.5 h-3.5 rounded-full bg-accent shadow-[0_0_20px_#3b82f6]" /> Volume
                 </div>
               </div>
             </div>
-            <div className="h-[500px] w-full">
+            <div className="h-[550px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData}>
                   <defs>
                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.5}/>
+                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.6}/>
                       <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="colorConv" x1="0" y1="0" x2="0" y2="1">
@@ -134,64 +137,67 @@ export default function DashboardOverview() {
                       <stop offset="95%" stopColor="hsl(var(--accent))" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
-                  <XAxis dataKey="name" stroke="rgba(255,255,255,0.2)" fontSize={12} tickLine={false} axisLine={false} dy={20} fontFamily="Space Grotesk" />
+                  <CartesianGrid strokeDasharray="4 4" stroke="rgba(255,255,255,0.03)" vertical={false} />
+                  <XAxis dataKey="name" stroke="rgba(255,255,255,0.2)" fontSize={12} tickLine={false} axisLine={false} dy={25} fontFamily="Space Grotesk" />
                   <YAxis hide />
-                  <Tooltip contentStyle={{ backgroundColor: 'rgba(10, 10, 12, 0.98)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '32px', backdropFilter: 'blur(30px)', padding: '24px' }} itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }} cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 2 }} />
-                  <Area type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorRevenue)" strokeWidth={6} animationDuration={3000} />
-                  <Area type="monotone" dataKey="conv" stroke="hsl(var(--accent))" fillOpacity={1} fill="url(#colorConv)" strokeWidth={4} strokeDasharray="12 12" animationDuration={4000} />
+                  <Tooltip contentStyle={{ backgroundColor: 'rgba(5, 5, 8, 0.98)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '32px', backdropFilter: 'blur(40px)', padding: '32px' }} itemStyle={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }} cursor={{ stroke: 'rgba(255,255,255,0.15)', strokeWidth: 2 }} />
+                  <Area type="monotone" dataKey="revenue" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorRevenue)" strokeWidth={8} animationDuration={3000} />
+                  <Area type="monotone" dataKey="conv" stroke="hsl(var(--accent))" fillOpacity={1} fill="url(#colorConv)" strokeWidth={4} strokeDasharray="15 15" animationDuration={4500} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
           </GlassCard>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex flex-col gap-10 lg:gap-14">
-          <GlassCard className="flex-1 flex flex-col border-white/[0.05] p-12 rounded-[3.5rem]" variant="darker">
-            <div className="flex items-center justify-between mb-12">
-              <h3 className="font-headline font-bold text-3xl tracking-tight">Neural Feed</h3>
-              <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_20px_-5px_#10b981]">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Real-time</span>
+        <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex flex-col gap-14">
+          <GlassCard className="flex-1 flex flex-col border-white/[0.05] p-16 rounded-[4rem]" variant="darker">
+            <div className="flex items-center justify-between mb-16">
+              <div className="space-y-2">
+                <h3 className="font-headline font-bold text-4xl tracking-tight text-white">Live Logs</h3>
+                <p className="text-[10px] text-muted-foreground tracking-[0.4em] uppercase font-black opacity-30">Active Neural Stream</p>
+              </div>
+              <div className="flex items-center gap-3 px-6 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 shadow-2xl">
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_15px_#10b981]" />
+                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Connected</span>
               </div>
             </div>
             
-            <div className="flex-1 space-y-10 overflow-y-auto pr-4 custom-scrollbar">
+            <div className="flex-1 space-y-12 overflow-y-auto pr-6 custom-scrollbar">
               {MOCK_LIVE_FEED.map((item, i) => (
-                <motion.div key={item.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 * i }} className="flex gap-6 group cursor-pointer">
-                  <div className={`w-16 h-16 rounded-[1.75rem] flex items-center justify-center shrink-0 border transition-all duration-700 group-hover:scale-110 group-hover:shadow-3xl ${
+                <motion.div key={item.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 * i }} className="flex gap-8 group cursor-pointer">
+                  <div className={`w-20 h-20 rounded-[2.25rem] flex items-center justify-center shrink-0 border transition-all duration-700 group-hover:scale-110 group-hover:shadow-3xl ${
                     item.type === 'sale' ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-500' :
                     item.type === 'lead' ? 'bg-primary/20 border-primary/30 text-primary' :
                     'bg-white/5 border-white/10 text-muted-foreground'
                   }`}>
-                    {item.type === 'sale' ? <DollarSign size={28} /> : item.type === 'lead' ? <Users size={28} /> : <Zap size={28} />}
+                    {item.type === 'sale' ? <DollarSign size={32} /> : item.type === 'lead' ? <Users size={32} /> : <Zap size={32} />}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="text-lg font-bold text-white group-hover:text-primary transition-colors tracking-tight">{item.title}</p>
-                      <span className="text-[10px] font-black text-muted-foreground/30 uppercase">{item.timestamp}</span>
+                  <div className="flex-1 min-w-0 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xl font-bold text-white group-hover:text-primary transition-colors tracking-tight">{item.title}</p>
+                      <span className="text-[11px] font-black text-muted-foreground/30 uppercase tracking-tighter">{item.timestamp}</span>
                     </div>
-                    <p className="text-sm text-muted-foreground/50 leading-relaxed line-clamp-1 group-hover:text-white/70 transition-colors font-light">{item.description}</p>
+                    <p className="text-base text-muted-foreground/60 leading-relaxed line-clamp-2 group-hover:text-white/80 transition-colors font-light">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
             </div>
             
-            <div className="mt-14 pt-10 border-t border-white/5">
-              <GlassCard variant="borderless" className="p-8 bg-primary/5 border border-primary/20 group cursor-pointer hover:bg-primary/10 transition-all rounded-[2.5rem]">
+            <div className="mt-16 pt-12 border-t border-white/5">
+              <div className="p-10 bg-primary/5 border border-primary/20 group cursor-pointer hover:bg-primary/10 transition-all rounded-[3rem] shadow-2xl">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-5">
-                    <div className="p-3 rounded-2xl bg-primary/20 text-primary group-hover:scale-110 group-hover:rotate-12 transition-all shadow-2xl">
-                      <Sparkles size={24} />
+                  <div className="flex items-center gap-6">
+                    <div className="p-4 rounded-2xl bg-primary/20 text-primary group-hover:scale-110 group-hover:rotate-12 transition-all shadow-3xl">
+                      <Sparkles size={28} />
                     </div>
                     <div>
-                      <span className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Neural Insight</span>
-                      <p className="text-xs text-muted-foreground/60 mt-1 font-light">Boost recovery by <span className="text-primary font-bold">14%</span> by using "Elite" tone.</p>
+                      <span className="text-[11px] font-black text-white uppercase tracking-[0.4em]">Neural Intelligence</span>
+                      <p className="text-sm text-muted-foreground/70 mt-2 font-light">Recovery probability increased by <span className="text-primary font-bold">14.2%</span> last hour.</p>
                     </div>
                   </div>
-                  <ArrowUpRight size={22} className="text-primary group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform" />
+                  <ArrowRight size={28} className="text-primary group-hover:translate-x-3 transition-transform" />
                 </div>
-              </GlassCard>
+              </div>
             </div>
           </GlassCard>
         </motion.div>
