@@ -4,26 +4,48 @@
 
 @layer base {
   :root {
-    --background: 240 10% 2%;
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 263.4 70% 50.4%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 10%;
+    --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 217.2 91.2% 59.8%;
+    --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 12%;
-    --input: 240 3.7% 12%;
-    --ring: 263.4 70% 50.4%;
-    --radius: 2.5rem;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
   }
 }
 
@@ -32,60 +54,25 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/30 selection:text-white;
+    @apply bg-background text-foreground antialiased selection:bg-primary/10;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
-    letter-spacing: -0.01em;
-    cursor: default;
+  }
+}
+
+@layer components {
+  .saas-card {
+    @apply bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-xl transition-all duration-200;
+  }
+  .saas-card-hover {
+    @apply hover:border-white/10 hover:bg-zinc-900/60;
+  }
+  .saas-button-primary {
+    @apply bg-white text-black hover:bg-zinc-200 transition-colors rounded-lg px-4 py-2 font-medium text-sm;
   }
 }
 
 @layer utilities {
-  .glass {
-    @apply bg-white/[0.02] backdrop-blur-[60px] border border-white/[0.08] shadow-[0_20px_60px_rgba(0,0,0,0.8)];
+  .text-balance {
+    text-wrap: balance;
   }
-  .glass-darker {
-    @apply bg-black/60 backdrop-blur-[80px] border border-white/[0.04] shadow-inner;
-  }
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40;
-  }
-  .bg-gradient-mesh {
-    background-image: 
-      radial-gradient(at 0% 0%, hsla(263, 70%, 50%, 0.15) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(217, 91%, 60%, 0.1) 0px, transparent 50%),
-      radial-gradient(at 50% 50%, hsla(263, 70%, 50%, 0.05) 0px, transparent 50%);
-  }
-  .glow-primary {
-    @apply shadow-[0_0_80px_-20px_hsl(var(--primary)/0.6)];
-  }
-  .noise {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.03;
-    pointer-events: none;
-  }
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    @apply bg-transparent;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-white/5 rounded-full hover:bg-white/10 transition-colors;
-  }
-  .shadow-3xl {
-    box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.7);
-  }
-  .shadow-4xl {
-    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 1);
-  }
-}
-
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-15px); }
-  100% { transform: translateY(0px); }
-}
-
-.animate-float {
-  animation: float 8s ease-in-out infinite;
 }
