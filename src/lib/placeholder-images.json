@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-dashboard",
+      "description": "Premium AI Dashboard Interface",
+      "imageUrl": "https://picsum.photos/seed/replyrush1/1200/800",
+      "imageHint": "SaaS dashboard"
+    },
+    {
+      "id": "feature-automation",
+      "description": "Automation workflow builder preview",
+      "imageUrl": "https://picsum.photos/seed/replyrush2/800/600",
+      "imageHint": "automation workflow"
+    },
+    {
+      "id": "feature-inbox",
+      "description": "Intelligent DM inbox preview",
+      "imageUrl": "https://picsum.photos/seed/replyrush3/800/600",
+      "imageHint": "chat inbox"
+    },
+    {
+      "id": "user-avatar-1",
+      "description": "Founder testimonial 1",
+      "imageUrl": "https://picsum.photos/seed/founder1/100/100",
+      "imageHint": "founder face"
+    },
+    {
+      "id": "user-avatar-2",
+      "description": "Founder testimonial 2",
+      "imageUrl": "https://picsum.photos/seed/founder2/100/100",
+      "imageHint": "founder face"
+    }
+  ]
 }
