@@ -1,3 +1,7 @@
+/**
+ * @fileOverview High-fidelity mock data for the ReplyRush AI production demo.
+ */
+
 export const MOCK_CHATS = [
   {
     id: '1',
@@ -12,8 +16,8 @@ export const MOCK_CHATS = [
     intent: 'High Purchase Intent',
     value: '$249.00',
     messages: [
-      { role: 'customer', content: 'Hey, I love the new high-performance collection!', type: 'text', timestamp: new Date(Date.now() - 3600000).toISOString() },
-      { role: 'ai', content: 'Thank you Marcus! We designed it specifically for high-intensity training. Are you looking for the Stealth Hoodies or the Compression series?', type: 'automated', timestamp: new Date(Date.now() - 3500000).toISOString() },
+      { role: 'customer', content: 'Hey, I love the new high-performance collection! The textures look premium.', type: 'text', timestamp: new Date(Date.now() - 3600000).toISOString() },
+      { role: 'ai', content: 'Thank you Marcus! We designed it specifically for high-intensity training environments. Are you looking for the Stealth Hoodies or the Compression series?', type: 'automated', timestamp: new Date(Date.now() - 3500000).toISOString() },
       { role: 'customer', content: 'The Stealth Hoodie. Does it come in XL black? I need it for a shoot next week.', type: 'text', timestamp: new Date(Date.now() - 1000000).toISOString() },
       { role: 'ai', content: 'Yes, we have 4 units left in XL Black! Since you are a recurring customer, I can apply a "Fast-Track" 10% loyalty credit if you order in the next 15 minutes. Should I generate your secure checkout link?', type: 'automated', timestamp: new Date(Date.now() - 500000).toISOString() },
       { role: 'customer', content: 'Perfect, send the payment link!', type: 'text', timestamp: new Date().toISOString() },

@@ -23,7 +23,7 @@
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
-    --radius: 0.75rem;
+    --radius: 0.5rem;
   }
 
   .dark {
@@ -43,36 +43,29 @@
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --border: 240 3.7% 17.9%;
+    --input: 240 3.7% 17.9%;
     --ring: 240 4.9% 83.9%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/10;
+    @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
   }
 }
 
-@layer components {
-  .saas-card {
-    @apply bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-xl transition-all duration-200;
-  }
-  .saas-card-hover {
-    @apply hover:border-white/10 hover:bg-zinc-900/60;
-  }
-  .saas-button-primary {
-    @apply bg-white text-black hover:bg-zinc-200 transition-colors rounded-lg px-4 py-2 font-medium text-sm;
-  }
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
 }
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 10px;
 }
