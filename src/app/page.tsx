@@ -10,7 +10,11 @@ import {
   MessageSquare, 
   TrendingUp,
   ChevronRight,
-  Lock
+  Lock,
+  Clock,
+  CheckCircle2,
+  Target,
+  ArrowUpRight
 } from 'lucide-react';
 
 export default function LandingPage() {
@@ -41,7 +45,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-6 pt-32 pb-48 text-center relative">
+      <section className="container mx-auto px-6 pt-32 pb-32 text-center relative">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -53,10 +57,10 @@ export default function LandingPage() {
             AI Sales Infrastructure for Instagram
           </div>
           <h1 className="text-5xl md:text-8xl font-bold font-headline tracking-tighter mb-8 leading-[0.9]">
-            Your Instagram <br />Sales Engine.
+            Your AI Instagram <br />Sales Team.
           </h1>
           <p className="text-lg md:text-xl text-zinc-500 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
-            Reply instantly, negotiate bulk deals, and recover abandoned leads 24/7 with autonomous sales logic.
+            Reply instantly, recover lost customers, and automate conversations 24/7 with autonomous sales logic.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/signup">
@@ -73,8 +77,67 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
+      {/* Business Value Section */}
+      <section className="py-24 border-y border-zinc-900 bg-zinc-950/50">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-5xl font-bold font-headline tracking-tight mb-8 text-center">
+              How ReplyRush AI helps businesses recover lost Instagram sales
+            </h2>
+            <p className="text-zinc-500 text-center mb-16 text-lg font-medium max-w-2xl mx-auto">
+              Most social commerce businesses lose up to 40% of their revenue simply because they can't reply fast enough. We solve the human bottleneck.
+            </p>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              {[
+                {
+                  title: "Fix the Revenue Leak",
+                  desc: "Every minute a DM goes unanswered, the purchase intent drops by 15%. ReplyRush ensures no lead ever goes cold.",
+                  icon: Target
+                },
+                {
+                  title: "Instant Response Velocity",
+                  desc: "AI identifies product inquiries and responds in under 1 second, capturing the customer exactly when they are ready to buy.",
+                  icon: Clock
+                },
+                {
+                  title: "Direct-to-Sale Conversion",
+                  desc: "Move conversations from simple questions to confirmed orders. AI applies bulk discounts and generates checkout links automatically.",
+                  icon: TrendingUp
+                },
+                {
+                  title: "24/7 Lead Persistence",
+                  desc: "Automate follow-ups and lead capture overnight. While your team sleeps, your AI agent is qualifying and closing buyers.",
+                  icon: CheckCircle2
+                }
+              ].map((item, i) => (
+                <div key={i} className="p-8 rounded-2xl border border-zinc-900 bg-black hover:border-zinc-700 transition-all group">
+                  <div className="w-10 h-10 rounded-lg bg-zinc-900 flex items-center justify-center mb-6 text-zinc-400 group-hover:text-white transition-colors">
+                    <item.icon size={20} />
+                  </div>
+                  <h3 className="text-lg font-bold mb-3">{item.title}</h3>
+                  <p className="text-zinc-500 text-sm leading-relaxed font-medium">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-16 p-8 rounded-3xl border border-white/5 bg-zinc-900/20 flex flex-col md:flex-row items-center justify-between gap-8">
+              <div>
+                <p className="text-sm font-bold text-zinc-400 uppercase tracking-widest mb-2">The Impact</p>
+                <h4 className="text-2xl font-bold tracking-tight">Reduce missed opportunities by 92%</h4>
+              </div>
+              <Link href="/signup">
+                <Button className="bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl h-12 px-8 font-bold gap-2">
+                  See the demo <ArrowUpRight size={18} />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Grid */}
-      <section id="infrastructure" className="container mx-auto px-6 py-40 border-t border-zinc-900">
+      <section id="infrastructure" className="container mx-auto px-6 py-40">
         <div className="grid md:grid-cols-3 gap-16">
           {[
             { 
