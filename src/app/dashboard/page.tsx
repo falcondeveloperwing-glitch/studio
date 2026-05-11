@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -18,7 +19,9 @@ import {
   ChevronRight,
   BrainCircuit,
   Command,
-  ArrowRight
+  ArrowRight,
+  ShieldCheck,
+  Target
 } from 'lucide-react';
 import { 
   XAxis, 
@@ -52,17 +55,17 @@ export default function DashboardOverview() {
         <div className="space-y-6">
           <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-4">
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 rounded-full px-6 py-2 text-[10px] font-black tracking-[0.4em] uppercase">
-              Neural Fleet: Operational
+              Neural Network: Active
             </Badge>
             <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-black tracking-widest uppercase opacity-40">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Latency: 0.12ms
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Agency Mode v2.4
             </div>
           </motion.div>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="font-headline text-6xl lg:text-8xl font-bold tracking-tighter leading-[0.85] text-white">
-            System Online, <br/> {user?.displayName?.split(' ')[0] || 'Director'}.
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="font-headline text-6xl lg:text-9xl font-bold tracking-tighter leading-[0.8] text-white">
+            Revenue <br/> Velocity.
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-muted-foreground text-2xl lg:text-3xl max-w-2xl opacity-50 font-light leading-relaxed">
-            Your AI fleet is currently negotiating with <span className="text-white font-bold underline decoration-primary/40 underline-offset-8">142</span> high-intent shoppers.
+            Your AI fleet is currently negotiating with <span className="text-white font-bold underline decoration-primary/40 underline-offset-8">142</span> high-intent shoppers, recovering <span className="text-emerald-500 font-bold">$12k+</span> in potential churn today.
           </motion.p>
         </div>
         
@@ -76,8 +79,8 @@ export default function DashboardOverview() {
               ))}
             </div>
             <div>
-              <p className="font-headline font-bold text-white text-4xl tracking-tight">42 Live</p>
-              <p className="text-muted-foreground text-[10px] uppercase font-black tracking-[0.4em] opacity-40">Active Threads</p>
+              <p className="font-headline font-bold text-white text-4xl tracking-tight">42 Leads</p>
+              <p className="text-muted-foreground text-[10px] uppercase font-black tracking-[0.4em] opacity-40">Live Negotiations</p>
             </div>
           </GlassCard>
         </motion.div>
@@ -85,10 +88,10 @@ export default function DashboardOverview() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         {[
-          { label: 'Revenue Recovered', value: MOCK_STATS.revenueRecovered, change: '+31.4%', icon: DollarSign, color: 'primary', glow: true },
-          { label: 'Neural Negotiations', value: MOCK_STATS.aiReplies, change: '+18.2%', icon: MessageCircle, color: 'accent' },
-          { label: 'Accuracy Rating', value: '99.8%', change: 'Elite', icon: BrainCircuit, color: 'primary' },
-          { label: 'Closure Velocity', value: '0.24s', change: '-42%', icon: Clock, color: 'emerald-500' }
+          { label: 'Recovered Capital', value: MOCK_STATS.revenueRecovered, change: '+31.4%', icon: DollarSign, color: 'primary', glow: true },
+          { label: 'AI Negotiations', value: MOCK_STATS.aiReplies, change: '+18.2%', icon: MessageCircle, color: 'accent' },
+          { label: 'Neural Accuracy', value: '99.8%', change: 'Target', icon: Target, color: 'primary' },
+          { label: 'Avg Latency', value: '0.12s', change: '-42%', icon: Zap, color: 'emerald-500' }
         ].map((stat, i) => (
           <motion.div key={i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 + (i * 0.1) }}>
             <GlassCard className={stat.glow ? "border-primary/20 bg-primary/[0.04] group rounded-[2.75rem]" : "border-white/[0.04] group hover:border-white/10 rounded-[2.75rem]"}>
@@ -112,15 +115,15 @@ export default function DashboardOverview() {
           <GlassCard className="h-full border-white/[0.05] p-16 rounded-[4rem]" variant="darker">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-10 mb-24">
               <div className="space-y-3">
-                <h3 className="font-headline font-bold text-5xl tracking-tight text-white">Conversion Velocity</h3>
-                <p className="text-[10px] text-muted-foreground tracking-[0.5em] uppercase font-black opacity-30">Neural Recovery Performance Index</p>
+                <h3 className="font-headline font-bold text-5xl tracking-tight text-white">Conversion Funnel</h3>
+                <p className="text-[10px] text-muted-foreground tracking-[0.5em] uppercase font-black opacity-30">Neural Lead Processing Performance</p>
               </div>
               <div className="flex gap-12">
                 <div className="flex items-center gap-4 text-[11px] font-black text-muted-foreground uppercase tracking-widest">
-                  <div className="w-3.5 h-3.5 rounded-full bg-primary glow-primary" /> Recovered
+                  <div className="w-3.5 h-3.5 rounded-full bg-primary glow-primary" /> Recaptured
                 </div>
                 <div className="flex items-center gap-4 text-[11px] font-black text-muted-foreground uppercase tracking-widest">
-                  <div className="w-3.5 h-3.5 rounded-full bg-accent shadow-[0_0_20px_#3b82f6]" /> Volume
+                  <div className="w-3.5 h-3.5 rounded-full bg-accent shadow-[0_0_20px_#3b82f6]" /> Raw Volume
                 </div>
               </div>
             </div>
@@ -153,12 +156,12 @@ export default function DashboardOverview() {
           <GlassCard className="flex-1 flex flex-col border-white/[0.05] p-16 rounded-[4rem]" variant="darker">
             <div className="flex items-center justify-between mb-16">
               <div className="space-y-2">
-                <h3 className="font-headline font-bold text-4xl tracking-tight text-white">Live Logs</h3>
-                <p className="text-[10px] text-muted-foreground tracking-[0.4em] uppercase font-black opacity-30">Active Neural Stream</p>
+                <h3 className="font-headline font-bold text-4xl tracking-tight text-white">Live Intelligence</h3>
+                <p className="text-[10px] text-muted-foreground tracking-[0.4em] uppercase font-black opacity-30">Neural Activity Stream</p>
               </div>
               <div className="flex items-center gap-3 px-6 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 shadow-2xl">
                 <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_15px_#10b981]" />
-                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Connected</span>
+                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Global Sync</span>
               </div>
             </div>
             
@@ -191,8 +194,8 @@ export default function DashboardOverview() {
                       <Sparkles size={28} />
                     </div>
                     <div>
-                      <span className="text-[11px] font-black text-white uppercase tracking-[0.4em]">Neural Intelligence</span>
-                      <p className="text-sm text-muted-foreground/70 mt-2 font-light">Recovery probability increased by <span className="text-primary font-bold">14.2%</span> last hour.</p>
+                      <span className="text-[11px] font-black text-white uppercase tracking-[0.4em]">Acquisition Potential</span>
+                      <p className="text-sm text-muted-foreground/70 mt-2 font-light">Recovery probability optimized by <span className="text-primary font-bold">14.2%</span>.</p>
                     </div>
                   </div>
                   <ArrowRight size={28} className="text-primary group-hover:translate-x-3 transition-transform" />

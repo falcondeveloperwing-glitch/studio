@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -18,7 +19,9 @@ import {
   ShieldCheck,
   Globe,
   BrainCircuit,
-  Command
+  Command,
+  Target,
+  DollarSign
 } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -52,16 +55,16 @@ export default function LandingPage() {
         <div className="hidden lg:flex items-center gap-12 text-[11px] font-black uppercase tracking-[0.4em] text-muted-foreground/50">
           <Link href="#features" className="hover:text-white transition-colors">Neural Logic</Link>
           <Link href="#enterprise" className="hover:text-white transition-colors">Enterprise</Link>
-          <Link href="#demo" className="hover:text-white transition-colors">Showcase</Link>
+          <Link href="#demo" className="hover:text-white transition-colors">Acquisition</Link>
         </div>
 
         <div className="flex items-center gap-6">
           <Link href="/login" className="hidden sm:block">
-            <Button variant="ghost" className="text-muted-foreground hover:text-white font-bold text-[10px] uppercase tracking-widest">Client Portal</Button>
+            <Button variant="ghost" className="text-muted-foreground hover:text-white font-bold text-[10px] uppercase tracking-widest">Console Access</Button>
           </Link>
           <Link href="/signup">
             <Button className="bg-primary hover:bg-primary/90 glow-primary rounded-2xl font-bold h-14 px-10 text-xs uppercase tracking-widest transition-all duration-500 hover:scale-105 active:scale-95 shadow-2xl text-white">
-              Get Started
+              Deploy Agent
             </Button>
           </Link>
         </div>
@@ -70,15 +73,15 @@ export default function LandingPage() {
       <section className="container mx-auto px-8 pt-32 lg:pt-48 pb-40 text-center relative z-10">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-white/[0.04] border border-white/[0.1] text-primary text-[10px] font-black tracking-[0.4em] mb-12 uppercase">
           <Sparkles size={12} className="animate-pulse" />
-          Next-Gen AI Sales Fleet is Live
+          The $100k+ Sales Pipeline Recapture Asset
         </motion.div>
         
-        <motion.h1 {...fadeInUp} className="font-headline text-6xl sm:text-8xl md:text-9xl font-bold mb-10 max-w-7xl mx-auto leading-[0.85] tracking-tighter text-gradient pb-6">
-          Your AI Instagram <br className="hidden lg:block" /> Sales Employee.
+        <motion.h1 {...fadeInUp} className="font-headline text-6xl sm:text-8xl md:text-9xl font-bold mb-10 max-w-7xl mx-auto leading-[0.8] tracking-tighter text-gradient pb-6">
+          Neural Sales <br className="hidden lg:block" /> Intelligence.
         </motion.h1>
         
         <motion.p {...fadeInUp} transition={{ delay: 0.2 }} className="text-xl lg:text-3xl text-muted-foreground max-w-3xl mx-auto mb-20 font-body leading-relaxed opacity-70 font-light">
-          Reply in milliseconds, recover 40% more lost sales, and automate negotiations with a neural agent that knows your brand perfectly.
+          Scale your Instagram revenue 24/7. Recapture 42% of abandoned DMs with a neural agent that learns your product catalog in seconds.
         </motion.p>
         
         <motion.div {...fadeInUp} transition={{ delay: 0.3 }} className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-40">
@@ -88,7 +91,7 @@ export default function LandingPage() {
             </Button>
           </Link>
           <Button variant="outline" size="lg" className="w-full sm:w-auto h-20 px-14 text-xl font-bold border-white/10 glass rounded-[2rem] hover:bg-white/10 transition-all duration-500 group">
-            <Play className="mr-3 fill-white group-hover:scale-110 transition-transform" size={24} /> Watch Demo
+            <Play className="mr-3 fill-white group-hover:scale-110 transition-transform" size={24} /> Acquisition Demo
           </Button>
         </motion.div>
 
@@ -107,13 +110,13 @@ export default function LandingPage() {
           
           <motion.div animate={{ y: [0, -20, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} className="absolute -bottom-10 -right-10 lg:-right-20 p-8 glass rounded-[2.5rem] w-80 text-left border-primary/30 shadow-2xl hidden md:block">
             <div className="flex items-center gap-4 mb-5">
-              <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary shadow-2xl"><TrendingUp size={24} /></div>
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-500 shadow-2xl"><DollarSign size={24} /></div>
               <div>
-                <p className="text-[10px] font-black text-primary uppercase tracking-widest">Recapture Rate</p>
-                <p className="text-2xl font-bold font-headline text-white">+42.8%</p>
+                <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Capital Recaptured</p>
+                <p className="text-2xl font-bold font-headline text-white">$142,850</p>
               </div>
             </div>
-            <p className="text-sm text-white/60 leading-relaxed font-medium italic">"The AI successfully recovered 14 abandoned carts in the last 6 hours."</p>
+            <p className="text-sm text-white/60 leading-relaxed font-medium italic">"The agent successfully stabilized our DM funnel, increasing LTV by 14.2%."</p>
           </motion.div>
         </motion.div>
       </section>
@@ -124,16 +127,16 @@ export default function LandingPage() {
             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="inline-block px-5 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-8">
               Neural Precision Fleet
             </motion.div>
-            <h2 className="font-headline text-6xl lg:text-8xl font-bold tracking-tighter leading-[0.9] text-gradient">Enterprise Intelligence <br/> at Startup Speed.</h2>
+            <h2 className="font-headline text-6xl lg:text-9xl font-bold tracking-tighter leading-[0.8] text-gradient pb-4">Revenue at <br/> Infinite Scale.</h2>
           </div>
-          <p className="max-w-md text-xl text-muted-foreground leading-relaxed opacity-60 font-light">We built ReplyRush to give Instagram brands a dedicated sales army that never sleeps, never misses a lead, and closes deals exactly like you do.</p>
+          <p className="max-w-md text-xl text-muted-foreground leading-relaxed opacity-60 font-light">ReplyRush is a high-value SaaS asset designed to solve the critical "latency churn" for 7-figure Instagram brands. Built for acquisition, designed for performance.</p>
         </div>
 
         <motion.div variants={stagger} initial="initial" whileInView="animate" viewport={{ once: true }} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {[
-            { title: 'Neural Intent', icon: BrainCircuit, color: 'primary', desc: 'Our logic engine reads between the lines, understanding buyer sentiment and urgency instantly.' },
-            { title: 'Sales Recovery', icon: TrendingUp, color: 'emerald-500', desc: 'Auto-pilot recovery that re-engages abandoned leads with intelligent, personalized incentives.' },
-            { title: 'Brand Sync', icon: Command, color: 'accent', desc: 'Sync Shopify, PDFs, or policy docs. The AI trains in minutes to provide pixel-perfect responses.' }
+            { title: 'Neural Intent', icon: BrainCircuit, color: 'primary', desc: 'Reads buyer sentiment and urgency to prioritize high-ticket negotiations over support tickets.' },
+            { title: 'Funnel Recovery', icon: Target, color: 'emerald-500', desc: 'Re-engages dormant leads automatically using scarcity triggers and personalized incentives.' },
+            { title: 'Brand Synthesis', icon: Command, color: 'accent', desc: 'Syncs with your ERP or policy docs in minutes to provide pixel-perfect, on-brand responses.' }
           ].map((feature, i) => (
             <motion.div key={i} variants={fadeInUp}>
               <GlassCard className="h-full p-12 border-white/[0.05] hover:border-white/20 rounded-[3rem]">
@@ -155,11 +158,11 @@ export default function LandingPage() {
             <span className="font-headline text-3xl font-bold">ReplyRush<span className="text-primary">AI</span></span>
           </div>
           <div className="flex gap-12 text-[10px] font-black text-muted-foreground uppercase tracking-[0.4em]">
+            <Link href="#" className="hover:text-white transition-colors">Legal</Link>
             <Link href="#" className="hover:text-white transition-colors">Privacy</Link>
-            <Link href="#" className="hover:text-white transition-colors">Terms</Link>
-            <Link href="#" className="hover:text-white transition-colors">API</Link>
+            <Link href="#" className="hover:text-white transition-colors">API Docs</Link>
           </div>
-          <p className="text-[10px] font-black text-muted-foreground/30 uppercase tracking-[0.6em] mt-10">© 2025 ReplyRush AI — Global Neural Commerce Leader.</p>
+          <p className="text-[10px] font-black text-muted-foreground/30 uppercase tracking-[0.6em] mt-10">© 2025 ReplyRush AI — Neural Commerce Systems Group.</p>
         </div>
       </footer>
     </div>
