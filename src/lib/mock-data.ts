@@ -1,5 +1,6 @@
 /**
- * @fileOverview High-fidelity mock data for the ReplyRush AI production demo.
+ * @fileOverview High-fidelity production-grade mock data for ReplyRush AI.
+ * Focuses on high-revenue business scenarios and realistic intent.
  */
 
 export const MOCK_CHATS = [
@@ -37,7 +38,7 @@ export const MOCK_CHATS = [
     value: '$499.00',
     messages: [
       { role: 'customer', content: 'Hi! What is the final price for the limited designer set with international shipping to Milan?', type: 'text', timestamp: new Date(Date.now() - 7200000).toISOString() },
-      { role: 'ai', content: 'The Designer Set is currently $499. International shipping to Milan is typically $45 via DHL Express (3-5 days). We have 2 sets left in the European warehouse. Would you like me to calculate the total with tax?', type: 'automated', timestamp: new Date(Date.now() - 7100000).toISOString() },
+      { role: 'ai', content: 'The Designer Set is currently $499. International shipping to Milan is typically $45 via DHL Express (3-5 days). We have 2 sets left in our European warehouse. Would you like me to calculate the total with tax?', type: 'automated', timestamp: new Date(Date.now() - 7100000).toISOString() },
     ]
   },
   {
@@ -63,16 +64,16 @@ export const MOCK_STATS = {
   leadsRecovered: '4,102',
   aiReplies: '18,942',
   revenueRecovered: '$142,850',
-  avgSpeed: '0.24s',
+  avgSpeed: '0.12s',
   conversionRate: '24.8%',
   satisfaction: '4.99/5'
 };
 
 export const MOCK_LIVE_FEED = [
-  { id: 'f1', title: 'Revenue Recovered', description: 'AI closed a $499 order with Elena Rossi. Scarcity trigger: "Last 2 Units".', timestamp: 'Just now', type: 'sale' },
-  { id: 'f2', title: 'High Intent Lead', description: '@marcus_fit reached checkout phase. Intent: 98% Readiness.', timestamp: '3m ago', type: 'lead' },
-  { id: 'f3', title: 'Global Sync', description: 'Inventory levels updated across 42 active negotiations.', timestamp: '8m ago', type: 'info' },
-  { id: 'f4', title: 'Escalation Logged', description: 'Handed off #8492 to Human Support. Reason: Logistics delay.', timestamp: '14m ago', type: 'redirect' }
+  { id: 'f1', title: 'Revenue Recovered', description: 'AI closed a $499 order with Elena Rossi. Trigger: Scarcity-Logic (Last 2 units).', timestamp: 'Just now', type: 'sale' },
+  { id: 'f2', title: 'High Intent Lead', description: '@marcus_fit requested checkout link. Estimated conversion probability: 98%.', timestamp: '3m ago', type: 'lead' },
+  { id: 'f3', title: 'Stock Intelligence', description: 'Global inventory sync completed across 42 active thread negotiations.', timestamp: '8m ago', type: 'info' },
+  { id: 'f4', title: 'Escalation Logged', description: 'Manual hand-off for order #8492. Reason: Complex carrier delay inquiry.', timestamp: '14m ago', type: 'redirect' }
 ];
 
 export const MOCK_WORKFLOWS = [
