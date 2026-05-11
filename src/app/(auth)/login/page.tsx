@@ -9,9 +9,11 @@ import { Input } from '@/components/ui/input';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Zap, ArrowRight, Loader2, Sparkles } from 'lucide-react';
 import { useLocalAuth } from '@/hooks/use-local-auth';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
   const { login } = useLocalAuth();
+  const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,15 +21,40 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Mock delay for cinematic feel
+
+    // Realistic simulation of network delay for cinematic feel
     setTimeout(() => {
-      login(email, email.includes('admin') ? 'admin' : 'business');
-    }, 1500);
+      if (email === 'demo@replyrush.ai' && password === 'ReplyRush123') {
+        login(email, 'admin');
+        toast({
+          title: "Access Granted",
+          description: "Welcome back, Commander.",
+        });
+      } else if (email === 'business@replyrush.ai' && password === 'Business123') {
+        login(email, 'business');
+        toast({
+          title: "Access Granted",
+          description: "Neural sales fleet is ready.",
+        });
+      } else {
+        setLoading(false);
+        toast({
+          variant: "destructive",
+          title: "Authentication Failed",
+          description: "Invalid credentials. Please use the demo accounts provided below.",
+        });
+      }
+    }, 1200);
   };
 
   const fillDemo = (role: 'admin' | 'business') => {
-    setEmail(role === 'admin' ? 'demo@replyrush.ai' : 'business@replyrush.ai');
-    setPassword(role === 'admin' ? 'ReplyRush123' : 'Business123');
+    if (role === 'admin') {
+      setEmail('demo@replyrush.ai');
+      setPassword('ReplyRush123');
+    } else {
+      setEmail('business@replyrush.ai');
+      setPassword('Business123');
+    }
   };
 
   return (
@@ -48,9 +75,9 @@ export default function LoginPage() {
             <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center glow-primary group-hover:scale-110 transition-transform duration-500">
               <Zap className="text-white fill-white" size={24} />
             </div>
-            <span className="font-headline text-3xl font-bold tracking-tighter">ReplyRush<span className="text-primary">AI</span></span>
+            <span className="font-headline text-3xl font-bold tracking-tighter text-white">ReplyRush<span className="text-primary">AI</span></span>
           </Link>
-          <h1 className="font-headline text-4xl font-bold mb-4 tracking-tighter">Welcome back</h1>
+          <h1 className="font-headline text-4xl font-bold mb-4 tracking-tighter text-white">Welcome back</h1>
           <p className="text-muted-foreground text-lg">Sign in to manage your neural sales team.</p>
         </div>
 
@@ -59,7 +86,7 @@ export default function LoginPage() {
             <div className="space-y-3">
               <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] ml-1">Account Email</label>
               <Input 
-                className="h-14 bg-white/[0.03] border-white/10 rounded-2xl px-6 text-base focus-visible:ring-primary/50" 
+                className="h-14 bg-white/[0.03] border-white/10 rounded-2xl px-6 text-base text-white focus-visible:ring-primary/50" 
                 placeholder="name@company.com" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -73,7 +100,7 @@ export default function LoginPage() {
               </div>
               <Input 
                 type="password" 
-                className="h-14 bg-white/[0.03] border-white/10 rounded-2xl px-6 text-base focus-visible:ring-primary/50" 
+                className="h-14 bg-white/[0.03] border-white/10 rounded-2xl px-6 text-base text-white focus-visible:ring-primary/50" 
                 placeholder="••••••••" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -81,7 +108,7 @@ export default function LoginPage() {
               />
             </div>
             
-            <Button type="submit" className="w-full h-14 bg-primary hover:bg-primary/90 glow-primary rounded-2xl font-bold text-lg group transition-all duration-500 active:scale-95" disabled={loading}>
+            <Button type="submit" className="w-full h-14 bg-primary hover:bg-primary/90 glow-primary rounded-2xl font-bold text-lg group transition-all duration-500 active:scale-95 text-white" disabled={loading}>
               {loading ? <Loader2 className="animate-spin" /> : <>Sign In <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" /></>}
             </Button>
           </form>
@@ -95,15 +122,17 @@ export default function LoginPage() {
           <div className="grid grid-cols-2 gap-4">
             <Button 
               variant="outline" 
-              className="h-12 border-white/5 bg-white/[0.02] hover:bg-white/10 rounded-2xl font-black text-[10px] uppercase tracking-widest gap-2"
+              className="h-12 border-white/5 bg-white/[0.02] hover:bg-white/10 rounded-2xl font-black text-[10px] uppercase tracking-widest gap-2 text-white"
               onClick={() => fillDemo('admin')}
+              type="button"
             >
               <Sparkles size={14} className="text-primary" /> Admin
             </Button>
             <Button 
               variant="outline" 
-              className="h-12 border-white/5 bg-white/[0.02] hover:bg-white/10 rounded-2xl font-black text-[10px] uppercase tracking-widest gap-2"
+              className="h-12 border-white/5 bg-white/[0.02] hover:bg-white/10 rounded-2xl font-black text-[10px] uppercase tracking-widest gap-2 text-white"
               onClick={() => fillDemo('business')}
+              type="button"
             >
               <Zap size={14} className="text-accent" /> Business
             </Button>
