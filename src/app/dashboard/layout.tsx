@@ -1,11 +1,36 @@
-import React from 'react';
+
+'use client';
+
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
+import { useUser } from '@/firebase';
+import { Loader2 } from 'lucide-react';
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user, loading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#020203] flex items-center justify-center">
+        <Loader2 className="w-10 h-10 text-primary animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) return null;
+
   return (
     <div className="flex min-h-screen bg-[#020203] relative overflow-hidden">
       {/* Background Ambience */}
@@ -16,8 +41,8 @@ export default function DashboardLayout({
       
       <DashboardSidebar />
       
-      <main className="flex-1 h-screen overflow-y-auto relative z-10 custom-scrollbar">
-        <div className="max-w-[1600px] mx-auto">
+      <main className="flex-1 h-screen overflow-y-auto relative z-10 custom-scrollbar scroll-smooth">
+        <div className="max-w-[1600px] mx-auto pb-12">
           {children}
         </div>
       </main>

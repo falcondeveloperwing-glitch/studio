@@ -1,8 +1,9 @@
+
 "use client";
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { 
   LayoutDashboard, 
@@ -16,7 +17,8 @@ import {
   Command
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { useUser, initializeFirebase } from '@/firebase';
+import { signOut } from 'firebase/auth';
 
 const navItems = [
   { label: 'Overview', icon: LayoutDashboard, href: '/dashboard' },
@@ -29,6 +31,14 @@ const navItems = [
 
 export function DashboardSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user } = useUser();
+
+  const handleLogout = async () => {
+    const { auth } = initializeFirebase();
+    await signOut(auth);
+    router.push('/login');
+  };
 
   return (
     <div className="w-72 h-screen border-r border-white/[0.05] flex flex-col bg-[#020203] sticky top-0 z-50">
@@ -92,20 +102,19 @@ export function DashboardSidebar() {
           <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 blur-[30px] rounded-full group-hover:scale-150 transition-transform duration-700" />
           <div className="flex items-center gap-2 mb-2 relative z-10">
             <Sparkles className="text-primary" size={16} />
-            <span className="text-xs font-bold text-primary uppercase tracking-widest">Pro Status</span>
+            <span className="text-xs font-bold text-primary uppercase tracking-widest">Elite Status</span>
           </div>
-          <p className="text-[11px] text-muted-foreground mb-4 leading-relaxed relative z-10">You've reached your lead limit for this month.</p>
-          <Button size="sm" className="w-full h-9 bg-primary hover:bg-primary/90 text-[10px] font-bold uppercase tracking-widest rounded-xl relative z-10">Expand Pipeline</Button>
+          <p className="text-[11px] text-muted-foreground mb-4 leading-relaxed relative z-10">Advanced lead prioritization active.</p>
         </div>
 
-        <div className="flex items-center justify-between bg-white/[0.03] border border-white/[0.05] p-3 rounded-[1.5rem] group hover:bg-white/[0.05] transition-colors cursor-pointer">
+        <div className="flex items-center justify-between bg-white/[0.03] border border-white/[0.05] p-3 rounded-[1.5rem] group hover:bg-white/[0.05] transition-colors cursor-pointer" onClick={handleLogout}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden">
-              <img src="https://picsum.photos/seed/admin/100/100" alt="Profile" className="w-full h-full object-cover" />
+              <img src={`https://picsum.photos/seed/${user?.uid}/100/100`} alt="Profile" className="w-full h-full object-cover" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-bold text-white truncate">John Smith</p>
-              <p className="text-[10px] text-muted-foreground truncate font-medium">john@nike.com</p>
+              <p className="text-xs font-bold text-white truncate">{user?.displayName || user?.email?.split('@')[0] || 'Member'}</p>
+              <p className="text-[10px] text-muted-foreground truncate font-medium">{user?.email}</p>
             </div>
           </div>
           <LogOut size={16} className="text-muted-foreground group-hover:text-white transition-colors mr-2" />
