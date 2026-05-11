@@ -19,10 +19,10 @@ export function GlassCard({
     <div
       className={cn(
         "rounded-xl border transition-all duration-200",
-        variant === "default" && "bg-zinc-900/30 border-white/[0.06] shadow-sm",
-        variant === "darker" && "bg-black/40 border-white/[0.04]",
+        variant === "default" && "bg-zinc-900/40 border-zinc-800 shadow-sm",
+        variant === "darker" && "bg-zinc-950 border-zinc-800",
         variant === "borderless" && "border-transparent bg-transparent",
-        hoverable && "hover:border-white/10 hover:bg-zinc-900/50",
+        hoverable && "hover:border-zinc-700 hover:bg-zinc-900/60",
         className
       )}
       {...props}
