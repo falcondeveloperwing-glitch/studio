@@ -1,10 +1,11 @@
 
-"use client";
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, 
   Inbox, 
@@ -14,11 +15,11 @@ import {
   Settings, 
   LogOut,
   Sparkles,
-  Command
+  Command,
+  ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useUser, initializeFirebase } from '@/firebase';
-import { signOut } from 'firebase/auth';
+import { useLocalAuth } from '@/hooks/use-local-auth';
 
 const navItems = [
   { label: 'Overview', icon: LayoutDashboard, href: '/dashboard' },
@@ -31,93 +32,99 @@ const navItems = [
 
 export function DashboardSidebar() {
   const pathname = usePathname();
-  const router = useRouter();
-  const { user } = useUser();
-
-  const handleLogout = async () => {
-    const { auth } = initializeFirebase();
-    await signOut(auth);
-    router.push('/login');
-  };
+  const { user, logout } = useLocalAuth();
 
   return (
-    <div className="w-72 h-screen border-r border-white/[0.05] flex flex-col bg-[#020203] sticky top-0 z-50">
-      <div className="p-8">
-        <Link href="/dashboard" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center glow-primary group-hover:scale-110 transition-transform duration-500">
-            <Zap className="text-white fill-white" size={20} />
+    <div className="w-[320px] h-screen border-r border-white/[0.06] flex flex-col bg-[#020203]/80 backdrop-blur-3xl sticky top-0 z-50">
+      <div className="p-10">
+        <Link href="/dashboard" className="flex items-center gap-4 group">
+          <div className="w-12 h-12 rounded-[1.25rem] bg-primary flex items-center justify-center glow-primary group-hover:scale-110 transition-transform duration-700">
+            <Zap className="text-white fill-white" size={24} />
           </div>
           <div>
-            <span className="font-headline font-bold text-xl tracking-tight text-white">ReplyRush</span>
-            <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">v2.4 Pro</span>
+            <span className="font-headline font-bold text-2xl tracking-tighter text-white">ReplyRush</span>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
+              <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Neural v4.2</span>
             </div>
           </div>
         </Link>
       </div>
 
-      <div className="flex-1 px-4 py-4 space-y-8">
+      <div className="flex-1 px-6 py-6 space-y-12">
         <div>
-          <p className="px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-4">Management</p>
-          <nav className="space-y-1">
+          <p className="px-5 text-[10px] font-black text-muted-foreground/50 uppercase tracking-[0.4em] mb-6">Management</p>
+          <nav className="space-y-2">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link key={item.href} href={item.href}>
-                  <div className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 group relative",
-                    isActive 
-                      ? "bg-white/[0.05] text-white" 
-                      : "text-muted-foreground hover:bg-white/[0.03] hover:text-white"
-                  )}>
-                    <item.icon size={18} className={cn(
-                      "transition-all duration-300",
-                      isActive ? "text-primary scale-110" : "group-hover:text-white"
-                    )} />
-                    <span className="font-bold text-sm tracking-tight">{item.label}</span>
-                    {isActive && (
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full glow-primary" />
+                  <motion.div 
+                    whileHover={{ x: 4 }}
+                    className={cn(
+                      "flex items-center justify-between px-5 py-4 rounded-[1.5rem] transition-all duration-500 group relative",
+                      isActive 
+                        ? "bg-white/[0.06] text-white shadow-xl" 
+                        : "text-muted-foreground/70 hover:bg-white/[0.03] hover:text-white"
                     )}
-                  </div>
+                  >
+                    <div className="flex items-center gap-4">
+                      <item.icon size={20} className={cn(
+                        "transition-all duration-500",
+                        isActive ? "text-primary scale-110" : "group-hover:text-white"
+                      )} />
+                      <span className="font-bold text-base tracking-tight">{item.label}</span>
+                    </div>
+                    {isActive ? (
+                      <ChevronRight size={14} className="text-primary" />
+                    ) : (
+                      <ChevronRight size={14} className="opacity-0 group-hover:opacity-40 transition-opacity" />
+                    )}
+                    {isActive && (
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r-full glow-primary" />
+                    )}
+                  </motion.div>
                 </Link>
               );
             })}
           </nav>
         </div>
 
-        <div className="px-4">
-          <Button variant="outline" className="w-full h-11 border-white/5 bg-white/5 hover:bg-white/10 rounded-2xl flex items-center justify-between px-4 group">
-            <div className="flex items-center gap-2">
-              <Command size={14} className="text-muted-foreground" />
-              <span className="text-xs font-bold text-white">Shortcuts</span>
+        <div className="px-5">
+          <Button variant="outline" className="w-full h-14 border-white/[0.04] bg-white/[0.02] hover:bg-white/[0.08] rounded-[1.5rem] flex items-center justify-between px-6 group border-dashed transition-all duration-500">
+            <div className="flex items-center gap-3">
+              <Command size={18} className="text-muted-foreground" />
+              <span className="text-xs font-bold text-white/80">Command</span>
             </div>
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white/10 text-muted-foreground group-hover:text-white">⌘ K</span>
+            <span className="text-[10px] font-black px-2 py-1 rounded-lg bg-white/10 text-muted-foreground group-hover:text-white transition-colors">⌘ K</span>
           </Button>
         </div>
       </div>
 
-      <div className="p-6">
-        <div className="glass p-5 rounded-[2rem] border-primary/20 relative overflow-hidden group mb-6 cursor-pointer">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 blur-[30px] rounded-full group-hover:scale-150 transition-transform duration-700" />
-          <div className="flex items-center gap-2 mb-2 relative z-10">
-            <Sparkles className="text-primary" size={16} />
-            <span className="text-xs font-bold text-primary uppercase tracking-widest">Elite Status</span>
+      <div className="p-8">
+        <div className="glass p-6 rounded-[2.5rem] border-primary/20 relative overflow-hidden group mb-8 cursor-pointer shadow-2xl">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[40px] rounded-full group-hover:scale-150 transition-transform duration-1000" />
+          <div className="flex items-center gap-2 mb-3 relative z-10">
+            <Sparkles className="text-primary animate-pulse" size={18} />
+            <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">Elite Status</span>
           </div>
-          <p className="text-[11px] text-muted-foreground mb-4 leading-relaxed relative z-10">Advanced lead prioritization active.</p>
+          <p className="text-[11px] text-muted-foreground font-medium leading-relaxed relative z-10">Neural prioritization is maximizing your sales funnel.</p>
         </div>
 
-        <div className="flex items-center justify-between bg-white/[0.03] border border-white/[0.05] p-3 rounded-[1.5rem] group hover:bg-white/[0.05] transition-colors cursor-pointer" onClick={handleLogout}>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden">
-              <img src={`https://picsum.photos/seed/${user?.uid}/100/100`} alt="Profile" className="w-full h-full object-cover" />
+        <div 
+          onClick={logout}
+          className="flex items-center justify-between bg-white/[0.02] border border-white/[0.05] p-4 rounded-[1.75rem] group hover:bg-white/[0.06] transition-all duration-500 cursor-pointer shadow-lg"
+        >
+          <div className="flex items-center gap-4 min-w-0">
+            <div className="w-12 h-12 rounded-full border border-white/10 overflow-hidden shadow-2xl group-hover:scale-105 transition-transform duration-500">
+              <img src={`https://picsum.photos/seed/admin/150/150`} alt="Profile" className="w-full h-full object-cover" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-bold text-white truncate">{user?.displayName || user?.email?.split('@')[0] || 'Member'}</p>
-              <p className="text-[10px] text-muted-foreground truncate font-medium">{user?.email}</p>
+              <p className="text-sm font-bold text-white truncate">{user?.displayName || 'Member'}</p>
+              <p className="text-[10px] text-muted-foreground/60 truncate font-black uppercase tracking-widest">{user?.role || 'User'}</p>
             </div>
           </div>
-          <LogOut size={16} className="text-muted-foreground group-hover:text-white transition-colors mr-2" />
+          <LogOut size={20} className="text-muted-foreground group-hover:text-primary transition-colors mr-2" />
         </div>
       </div>
     </div>
