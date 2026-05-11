@@ -12,16 +12,21 @@ export function useLocalAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Restore session from localStorage on mount
-    const stored = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored));
-      } catch (e) {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
+    const checkAuth = () => {
+      if (typeof window === 'undefined') return;
+      
+      const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+      if (stored) {
+        try {
+          setUser(JSON.parse(stored));
+        } catch (e) {
+          localStorage.removeItem(AUTH_STORAGE_KEY);
+        }
       }
-    }
-    setLoading(false);
+      setLoading(false);
+    };
+
+    checkAuth();
   }, []);
 
   const login = (email: string, password: string): boolean => {
