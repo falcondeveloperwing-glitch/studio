@@ -30,22 +30,23 @@ import {
   Pie
 } from 'recharts';
 import { Badge } from '@/components/ui/badge';
+import { MOCK_STATS } from '@/lib/mock-data';
 
 const data = [
-  { name: 'Jan', sales: 4000, conv: 2400 },
-  { name: 'Feb', sales: 3000, conv: 1398 },
-  { name: 'Mar', sales: 6000, conv: 4800 },
-  { name: 'Apr', sales: 4780, conv: 3908 },
-  { name: 'May', sales: 7890, conv: 4800 },
-  { name: 'Jun', sales: 6390, conv: 5800 },
-  { name: 'Jul', sales: 9490, conv: 7300 },
+  { name: 'Jan', sales: 42000, conv: 24000 },
+  { name: 'Feb', sales: 58000, conv: 32000 },
+  { name: 'Mar', sales: 65000, conv: 41000 },
+  { name: 'Apr', sales: 92000, conv: 58000 },
+  { name: 'May', sales: 118000, conv: 74000 },
+  { name: 'Jun', sales: 145000, conv: 92000 },
+  { name: 'Jul', sales: 182000, conv: 124000 },
 ];
 
 const satisfactionData = [
-  { name: 'Neural Positive', value: 75, color: 'hsl(var(--primary))' },
-  { name: 'Satisfied', value: 15, color: 'hsl(var(--accent))' },
-  { name: 'Neutral', value: 8, color: 'hsl(var(--muted))' },
-  { name: 'Frustrated', value: 2, color: 'hsl(var(--destructive))' },
+  { name: 'Highly Satisfied', value: 82, color: 'hsl(var(--primary))' },
+  { name: 'Satisfied', value: 14, color: 'hsl(var(--accent))' },
+  { name: 'Neutral', value: 3, color: 'hsl(var(--muted))' },
+  { name: 'Escalated', value: 1, color: 'hsl(var(--destructive))' },
 ];
 
 export default function AnalyticsPage() {
@@ -57,14 +58,14 @@ export default function AnalyticsPage() {
             <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-2xl">
               <BrainCircuit size={28} />
             </div>
-            <p className="text-[10px] font-black text-primary uppercase tracking-[0.5em]">Cognitive Dataset v2</p>
+            <p className="text-[10px] font-black text-primary uppercase tracking-[0.5em]">Revenue Dataset v2.4</p>
           </div>
           <motion.h1 
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             className="font-headline text-6xl lg:text-8xl font-bold tracking-tighter mb-4"
           >
-            Deep Intelligence
+            Neural Growth
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, x: -10 }}
@@ -72,25 +73,25 @@ export default function AnalyticsPage() {
             transition={{ delay: 0.1 }}
             className="text-muted-foreground text-2xl lg:text-3xl max-w-2xl opacity-50 font-light"
           >
-            Neural analysis of your Instagram commerce ecosystem.
+            A high-fidelity analysis of your Instagram sales ecosystem.
           </motion.p>
         </div>
         <div className="flex gap-5">
           <Button variant="outline" className="border-white/5 bg-white/5 rounded-2xl h-16 px-10 font-black text-[10px] uppercase tracking-widest gap-3 shadow-2xl">
-            <Download size={20} /> Export
+            <Download size={20} /> Export Audit
           </Button>
           <Button variant="outline" className="border-white/5 bg-white/5 rounded-2xl h-16 px-10 font-black text-[10px] uppercase tracking-widest gap-3 shadow-2xl">
-            <Calendar size={20} /> 30 Days <ChevronDown size={14} className="opacity-30" />
+            <Calendar size={20} /> Current Quarter <ChevronDown size={14} className="opacity-30" />
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         {[
-          { label: 'Conversations', value: '42,109', change: '+18.2%', icon: MessageSquare, color: 'primary' },
-          { label: 'Avg Response', value: '0.4s', change: '-20.1%', icon: Clock, color: 'accent' },
-          { label: 'Closure Rate', value: '14.2%', change: '+2.4%', icon: TrendingUp, color: 'emerald-500' },
-          { label: 'Neural CSAT', value: '4.95/5', change: '+0.1%', icon: Smile, color: 'primary' }
+          { label: 'Total Inquiries', value: MOCK_STATS.aiReplies, change: '+22.4%', icon: MessageSquare, color: 'primary' },
+          { label: 'Neural Latency', value: MOCK_STATS.avgSpeed, change: '-42.1%', icon: Clock, color: 'accent' },
+          { label: 'Lead Conversion', value: MOCK_STATS.conversionRate, change: '+4.8%', icon: TrendingUp, color: 'emerald-500' },
+          { label: 'Customer Trust', value: MOCK_STATS.satisfaction, change: '+0.4%', icon: Smile, color: 'primary' }
         ].map((stat, i) => (
           <motion.div
             key={i}
@@ -124,15 +125,15 @@ export default function AnalyticsPage() {
           <GlassCard className="h-full border-white/[0.04] p-16 rounded-[3.5rem]" variant="darker">
             <div className="flex items-center justify-between mb-24">
               <div>
-                <h3 className="font-headline font-bold text-4xl lg:text-5xl tracking-tight mb-3 text-gradient">Neural Velocity</h3>
-                <p className="text-[11px] text-muted-foreground tracking-[0.5em] uppercase font-black opacity-30">Volume vs. Recovered Revenue</p>
+                <h3 className="font-headline font-bold text-4xl lg:text-5xl tracking-tight mb-3 text-gradient">Revenue Velocity</h3>
+                <p className="text-[11px] text-muted-foreground tracking-[0.5em] uppercase font-black opacity-30">Inquiry Volume vs. Recovered GMV</p>
               </div>
               <div className="flex gap-10">
                 <div className="flex items-center gap-4 text-[11px] font-black text-muted-foreground uppercase tracking-widest">
-                  <div className="w-3 h-3 rounded-full bg-primary glow-primary" /> Sales
+                  <div className="w-3 h-3 rounded-full bg-primary glow-primary" /> Recovered
                 </div>
                 <div className="flex items-center gap-4 text-[11px] font-black text-muted-foreground uppercase tracking-widest">
-                  <div className="w-3 h-3 rounded-full bg-accent shadow-[0_0_15px_#3b82f6]" /> Threads
+                  <div className="w-3 h-3 rounded-full bg-accent shadow-[0_0_15px_#3b82f6]" /> Conversations
                 </div>
               </div>
             </div>
@@ -186,7 +187,7 @@ export default function AnalyticsPage() {
           className="space-y-10"
         >
           <GlassCard className="h-full border-white/[0.04] p-16 rounded-[3.5rem]" variant="darker">
-            <h3 className="font-headline font-bold text-3xl mb-20 text-center tracking-tight">Emotional Spectrum</h3>
+            <h3 className="font-headline font-bold text-3xl mb-20 text-center tracking-tight">Emotional Sentiment</h3>
             <div className="h-[350px] relative">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -206,8 +207,8 @@ export default function AnalyticsPage() {
                 </PieChart>
               </ResponsiveContainer>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <p className="text-7xl font-bold font-headline tracking-tighter text-white">96%</p>
-                <p className="text-[12px] text-primary uppercase font-black tracking-[0.5em]">Positive</p>
+                <p className="text-7xl font-bold font-headline tracking-tighter text-white">98%</p>
+                <p className="text-[12px] text-primary uppercase font-black tracking-[0.5em]">Resolved</p>
               </div>
             </div>
             
@@ -225,7 +226,7 @@ export default function AnalyticsPage() {
             
             <div className="mt-20 pt-12 border-t border-white/[0.05]">
               <Button className="w-full h-16 bg-white/[0.04] hover:bg-white/[0.08] rounded-[2rem] text-[10px] font-black uppercase tracking-widest gap-4 transition-all duration-700 shadow-2xl group text-white">
-                <Zap size={20} className="text-primary group-hover:animate-pulse" /> Neural Strategy Update
+                <Zap size={20} className="text-primary group-hover:animate-pulse" /> Review Strategy Report
               </Button>
             </div>
           </GlassCard>

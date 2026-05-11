@@ -15,12 +15,12 @@ export const MOCK_CHATS = [
     avatarSeed: 'marcus',
     sentiment: 'Positive',
     intent: 'High Purchase Intent',
-    value: '$249.00',
+    value: '$1,240.00',
     messages: [
       { role: 'customer', content: 'Hey, I love the new high-performance collection! The textures look premium.', type: 'text', timestamp: new Date(Date.now() - 3600000).toISOString() },
       { role: 'ai', content: 'Thank you Marcus! We designed it specifically for high-intensity training environments. Are you looking for the Stealth Hoodies or the Compression series?', type: 'automated', timestamp: new Date(Date.now() - 3500000).toISOString() },
-      { role: 'customer', content: 'The Stealth Hoodie. Does it come in XL black? I need it for a shoot next week.', type: 'text', timestamp: new Date(Date.now() - 1000000).toISOString() },
-      { role: 'ai', content: 'Yes, we have 4 units left in XL Black! Since you are a recurring customer, I can apply a "Fast-Track" 10% loyalty credit if you order in the next 15 minutes. Should I generate your secure checkout link?', type: 'automated', timestamp: new Date(Date.now() - 500000).toISOString() },
+      { role: 'customer', content: 'I need 10 Stealth Hoodies in XL for my coaching team. Do you have bulk stock available for immediate dispatch?', type: 'text', timestamp: new Date(Date.now() - 1000000).toISOString() },
+      { role: 'ai', content: 'We currently have 14 units of the Stealth Hoodie in XL Black. For a bulk order of 10, I can apply our "Operations Tier" 15% discount. That brings your total to $1,020 plus $220 for DHL Express overnight. Should I generate your secure checkout link?', type: 'automated', timestamp: new Date(Date.now() - 500000).toISOString() },
       { role: 'customer', content: 'Perfect, send the payment link!', type: 'text', timestamp: new Date().toISOString() },
     ]
   },
@@ -54,30 +54,49 @@ export const MOCK_CHATS = [
     intent: 'Support Escalation',
     value: '$0.00',
     messages: [
-      { role: 'customer', content: 'I ordered 3 days ago and havent seen tracking. Order #8492. This is urgent.', type: 'text', timestamp: new Date(Date.now() - 14400000).toISOString() },
-      { role: 'ai', content: 'I apologize for the delay, Jordan. Checking our dispatch logs... It seems the carrier is experiencing delays in your region. I am escalating this to our logistics lead for a manual override. You will receive an SMS update shortly.', type: 'automated', timestamp: new Date(Date.now() - 14300000).toISOString() },
+      { role: 'customer', content: 'I ordered 3 days ago and havent seen tracking. Order #8492. This is urgent as I have a launch tomorrow.', type: 'text', timestamp: new Date(Date.now() - 14400000).toISOString() },
+      { role: 'ai', content: 'I apologize for the delay, Jordan. Checking our dispatch logs... It seems the carrier is experiencing delays in the Tri-State area. I am escalating this to our logistics lead for a manual override and courier upgrade. You will receive an SMS update within 15 minutes.', type: 'automated', timestamp: new Date(Date.now() - 14300000).toISOString() },
+    ]
+  },
+  {
+    id: '4',
+    customerName: 'Sarah Jenkins',
+    customerUsername: 's_jenkins_style',
+    lastMessage: 'Is the 20% discount still active?',
+    status: 'AI Handled',
+    unread: false,
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
+    avatarSeed: 'sarah',
+    sentiment: 'Positive',
+    intent: 'Promotional Recovery',
+    value: '$185.00',
+    messages: [
+      { role: 'customer', content: 'I saw a 20% code on your story yesterday but it seems expired. Is there any way to still use it?', type: 'text', timestamp: new Date(Date.now() - 86400000).toISOString() },
+      { role: 'ai', content: 'Hi Sarah! That flash sale ended at midnight, but I see you have been a customer since 2023. I can reactivate a personalized loyalty code for the next 2 hours. Would you like me to apply it to your cart?', type: 'automated', timestamp: new Date(Date.now() - 86300000).toISOString() },
     ]
   }
 ];
 
 export const MOCK_STATS = {
-  leadsRecovered: '4,102',
-  aiReplies: '18,942',
-  revenueRecovered: '$142,850',
-  avgSpeed: '0.12s',
-  conversionRate: '24.8%',
-  satisfaction: '4.99/5'
+  leadsRecovered: '12,402',
+  aiReplies: '142,942',
+  revenueRecovered: '$842,850',
+  avgSpeed: '0.08s',
+  conversionRate: '31.4%',
+  satisfaction: '4.98/5'
 };
 
 export const MOCK_LIVE_FEED = [
-  { id: 'f1', title: 'Revenue Recovered', description: 'AI closed a $499 order with Elena Rossi. Trigger: Scarcity-Logic (Last 2 units).', timestamp: 'Just now', type: 'sale' },
-  { id: 'f2', title: 'High Intent Lead', description: '@marcus_fit requested checkout link. Estimated conversion probability: 98%.', timestamp: '3m ago', type: 'lead' },
-  { id: 'f3', title: 'Stock Intelligence', description: 'Global inventory sync completed across 42 active thread negotiations.', timestamp: '8m ago', type: 'info' },
-  { id: 'f4', title: 'Escalation Logged', description: 'Manual hand-off for order #8492. Reason: Complex carrier delay inquiry.', timestamp: '14m ago', type: 'redirect' }
+  { id: 'f1', title: 'Revenue Recovered', description: 'AI closed a $1,020 bulk order with Marcus Sterling. Logic: Operations-Tier Discount Applied.', timestamp: 'Just now', type: 'sale' },
+  { id: 'f2', title: 'High Intent Lead', description: '@elenar_designs inquired about Milan shipping. Automated quote delivered. Probability: 84%.', timestamp: '4m ago', type: 'lead' },
+  { id: 'f3', title: 'Cart Recovery', description: 'Sarah Jenkins reactivated via personalized loyalty sequence. $185 value pending.', timestamp: '12m ago', type: 'sale' },
+  { id: 'f4', title: 'Escalation Logged', description: 'Manual hand-off for order #8492. Reason: Urgent Logistics Override required.', timestamp: '22m ago', type: 'redirect' },
+  { id: 'f5', title: 'Inventory Sync', description: 'Global SKU inventory updated across 86 active thread negotiations.', timestamp: '45m ago', type: 'info' }
 ];
 
 export const MOCK_WORKFLOWS = [
-  { id: 'w1', name: 'Neural Price Strategy', trigger: 'Customer mentions "price" or "expensive"', action: 'Dynamic Loyalty Discount (10%)', status: 'Active', runs: 1450 },
-  { id: 'w2', name: 'Instant Stock Intelligence', trigger: 'Inquiry: "is this in stock?"', action: 'Live ERP Query + High-Res Image', status: 'Active', runs: 3120 },
-  { id: 'w3', name: 'Dormant Lead Nudge', trigger: 'Inactivity > 18 hours', action: 'Personalized "Check-in" sequence', status: 'Active', runs: 680 }
+  { id: 'w1', name: 'Neural Pricing Logic', trigger: 'Customer mentions "price", "bulk", or "discount"', action: 'Tiered Loyalty Discount (10-20%)', status: 'Active', runs: 8450 },
+  { id: 'w2', name: 'Inventory Intelligence', trigger: 'Inquiry: "in stock", "available", or SKU codes', action: 'Live ERP Check + Scarcity Nudge', status: 'Active', runs: 12120 },
+  { id: 'w3', name: 'Dormant Lead Recovery', trigger: 'Inactivity > 24 hours post-quote', action: 'Sentiment-driven "Check-in" sequence', status: 'Active', runs: 4680 },
+  { id: 'w4', name: 'Logistics Escalation', trigger: 'Sentiment: Frustrated + Keyword: "tracking", "delay"', action: 'Priority Slack Alert + AI Apology', status: 'Active', runs: 1240 }
 ];

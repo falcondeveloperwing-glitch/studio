@@ -19,10 +19,22 @@ export default function KnowledgePage() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [knowledgeText, setKnowledgeText] = useState(
-    "Standard Shipping: 3-5 business days via DHL. Rates: $15 Domestic, $45 International.\n\n" +
-    "Returns: 30-day window for unworn items with tags. Refunds processed in 48 hours.\n\n" +
-    "Pricing: Stealth Hoodie ($120), Tech Joggers ($85), Compression Shirt ($65).\n\n" +
-    "Bulk Orders: 15% discount for 10+ items. Contact operations for custom SKU runs."
+    "GLOBAL SHIPPING & LOGISTICS:\n" +
+    "- Standard Domestic (US): 3-5 business days via UPS Ground. Flat rate $12.95.\n" +
+    "- International Priority: 2-4 business days via DHL Express. Calculated at checkout (Avg $45-$65).\n" +
+    "- Free shipping on orders over $250.\n\n" +
+    "PRODUCT PRICING & INVENTORY:\n" +
+    "- Stealth Hoodie: $120.00 (SKU: STH-01). Core stock in Black/Grey.\n" +
+    "- Tech Joggers: $85.00 (SKU: TJ-04). Water-resistant coating.\n" +
+    "- Compression Layer: $65.00 (SKU: CL-09). Antimicrobial fabric.\n\n" +
+    "BULK & WHOLESALE POLICY:\n" +
+    "- Minimum bulk order: 10 units.\n" +
+    "- Tier 1 (10-24 units): 15% discount code: BULK15.\n" +
+    "- Tier 2 (25+ units): 25% discount code: BULK25.\n\n" +
+    "RETURNS & EXCHANGES:\n" +
+    "- 30-day window for unworn items with original tags.\n" +
+    "- Exchanges are free; returns incur a $10 restocking fee unless defective.\n" +
+    "- Sale items (marked 40%+ off) are final sale."
   );
 
   const handleTrain = async () => {
@@ -61,7 +73,7 @@ export default function KnowledgePage() {
               <div>
                 <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-3 block">Contextual Business Data</label>
                 <Textarea 
-                  className="min-h-[300px] bg-zinc-950/50 border-zinc-800 rounded-xl p-5 text-sm leading-relaxed focus-visible:ring-zinc-700"
+                  className="min-h-[400px] bg-zinc-950/50 border-zinc-800 rounded-xl p-5 text-sm leading-relaxed focus-visible:ring-zinc-700"
                   placeholder="Paste product lists, shipping rules, or return policies..."
                   value={knowledgeText}
                   onChange={(e) => setKnowledgeText(e.target.value)}
@@ -106,7 +118,7 @@ export default function KnowledgePage() {
                 <Info className="text-zinc-500" size={18} />
                 <h3 className="font-bold text-sm">System Guidance</h3>
               </div>
-              <p className="text-xs text-zinc-500 leading-relaxed font-medium">Specificity drives conversion. Use SKU codes and exact regional shipping times for 24% better AI performance.</p>
+              <p className="text-xs text-zinc-500 leading-relaxed font-medium">Specificity drives conversion. Using exact SKU codes and regional courier rules increases AI sales accuracy by 28%.</p>
             </GlassCard>
           </div>
         </div>
@@ -116,9 +128,9 @@ export default function KnowledgePage() {
             <h3 className="font-bold text-lg mb-8 tracking-tight">Version History</h3>
             <div className="space-y-6">
               {[
-                { name: 'q4_inventory_sheet.xlsx', time: '2h ago', size: '4.2 MB' },
-                { name: 'shipping_policy_intl.pdf', time: '1d ago', size: '1.8 MB' },
-                { name: 'refund_logic_v3.docx', time: '3d ago', size: '0.9 MB' }
+                { name: '2025_q1_inventory_master.xlsx', time: '2h ago', size: '12.4 MB' },
+                { name: 'international_shipping_matrix.pdf', time: '1d ago', size: '2.1 MB' },
+                { name: 'return_restocking_policy_v4.docx', time: '3d ago', size: '1.2 MB' }
               ].map((file, i) => (
                 <div key={i} className="flex gap-4 pb-6 border-b border-zinc-800 last:border-0 last:pb-0">
                   <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0 shadow-lg">

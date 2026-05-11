@@ -27,13 +27,13 @@ import { Button } from '@/components/ui/button';
 import { MOCK_STATS, MOCK_LIVE_FEED } from '@/lib/mock-data';
 
 const chartData = [
-  { name: 'Mon', revenue: 4200 },
-  { name: 'Tue', revenue: 3800 },
-  { name: 'Wed', revenue: 5100 },
-  { name: 'Thu', revenue: 4700 },
-  { name: 'Fri', revenue: 6200 },
-  { name: 'Sat', revenue: 5800 },
-  { name: 'Sun', revenue: 7400 },
+  { name: 'Mon', revenue: 84000 },
+  { name: 'Tue', revenue: 92000 },
+  { name: 'Wed', revenue: 115000 },
+  { name: 'Thu', revenue: 108000 },
+  { name: 'Fri', revenue: 142000 },
+  { name: 'Sat', revenue: 168000 },
+  { name: 'Sun', revenue: 194000 },
 ];
 
 export default function DashboardOverview() {
@@ -42,7 +42,7 @@ export default function DashboardOverview() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight mb-2">Operational Command</h1>
-          <p className="text-zinc-500 text-sm">Real-time performance monitoring of your AI sales fleet.</p>
+          <p className="text-zinc-500 text-sm">Real-time performance monitoring of your AI sales ecosystem.</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-zinc-800 bg-zinc-900/50">
@@ -50,17 +50,17 @@ export default function DashboardOverview() {
             <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">System Nominal</span>
           </div>
           <Button variant="outline" className="h-10 border-zinc-800 bg-zinc-900/50 text-xs font-bold gap-2">
-            <Activity size={14} /> View Logs
+            <Activity size={14} /> Neural Logs
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Revenue Recovered', value: MOCK_STATS.revenueRecovered, change: '+12.5%', icon: DollarSign, trend: 'up' },
-          { label: 'AI Total Replies', value: MOCK_STATS.aiReplies, change: '+8.2%', icon: MessageSquare, trend: 'up' },
-          { label: 'Avg Latency', value: '0.12s', change: '-5%', icon: Zap, trend: 'down' },
-          { label: 'Lead Conversion', value: '24.8%', change: '+2.1%', icon: TrendingUp, trend: 'up' }
+          { label: 'Revenue Recovered', value: MOCK_STATS.revenueRecovered, change: '+18.5%', icon: DollarSign, trend: 'up' },
+          { label: 'Total AI Replies', value: MOCK_STATS.aiReplies, change: '+12.2%', icon: MessageSquare, trend: 'up' },
+          { label: 'Avg Latency', value: MOCK_STATS.avgSpeed, change: '-42%', icon: Zap, trend: 'up' },
+          { label: 'Lead Conversion', value: MOCK_STATS.conversionRate, change: '+4.1%', icon: TrendingUp, trend: 'up' }
         ].map((stat, i) => (
           <GlassCard key={i} className="group border-zinc-800/50 hover:border-zinc-700/50 bg-zinc-900/20">
             <div className="flex items-center justify-between mb-6">
@@ -82,11 +82,11 @@ export default function DashboardOverview() {
           <div className="flex items-center justify-between mb-12">
             <div>
               <h3 className="font-bold text-lg mb-1">Revenue Velocity</h3>
-              <p className="text-xs text-zinc-500">Sales recaptured by AI over the last 7 sessions.</p>
+              <p className="text-xs text-zinc-500">Global sales recaptured by AI over the last 7 sessions.</p>
             </div>
             <div className="flex gap-6">
               <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-black uppercase tracking-widest">
-                <div className="w-2 h-2 rounded-full bg-white" /> Performance
+                <div className="w-2 h-2 rounded-full bg-white" /> Recovered GMV
               </div>
             </div>
           </div>
@@ -135,7 +135,7 @@ export default function DashboardOverview() {
 
         <GlassCard className="flex flex-col border-zinc-800/50 bg-zinc-900/20">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="font-bold text-lg">Live Activity</h3>
+            <h3 className="font-bold text-lg">Global Activity</h3>
             <Badge variant="outline" className="border-zinc-800 text-[9px] font-black uppercase tracking-widest px-2">Real-time</Badge>
           </div>
           <div className="flex-1 space-y-8 overflow-y-auto pr-2 custom-scrollbar">
@@ -156,7 +156,7 @@ export default function DashboardOverview() {
           </div>
           <div className="mt-8 pt-8 border-t border-zinc-800">
             <Button variant="ghost" className="w-full justify-between h-12 text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all rounded-xl">
-              <span className="text-xs font-bold uppercase tracking-widest">Open Analytics</span>
+              <span className="text-xs font-bold uppercase tracking-widest">Audit Full Dataset</span>
               <ArrowRight size={16} />
             </Button>
           </div>
