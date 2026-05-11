@@ -2,33 +2,33 @@
   "placeholderImages": [
     {
       "id": "hero-dashboard",
-      "description": "Premium AI Dashboard Interface",
-      "imageUrl": "https://picsum.photos/seed/replyrush1/1200/800",
-      "imageHint": "SaaS dashboard"
+      "description": "High-fidelity AI Dashboard with real-time neural logs",
+      "imageUrl": "https://picsum.photos/seed/replyrush_hero/1200/800",
+      "imageHint": "SaaS analytics"
     },
     {
       "id": "feature-automation",
-      "description": "Automation workflow builder preview",
-      "imageUrl": "https://picsum.photos/seed/replyrush2/800/600",
-      "imageHint": "automation workflow"
+      "description": "Premium visual node automation builder",
+      "imageUrl": "https://picsum.photos/seed/replyrush_nodes/800/600",
+      "imageHint": "node workflow"
     },
     {
       "id": "feature-inbox",
-      "description": "Intelligent DM inbox preview",
-      "imageUrl": "https://picsum.photos/seed/replyrush3/800/600",
-      "imageHint": "chat inbox"
+      "description": "Real-time AI DM inbox ecosystem",
+      "imageUrl": "https://picsum.photos/seed/replyrush_chat/800/600",
+      "imageHint": "chat dashboard"
     },
     {
       "id": "user-avatar-1",
-      "description": "Founder testimonial 1",
-      "imageUrl": "https://picsum.photos/seed/founder1/100/100",
-      "imageHint": "founder face"
+      "description": "Founder of elite fashion brand",
+      "imageUrl": "https://picsum.photos/seed/face1/100/100",
+      "imageHint": "founder portrait"
     },
     {
       "id": "user-avatar-2",
-      "description": "Founder testimonial 2",
-      "imageUrl": "https://picsum.photos/seed/founder2/100/100",
-      "imageHint": "founder face"
+      "description": "E-commerce CMO",
+      "imageUrl": "https://picsum.photos/seed/face2/100/100",
+      "imageHint": "corporate portrait"
     }
   ]
 }

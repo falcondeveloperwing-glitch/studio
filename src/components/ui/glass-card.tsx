@@ -1,4 +1,3 @@
-
 'use client';
 
 import { cn } from "@/lib/utils";
@@ -22,27 +21,20 @@ export function GlassCard({
   return (
     <div
       className={cn(
-        "rounded-[2rem] p-8 transition-all duration-700 relative overflow-hidden group",
+        "rounded-[2.5rem] p-8 transition-all duration-700 relative overflow-hidden group",
         variant === "default" && "glass",
         variant === "darker" && "glass-darker",
-        variant === "borderless" && "bg-white/[0.02] backdrop-blur-3xl",
-        hoverable && "hover:bg-white/[0.06] hover:border-white/15 hover:-translate-y-1.5",
-        glow === "primary" && "glow-primary",
-        glow === "accent" && "shadow-[0_0_40px_-5px_hsl(var(--accent)/0.3)]",
+        variant === "borderless" && "bg-white/[0.01] backdrop-blur-2xl",
+        hoverable && "hover:bg-white/[0.05] hover:border-white/20 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)]",
+        glow === "primary" && "glow-primary border-primary/20",
+        glow === "accent" && "shadow-[0_0_40px_-5px_hsl(var(--accent)/0.3)] border-accent/20",
         className
       )}
       {...props}
     >
-      {/* Dynamic Inner Glow Gradient */}
-      <div className="absolute inset-px rounded-[inherit] bg-gradient-to-br from-white/[0.08] via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-      
-      {/* Noise Texture Layer */}
-      <div className="absolute inset-0 noise z-0 opacity-[0.03] pointer-events-none" />
-      
-      {/* Subtle Bottom Shine */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-
-      {/* Content */}
+      <div className="absolute inset-px rounded-[inherit] bg-gradient-to-br from-white/[0.1] via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      <div className="absolute inset-0 noise z-0 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
       <div className="relative z-10">
         {children}
       </div>
