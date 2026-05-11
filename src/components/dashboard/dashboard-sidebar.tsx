@@ -12,15 +12,14 @@ import {
   BarChart3, 
   Settings, 
   LogOut,
-  Sparkles
+  ShieldCheck
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useLocalAuth } from '@/hooks/use-local-auth';
 
 const navItems = [
   { label: 'Overview', icon: LayoutDashboard, href: '/dashboard' },
-  { label: 'Inbox', icon: Inbox, href: '/dashboard/inbox' },
-  { label: 'Knowledge Base', icon: BrainCircuit, href: '/dashboard/knowledge' },
+  { label: 'Neural Inbox', icon: Inbox, href: '/dashboard/inbox' },
+  { label: 'Intelligence', icon: BrainCircuit, href: '/dashboard/knowledge' },
   { label: 'Automations', icon: Zap, href: '/dashboard/automations' },
   { label: 'Analytics', icon: BarChart3, href: '/dashboard/analytics' },
   { label: 'Settings', icon: Settings, href: '/dashboard/settings' },
@@ -31,28 +30,28 @@ export function DashboardSidebar() {
   const { user, logout } = useLocalAuth();
 
   return (
-    <div className="w-64 h-screen border-r border-white/5 flex flex-col bg-zinc-950 sticky top-0 z-50">
-      <div className="p-6">
-        <Link href="/dashboard" className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
-            <Zap className="text-black fill-black" size={18} />
+    <div className="w-64 h-screen border-r border-white/5 flex flex-col bg-zinc-950 sticky top-0 z-50 overflow-hidden">
+      <div className="p-8 pb-10">
+        <Link href="/dashboard" className="flex items-center gap-3 group">
+          <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center transition-transform group-hover:scale-105">
+            <Zap className="text-black" size={18} fill="black" />
           </div>
           <span className="font-bold text-lg tracking-tight text-white">ReplyRush</span>
         </Link>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1">
+      <nav className="flex-1 px-4 space-y-1">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link key={item.href} href={item.href}>
               <div className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors",
+                "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all duration-200",
                 isActive 
-                  ? "bg-zinc-900 text-white font-medium" 
-                  : "text-zinc-400 hover:text-white hover:bg-zinc-900/50"
+                  ? "bg-white/5 text-white font-semibold" 
+                  : "text-zinc-500 hover:text-white hover:bg-white/[0.02]"
               )}>
-                <item.icon size={18} />
+                <item.icon size={18} className={cn("transition-colors", isActive ? "text-white" : "text-zinc-600")} />
                 {item.label}
               </div>
             </Link>
@@ -60,29 +59,29 @@ export function DashboardSidebar() {
         })}
       </nav>
 
-      <div className="p-4 border-t border-white/5 space-y-4">
-        <div className="p-3 bg-zinc-900/50 border border-white/5 rounded-xl">
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles size={14} className="text-zinc-400" />
-            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Pro Fleet</span>
+      <div className="p-6 border-t border-white/5 space-y-6">
+        <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
+          <div className="flex items-center gap-2 mb-3">
+            <ShieldCheck size={14} className="text-zinc-500" />
+            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Enterprise Mode</span>
           </div>
-          <p className="text-[11px] text-zinc-500 leading-normal">Your AI agents are monitoring 142 active threads.</p>
+          <p className="text-[11px] text-zinc-600 leading-normal font-medium">Monitoring 142 active commerce threads across global hubs.</p>
         </div>
 
         <button 
           onClick={logout} 
-          className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-zinc-900 transition-colors group"
+          className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-white/[0.03] transition-colors group"
         >
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-8 h-8 rounded-full border border-white/10 overflow-hidden bg-zinc-800">
-              <img src={user?.avatar || `https://picsum.photos/seed/${user?.email}/100/100`} alt="Profile" className="w-full h-full object-cover" />
+            <div className="w-8 h-8 rounded-full border border-white/10 overflow-hidden bg-zinc-900">
+              <img src={user?.avatar || `https://picsum.photos/seed/${user?.email}/100/100`} alt="Profile" className="w-full h-full object-cover grayscale" />
             </div>
             <div className="min-w-0 text-left">
-              <p className="text-xs font-medium text-white truncate">{user?.displayName || 'User'}</p>
-              <p className="text-[10px] text-zinc-500 truncate uppercase tracking-tighter">Business</p>
+              <p className="text-xs font-bold text-white truncate">{user?.displayName || 'User'}</p>
+              <p className="text-[9px] text-zinc-500 truncate uppercase font-bold tracking-widest">HQ Admin</p>
             </div>
           </div>
-          <LogOut size={14} className="text-zinc-500 group-hover:text-white transition-colors" />
+          <LogOut size={14} className="text-zinc-600 group-hover:text-white transition-colors" />
         </button>
       </div>
     </div>

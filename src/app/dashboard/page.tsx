@@ -10,8 +10,9 @@ import {
   Zap,
   TrendingUp,
   ArrowRight,
-  ShieldCheck,
-  Activity
+  Activity,
+  ChevronRight,
+  Globe
 } from 'lucide-react';
 import { 
   XAxis, 
@@ -27,75 +28,83 @@ import { Button } from '@/components/ui/button';
 import { MOCK_STATS, MOCK_LIVE_FEED } from '@/lib/mock-data';
 
 const chartData = [
-  { name: 'Mon', revenue: 84000 },
-  { name: 'Tue', revenue: 92000 },
-  { name: 'Wed', revenue: 115000 },
-  { name: 'Thu', revenue: 108000 },
-  { name: 'Fri', revenue: 142000 },
-  { name: 'Sat', revenue: 168000 },
-  { name: 'Sun', revenue: 194000 },
+  { name: 'Mon', revenue: 142000 },
+  { name: 'Tue', revenue: 158000 },
+  { name: 'Wed', revenue: 182000 },
+  { name: 'Thu', revenue: 174000 },
+  { name: 'Fri', revenue: 215000 },
+  { name: 'Sat', revenue: 248000 },
+  { name: 'Sun', revenue: 284000 },
 ];
 
 export default function DashboardOverview() {
   return (
-    <div className="p-8 lg:p-12 space-y-12 max-w-[1600px] mx-auto animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div className="p-8 lg:p-16 space-y-16 max-w-[1600px] mx-auto animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight mb-2">Operational Command</h1>
-          <p className="text-zinc-500 text-sm">Real-time performance monitoring of your AI sales ecosystem.</p>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-zinc-800 bg-zinc-900/50">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">System Nominal</span>
+          <div className="flex items-center gap-3 mb-6">
+            <Badge variant="outline" className="border-white/10 bg-white/[0.02] text-[10px] font-bold uppercase tracking-widest px-3 py-1 text-zinc-500">
+              System v4.2.0
+            </Badge>
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-emerald-500">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Live Operations
+            </div>
           </div>
-          <Button variant="outline" className="h-10 border-zinc-800 bg-zinc-900/50 text-xs font-bold gap-2">
-            <Activity size={14} /> Neural Logs
+          <h1 className="text-5xl font-bold tracking-tighter mb-4">Command Overview</h1>
+          <p className="text-zinc-500 text-lg font-medium">Real-time synchronization of your global AI sales infrastructure.</p>
+        </div>
+        <div className="flex items-center gap-4 pb-1">
+          <Button variant="outline" className="h-12 border-white/10 bg-white/[0.02] text-xs font-bold gap-3 rounded-xl px-6">
+            <Activity size={16} /> Technical Logs
+          </Button>
+          <Button className="h-12 bg-white text-black hover:bg-zinc-200 text-xs font-bold gap-3 rounded-xl px-6 shadow-xl">
+            Scale Fleet <ArrowRight size={16} />
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Revenue Recovered', value: MOCK_STATS.revenueRecovered, change: '+18.5%', icon: DollarSign, trend: 'up' },
-          { label: 'Total AI Replies', value: MOCK_STATS.aiReplies, change: '+12.2%', icon: MessageSquare, trend: 'up' },
-          { label: 'Avg Latency', value: MOCK_STATS.avgSpeed, change: '-42%', icon: Zap, trend: 'up' },
-          { label: 'Lead Conversion', value: MOCK_STATS.conversionRate, change: '+4.1%', icon: TrendingUp, trend: 'up' }
+          { label: 'Recovered Revenue', value: MOCK_STATS.revenueRecovered, change: '+18.5%', icon: DollarSign },
+          { label: 'Neural AI Replies', value: MOCK_STATS.aiReplies, change: '+12.2%', icon: Zap },
+          { label: 'Response Latency', value: MOCK_STATS.avgSpeed, change: '-42%', icon: Activity },
+          { label: 'Conversion Delta', value: MOCK_STATS.conversionRate, change: '+4.1%', icon: TrendingUp }
         ].map((stat, i) => (
-          <GlassCard key={i} className="group border-zinc-800/50 hover:border-zinc-700/50 bg-zinc-900/20">
-            <div className="flex items-center justify-between mb-6">
-              <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-white transition-all">
+          <GlassCard key={i} className="border-white/5 bg-white/[0.01] p-10 group hover:border-white/10 transition-all rounded-[2rem]">
+            <div className="flex items-center justify-between mb-8">
+              <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-500 group-hover:text-white transition-colors">
                 <stat.icon size={18} />
               </div>
-              <Badge variant="outline" className={`border-none font-bold text-[10px] ${stat.trend === 'up' ? 'text-emerald-500 bg-emerald-500/10' : 'text-zinc-400 bg-zinc-400/10'}`}>
+              <Badge variant="outline" className="border-none font-bold text-[10px] text-emerald-500 bg-emerald-500/10 px-3 py-1">
                 {stat.change}
               </Badge>
             </div>
-            <p className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em] mb-1">{stat.label}</p>
-            <p className="text-3xl font-bold tracking-tight">{stat.value}</p>
+            <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest mb-2">{stat.label}</p>
+            <p className="text-4xl font-bold tracking-tighter">{stat.value}</p>
           </GlassCard>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <GlassCard className="lg:col-span-2 border-zinc-800/50 bg-zinc-900/20">
-          <div className="flex items-center justify-between mb-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <GlassCard className="lg:col-span-2 border-white/5 bg-white/[0.01] p-12 rounded-[2.5rem]">
+          <div className="flex items-center justify-between mb-16">
             <div>
-              <h3 className="font-bold text-lg mb-1">Revenue Velocity</h3>
-              <p className="text-xs text-zinc-500">Global sales recaptured by AI over the last 7 sessions.</p>
+              <h3 className="font-bold text-2xl mb-2 tracking-tight">Revenue Velocity</h3>
+              <p className="text-xs text-zinc-600 font-medium">Daily recovered GMV through automated negotiations.</p>
             </div>
-            <div className="flex gap-6">
-              <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-black uppercase tracking-widest">
-                <div className="w-2 h-2 rounded-full bg-white" /> Recovered GMV
+            <div className="flex gap-8">
+              <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                <div className="w-2 h-2 rounded-full bg-white shadow-xl" /> AI Recovered
               </div>
             </div>
           </div>
-          <div className="h-[350px] w-full">
+          <div className="h-[400px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ffffff" stopOpacity={0.1}/>
+                    <stop offset="5%" stopColor="#ffffff" stopOpacity={0.08}/>
                     <stop offset="95%" stopColor="#ffffff" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
@@ -106,18 +115,19 @@ export default function DashboardOverview() {
                   fontSize={11} 
                   tickLine={false} 
                   axisLine={false} 
-                  dy={10} 
+                  dy={15} 
                 />
                 <YAxis hide />
                 <Tooltip 
                   contentStyle={{ 
                     backgroundColor: '#09090b', 
-                    border: '1px solid #27272a', 
-                    borderRadius: '12px', 
+                    border: '1px solid #18181b', 
+                    borderRadius: '16px', 
                     fontSize: '12px',
-                    boxShadow: '0 20px 40px rgba(0,0,0,0.5)'
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+                    padding: '16px'
                   }}
-                  itemStyle={{ fontWeight: 'bold' }}
+                  itemStyle={{ fontWeight: 'bold', color: '#fff' }}
                 />
                 <Area 
                   type="monotone" 
@@ -126,38 +136,38 @@ export default function DashboardOverview() {
                   fillOpacity={1} 
                   fill="url(#colorRevenue)" 
                   strokeWidth={2} 
-                  animationDuration={2000}
+                  animationDuration={2500}
                 />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </GlassCard>
 
-        <GlassCard className="flex flex-col border-zinc-800/50 bg-zinc-900/20">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="font-bold text-lg">Global Activity</h3>
-            <Badge variant="outline" className="border-zinc-800 text-[9px] font-black uppercase tracking-widest px-2">Real-time</Badge>
+        <GlassCard className="border-white/5 bg-white/[0.01] p-12 flex flex-col rounded-[2.5rem]">
+          <div className="flex items-center justify-between mb-10">
+            <h3 className="font-bold text-2xl tracking-tight">Activity Feed</h3>
+            <div className="w-2 h-2 rounded-full bg-emerald-500" />
           </div>
-          <div className="flex-1 space-y-8 overflow-y-auto pr-2 custom-scrollbar">
+          <div className="flex-1 space-y-10 overflow-y-auto pr-2 custom-scrollbar max-h-[450px]">
             {MOCK_LIVE_FEED.map((item) => (
-              <div key={item.id} className="flex gap-4 group cursor-pointer relative">
-                <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0 text-zinc-500 group-hover:text-white transition-all shadow-lg">
+              <div key={item.id} className="flex gap-5 group cursor-pointer relative">
+                <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center shrink-0 text-zinc-600 group-hover:text-white group-hover:border-white/20 transition-all shadow-lg">
                   {item.type === 'sale' ? <DollarSign size={18} /> : item.type === 'lead' ? <TrendingUp size={18} /> : <MessageSquare size={18} />}
                 </div>
                 <div className="min-w-0 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-bold truncate tracking-tight">{item.title}</p>
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-sm font-bold truncate tracking-tight text-white/90">{item.title}</p>
                     <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest whitespace-nowrap">{item.timestamp}</span>
                   </div>
-                  <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">{item.description}</p>
+                  <p className="text-xs text-zinc-500 leading-relaxed font-medium line-clamp-2">{item.description}</p>
                 </div>
               </div>
             ))}
           </div>
-          <div className="mt-8 pt-8 border-t border-zinc-800">
-            <Button variant="ghost" className="w-full justify-between h-12 text-zinc-400 hover:text-white hover:bg-zinc-900 transition-all rounded-xl">
-              <span className="text-xs font-bold uppercase tracking-widest">Audit Full Dataset</span>
-              <ArrowRight size={16} />
+          <div className="mt-10 pt-10 border-t border-white/5">
+            <Button variant="ghost" className="w-full justify-between h-14 text-zinc-500 hover:text-white hover:bg-white/[0.02] transition-all rounded-2xl px-6">
+              <span className="text-[10px] font-bold uppercase tracking-widest">Download Full Audit</span>
+              <ChevronRight size={16} />
             </Button>
           </div>
         </GlassCard>
