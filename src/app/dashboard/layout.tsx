@@ -18,6 +18,7 @@ export default function DashboardLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
+    // Local route protection
     if (!loading && !user) {
       router.push('/login');
     }

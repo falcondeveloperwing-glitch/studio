@@ -1,41 +1,47 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { MOCK_USERS, type MockUser } from '@/lib/mock-users';
 
-export type MockUser = {
-  email: string;
-  role: 'admin' | 'business';
-  displayName: string;
-} | null;
+const AUTH_STORAGE_KEY = 'replyrush_auth_session';
 
 export function useLocalAuth() {
   const router = useRouter();
-  const [user, setUser] = useState<MockUser>(null);
+  const [user, setUser] = useState<Omit<MockUser, 'password'> | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('replyrush_mock_user');
+    // Restore session from localStorage on mount
+    const stored = localStorage.getItem(AUTH_STORAGE_KEY);
     if (stored) {
-      setUser(JSON.parse(stored));
+      try {
+        setUser(JSON.parse(stored));
+      } catch (e) {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+      }
     }
     setLoading(false);
   }, []);
 
-  const login = (email: string, role: 'admin' | 'business') => {
-    const newUser: MockUser = {
-      email,
-      role,
-      displayName: role === 'admin' ? 'Chief Admin' : 'Brand Manager'
-    };
-    localStorage.setItem('replyrush_mock_user', JSON.stringify(newUser));
-    setUser(newUser);
-    router.push('/dashboard');
+  const login = (email: string, password: string): boolean => {
+    const foundUser = MOCK_USERS.find(
+      (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+    );
+
+    if (foundUser) {
+      const { password: _, ...sessionUser } = foundUser;
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(sessionUser));
+      setUser(sessionUser);
+      router.push('/dashboard');
+      return true;
+    }
+
+    return false;
   };
 
   const logout = () => {
-    localStorage.removeItem('replyrush_mock_user');
+    localStorage.removeItem(AUTH_STORAGE_KEY);
     setUser(null);
     router.push('/login');
   };

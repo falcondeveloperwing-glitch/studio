@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -7,9 +6,10 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { GlassCard } from '@/components/ui/glass-card';
-import { Zap, ArrowRight, Loader2, Sparkles } from 'lucide-react';
+import { Zap, ArrowRight, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
 import { useLocalAuth } from '@/hooks/use-local-auth';
 import { useToast } from '@/hooks/use-toast';
+import { MOCK_USERS } from '@/lib/mock-users';
 
 export default function LoginPage() {
   const { login } = useLocalAuth();
@@ -22,43 +22,36 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
 
-    // Realistic simulation of network delay for cinematic feel
+    // Cinematic delay for realism
     setTimeout(() => {
-      if (email === 'demo@replyrush.ai' && password === 'ReplyRush123') {
-        login(email, 'admin');
+      const success = login(email, password);
+      
+      if (success) {
         toast({
           title: "Access Granted",
-          description: "Welcome back, Commander.",
-        });
-      } else if (email === 'business@replyrush.ai' && password === 'Business123') {
-        login(email, 'business');
-        toast({
-          title: "Access Granted",
-          description: "Neural sales fleet is ready.",
+          description: "Neural sales fleet is online.",
         });
       } else {
         setLoading(false);
         toast({
           variant: "destructive",
           title: "Authentication Failed",
-          description: "Invalid credentials. Please use the demo accounts provided below.",
+          description: "Invalid credentials. Please use the demo accounts.",
         });
       }
-    }, 1200);
+    }, 1000);
   };
 
-  const fillDemo = (role: 'admin' | 'business') => {
-    if (role === 'admin') {
-      setEmail('demo@replyrush.ai');
-      setPassword('ReplyRush123');
-    } else {
-      setEmail('business@replyrush.ai');
-      setPassword('Business123');
+  const fillDemo = (email: string) => {
+    const user = MOCK_USERS.find(u => u.email === email);
+    if (user) {
+      setEmail(user.email);
+      setPassword(user.password);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-background px-8">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#020203] px-8">
       {/* Background Decor */}
       <div className="absolute top-[-20%] right-[-10%] w-[70%] h-[70%] bg-primary/10 blur-[180px] rounded-full" />
       <div className="absolute bottom-[-20%] left-[-10%] w-[60%] h-[60%] bg-accent/5 blur-[150px] rounded-full" />
@@ -77,8 +70,8 @@ export default function LoginPage() {
             </div>
             <span className="font-headline text-3xl font-bold tracking-tighter text-white">ReplyRush<span className="text-primary">AI</span></span>
           </Link>
-          <h1 className="font-headline text-4xl font-bold mb-4 tracking-tighter text-white">Welcome back</h1>
-          <p className="text-muted-foreground text-lg">Sign in to manage your neural sales team.</p>
+          <h1 className="font-headline text-4xl font-bold mb-4 tracking-tighter text-white">Command Center</h1>
+          <p className="text-muted-foreground text-lg">Sign in to manage your AI fleet.</p>
         </div>
 
         <GlassCard className="p-10 border-white/[0.06] shadow-2xl" variant="darker">
@@ -96,7 +89,7 @@ export default function LoginPage() {
             <div className="space-y-3">
               <div className="flex items-center justify-between ml-1">
                 <label className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Password</label>
-                <Link href="#" className="text-[10px] text-primary uppercase font-bold tracking-widest hover:underline">Forgot?</Link>
+                <Link href="#" className="text-[10px] text-primary uppercase font-bold tracking-widest hover:underline">Recovery</Link>
               </div>
               <Input 
                 type="password" 
@@ -123,15 +116,15 @@ export default function LoginPage() {
             <Button 
               variant="outline" 
               className="h-12 border-white/5 bg-white/[0.02] hover:bg-white/10 rounded-2xl font-black text-[10px] uppercase tracking-widest gap-2 text-white"
-              onClick={() => fillDemo('admin')}
+              onClick={() => fillDemo('demo@replyrush.ai')}
               type="button"
             >
-              <Sparkles size={14} className="text-primary" /> Admin
+              <ShieldCheck size={14} className="text-primary" /> Admin
             </Button>
             <Button 
               variant="outline" 
               className="h-12 border-white/5 bg-white/[0.02] hover:bg-white/10 rounded-2xl font-black text-[10px] uppercase tracking-widest gap-2 text-white"
-              onClick={() => fillDemo('business')}
+              onClick={() => fillDemo('business@replyrush.ai')}
               type="button"
             >
               <Zap size={14} className="text-accent" /> Business
@@ -140,7 +133,7 @@ export default function LoginPage() {
         </GlassCard>
 
         <p className="text-center mt-10 text-sm text-muted-foreground">
-          New to ReplyRush? <Link href="/signup" className="text-primary font-bold hover:underline">Launch free trial</Link>
+          New to the fleet? <Link href="/signup" className="text-primary font-bold hover:underline">Deploy free trial</Link>
         </p>
       </motion.div>
     </div>
