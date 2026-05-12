@@ -12,8 +12,7 @@ import {
   Users, 
   CreditCard,
   ChevronRight,
-  ShieldCheck,
-  Smartphone
+  ShieldCheck
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
@@ -21,116 +20,117 @@ import { Label } from '@/components/ui/label';
 
 export default function SettingsPage() {
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <div className="mb-10">
-        <h1 className="font-headline text-3xl font-bold mb-2">Settings</h1>
-        <p className="text-muted-foreground">Configure your business profile, AI personality, and platform integrations.</p>
+    <div className="max-w-3xl mx-auto space-y-10">
+      <div>
+        <h1 className="text-4xl font-bold tracking-tight mb-2">Settings</h1>
+        <p className="text-zinc-500 font-medium">Manage your business profile and platform preferences.</p>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-6">
         {/* Business Profile */}
-        <GlassCard>
+        <GlassCard className="border-white/5 bg-zinc-950/50 p-8">
           <div className="flex items-center gap-3 mb-8">
-            <div className="p-2 rounded-lg bg-primary/20">
-              <User className="text-primary" size={20} />
+            <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-zinc-400">
+              <User size={18} />
             </div>
-            <h2 className="font-headline font-bold text-xl">Business Profile</h2>
+            <h2 className="font-bold text-xl">Business Profile</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label className="text-xs font-bold text-muted-foreground uppercase">Brand Name</Label>
-              <Input className="bg-white/5 border-white/10 rounded-xl" defaultValue="Nike Official Store" />
+              <Label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Brand Name</Label>
+              <Input className="bg-white/5 border-white/10 rounded-lg h-10" defaultValue="Nike Official Store" />
             </div>
             <div className="space-y-2">
-              <Label className="text-xs font-bold text-muted-foreground uppercase">Contact Email</Label>
-              <Input className="bg-white/5 border-white/10 rounded-xl" defaultValue="support@nike.com" />
+              <Label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Contact Email</Label>
+              <Input className="bg-white/5 border-white/10 rounded-lg h-10" defaultValue="support@nike.com" />
             </div>
             <div className="md:col-span-2 space-y-2">
-              <Label className="text-xs font-bold text-muted-foreground uppercase">Business Description</Label>
-              <Input className="bg-white/5 border-white/10 rounded-xl" defaultValue="Premium sportswear and lifestyle brand." />
+              <Label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Description</Label>
+              <Input className="bg-white/5 border-white/10 rounded-lg h-10" defaultValue="Premium sportswear and lifestyle brand." />
             </div>
           </div>
           <div className="mt-8 flex justify-end">
-            <Button className="bg-primary hover:bg-primary/90 rounded-xl px-8 h-10 font-bold">Save Profile</Button>
+            <Button className="bg-white text-black hover:bg-zinc-200 rounded-lg px-6 h-10 font-bold text-xs">Save Changes</Button>
           </div>
         </GlassCard>
 
-        {/* AI Personality */}
-        <GlassCard>
+        {/* Assistant Personality */}
+        <GlassCard className="border-white/5 bg-zinc-950/50 p-8">
           <div className="flex items-center gap-3 mb-8">
-            <div className="p-2 rounded-lg bg-accent/20">
-              <Sparkles className="text-accent" size={20} />
+            <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-zinc-400">
+              <Sparkles size={18} />
             </div>
-            <h2 className="font-headline font-bold text-xl">AI Assistant Personality</h2>
+            <h2 className="font-bold text-xl">Automation Tone</h2>
           </div>
 
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {['Professional', 'Friendly', 'Luxury'].map((tone) => (
-                <div key={tone} className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${tone === 'Luxury' ? 'border-primary bg-primary/10' : 'border-white/5 bg-white/[0.02] hover:border-white/20'}`}>
+                <div key={tone} className={`p-4 rounded-xl border-2 transition-all ${tone === 'Professional' ? 'border-white bg-white/5' : 'border-white/5 bg-white/[0.01] hover:border-white/10 cursor-pointer'}`}>
                   <p className="text-sm font-bold mb-1">{tone}</p>
-                  <p className="text-[10px] text-muted-foreground">Tailored for {tone.toLowerCase()} brands.</p>
+                  <p className="text-[10px] text-zinc-500 font-medium">Standard {tone.toLowerCase()} responses.</p>
                 </div>
               ))}
             </div>
 
             <Separator className="bg-white/5" />
 
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-bold">Auto-escalate to human</p>
-                <p className="text-[11px] text-muted-foreground">Automatically notify staff when AI cannot answer.</p>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-bold">Auto-escalate to human</p>
+                  <p className="text-xs text-zinc-500">Notify team when a response cannot be automated.</p>
+                </div>
+                <Switch defaultChecked />
               </div>
-              <Switch defaultChecked />
-            </div>
 
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-bold">Show "AI Assistant" badge</p>
-                <p className="text-[11px] text-muted-foreground">Inform customers that they are speaking to AI.</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-bold">Show "AI Assistant" label</p>
+                  <p className="text-xs text-zinc-500">Inform customers they are interacting with automation.</p>
+                </div>
+                <Switch />
               </div>
-              <Switch />
             </div>
           </div>
         </GlassCard>
 
-        {/* Integration Placeholder */}
-        <GlassCard className="relative overflow-hidden">
-          <div className="flex items-center justify-between relative z-10">
+        {/* Integrations */}
+        <GlassCard className="border-white/5 bg-zinc-950/50 p-8">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#833ab4] via-[#fd1d1d] to-[#fcb045] flex items-center justify-center shadow-lg">
-                <Instagram className="text-white" size={24} />
+              <div className="w-10 h-10 rounded-lg bg-zinc-900 border border-white/10 flex items-center justify-center">
+                <Instagram className="text-zinc-400" size={20} />
               </div>
               <div>
-                <h3 className="font-bold">Instagram Connection</h3>
-                <p className="text-xs text-muted-foreground">Connected as <span className="text-white font-medium">@nike_official</span></p>
+                <h3 className="font-bold text-sm">Instagram Connection</h3>
+                <p className="text-xs text-zinc-500">Connected as <span className="text-white">@nike_official</span></p>
               </div>
             </div>
-            <Button variant="outline" className="border-white/10 bg-white/5 h-10 rounded-xl px-6 font-bold text-xs">Disconnect Account</Button>
+            <Button variant="outline" className="border-white/10 bg-white/5 h-9 rounded-lg px-4 text-xs font-bold">Manage</Button>
           </div>
-          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl rounded-full" />
         </GlassCard>
 
-        {/* Settings Links */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Navigation Items */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
-            { label: 'Notification Settings', icon: Bell, desc: 'Manage alerts and push notifications' },
-            { label: 'Team Members', icon: Users, desc: 'Invite and manage your sales staff' },
-            { label: 'Billing & Subscriptions', icon: CreditCard, desc: 'Manage your plan and invoices' },
-            { label: 'Security & Auth', icon: ShieldCheck, desc: '2FA and login activity' }
+            { label: 'Notifications', icon: Bell, desc: 'Manage alerts' },
+            { label: 'Team Members', icon: Users, desc: 'Manage staff access' },
+            { label: 'Billing', icon: CreditCard, desc: 'Manage plan' },
+            { label: 'Security', icon: ShieldCheck, desc: 'Password and auth' }
           ].map((item, i) => (
-            <GlassCard key={i} className="flex items-center justify-between group cursor-pointer hover:bg-white/10 transition-colors p-4">
+            <GlassCard key={i} className="flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors p-4 border-white/5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                  <item.icon size={20} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                <div className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-zinc-500">
+                  <item.icon size={18} />
                 </div>
                 <div>
                   <p className="text-sm font-bold">{item.label}</p>
-                  <p className="text-[10px] text-muted-foreground">{item.desc}</p>
+                  <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold">{item.desc}</p>
                 </div>
               </div>
-              <ChevronRight size={16} className="text-muted-foreground group-hover:text-white transition-colors" />
+              <ChevronRight size={14} className="text-zinc-600" />
             </GlassCard>
           ))}
         </div>

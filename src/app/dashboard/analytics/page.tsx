@@ -5,17 +5,14 @@ import { motion } from 'framer-motion';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
 import { 
-  BarChart3, 
   TrendingUp, 
   Clock, 
   Smile, 
   MessageSquare, 
-  ArrowUpRight,
   Download,
   Calendar,
-  Zap,
   ChevronDown,
-  BrainCircuit
+  BarChart
 } from 'lucide-react';
 import { 
   ResponsiveContainer, 
@@ -43,194 +40,120 @@ const data = [
 ];
 
 const satisfactionData = [
-  { name: 'Highly Satisfied', value: 82, color: 'hsl(var(--primary))' },
-  { name: 'Satisfied', value: 14, color: 'hsl(var(--accent))' },
-  { name: 'Neutral', value: 3, color: 'hsl(var(--muted))' },
-  { name: 'Escalated', value: 1, color: 'hsl(var(--destructive))' },
+  { name: 'Satisfied', value: 82, color: '#fafafa' },
+  { name: 'Neutral', value: 14, color: '#52525b' },
+  { name: 'Negative', value: 4, color: '#27272a' },
 ];
 
 export default function AnalyticsPage() {
   return (
-    <div className="p-8 lg:p-14 space-y-20 animate-in fade-in duration-1000">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
+    <div className="space-y-12">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-2xl">
-              <BrainCircuit size={28} />
-            </div>
-            <p className="text-[10px] font-black text-primary uppercase tracking-[0.5em]">Revenue Dataset v2.4</p>
-          </div>
-          <motion.h1 
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="font-headline text-6xl lg:text-8xl font-bold tracking-tighter mb-4"
-          >
-            Neural Growth
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-muted-foreground text-2xl lg:text-3xl max-w-2xl opacity-50 font-light"
-          >
-            A high-fidelity analysis of your Instagram sales ecosystem.
-          </motion.p>
+          <h1 className="text-4xl font-bold tracking-tight mb-2">Analytics</h1>
+          <p className="text-zinc-500 font-medium">Detailed performance insights and sales metrics.</p>
         </div>
-        <div className="flex gap-5">
-          <Button variant="outline" className="border-white/5 bg-white/5 rounded-2xl h-16 px-10 font-black text-[10px] uppercase tracking-widest gap-3 shadow-2xl">
-            <Download size={20} /> Export Audit
+        <div className="flex gap-3">
+          <Button variant="outline" className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold gap-2">
+            <Download size={16} /> Export Data
           </Button>
-          <Button variant="outline" className="border-white/5 bg-white/5 rounded-2xl h-16 px-10 font-black text-[10px] uppercase tracking-widest gap-3 shadow-2xl">
-            <Calendar size={20} /> Current Quarter <ChevronDown size={14} className="opacity-30" />
+          <Button variant="outline" className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold gap-2">
+            <Calendar size={16} /> Last 30 Days <ChevronDown size={12} className="opacity-50" />
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Inquiries', value: MOCK_STATS.aiReplies, change: '+22.4%', icon: MessageSquare, color: 'primary' },
-          { label: 'Neural Latency', value: MOCK_STATS.avgSpeed, change: '-42.1%', icon: Clock, color: 'accent' },
-          { label: 'Lead Conversion', value: MOCK_STATS.conversionRate, change: '+4.8%', icon: TrendingUp, color: 'emerald-500' },
-          { label: 'Customer Trust', value: MOCK_STATS.satisfaction, change: '+0.4%', icon: Smile, color: 'primary' }
+          { label: 'Total Inquiries', value: MOCK_STATS.aiReplies, change: '+22.4%', icon: MessageSquare },
+          { label: 'Avg Speed', value: MOCK_STATS.avgSpeed, change: '-42.1%', icon: Clock },
+          { label: 'Conversion Rate', value: MOCK_STATS.conversionRate, change: '+4.8%', icon: TrendingUp },
+          { label: 'Customer Satisfaction', value: MOCK_STATS.satisfaction, change: '+0.4%', icon: Smile }
         ].map((stat, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 + (i * 0.1) }}
-          >
-            <GlassCard className="border-white/[0.04] group hover:border-white/10 p-12 transition-all duration-700 rounded-[3rem]">
-              <div className="flex justify-between items-start mb-14">
-                <div className={`p-5 rounded-[1.75rem] transition-all duration-700 group-hover:scale-110 shadow-3xl ${stat.color === 'primary' ? 'bg-primary/20 text-primary' : stat.color === 'accent' ? 'bg-accent/20 text-accent' : 'bg-emerald-500/20 text-emerald-500'}`}>
-                  <stat.icon size={30} />
-                </div>
-                <Badge variant="outline" className={`border-none font-black text-[10px] tracking-widest h-7 px-4 ${stat.change.startsWith('+') ? 'text-emerald-500 bg-emerald-500/10' : 'text-primary bg-primary/10'}`}>
-                  {stat.change}
-                </Badge>
+          <GlassCard key={i} className="border-white/5 p-6 bg-zinc-950/50">
+            <div className="flex justify-between items-start mb-6">
+              <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400">
+                <stat.icon size={16} />
               </div>
-              <p className="text-muted-foreground text-[11px] uppercase tracking-[0.4em] font-black mb-2 opacity-40">{stat.label}</p>
-              <p className="text-5xl font-bold font-headline tracking-tighter text-white">{stat.value}</p>
-            </GlassCard>
-          </motion.div>
+              <Badge variant="outline" className={`border-none font-bold text-[10px] ${stat.change.startsWith('+') ? 'text-emerald-500 bg-emerald-500/10' : 'text-zinc-500 bg-zinc-500/10'}`}>
+                {stat.change}
+              </Badge>
+            </div>
+            <p className="text-zinc-600 text-[10px] uppercase tracking-widest font-bold mb-1">{stat.label}</p>
+            <p className="text-2xl font-bold tracking-tight text-white">{stat.value}</p>
+          </GlassCard>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-14">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.98 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="lg:col-span-2"
-        >
-          <GlassCard className="h-full border-white/[0.04] p-16 rounded-[3.5rem]" variant="darker">
-            <div className="flex items-center justify-between mb-24">
-              <div>
-                <h3 className="font-headline font-bold text-4xl lg:text-5xl tracking-tight mb-3 text-gradient">Revenue Velocity</h3>
-                <p className="text-[11px] text-muted-foreground tracking-[0.5em] uppercase font-black opacity-30">Inquiry Volume vs. Recovered GMV</p>
-              </div>
-              <div className="flex gap-10">
-                <div className="flex items-center gap-4 text-[11px] font-black text-muted-foreground uppercase tracking-widest">
-                  <div className="w-3 h-3 rounded-full bg-primary glow-primary" /> Recovered
-                </div>
-                <div className="flex items-center gap-4 text-[11px] font-black text-muted-foreground uppercase tracking-widest">
-                  <div className="w-3 h-3 rounded-full bg-accent shadow-[0_0_15px_#3b82f6]" /> Conversations
-                </div>
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <GlassCard className="lg:col-span-2 border-white/5 p-8">
+          <div className="flex items-center justify-between mb-10">
+            <div>
+              <h3 className="font-bold text-xl mb-1">Sales Performance</h3>
+              <p className="text-xs text-zinc-500">Revenue recovered vs. inquiry volume.</p>
             </div>
-            <div className="h-[550px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={data}>
-                  <defs>
-                    <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.4}/>
-                      <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
-                    </linearGradient>
-                    <linearGradient id="colorConv" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(var(--accent))" stopOpacity={0.2}/>
-                      <stop offset="95%" stopColor="hsl(var(--accent))" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
-                  <XAxis 
-                    dataKey="name" 
-                    stroke="rgba(255,255,255,0.15)" 
-                    fontSize={12} 
-                    tickLine={false} 
-                    axisLine={false}
-                    dy={25}
-                    fontFamily="Space Grotesk"
-                  />
-                  <YAxis hide />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(10, 10, 12, 0.98)', 
-                      border: '1px solid rgba(255,255,255,0.1)', 
-                      borderRadius: '32px',
-                      backdropFilter: 'blur(40px)',
-                      padding: '24px'
-                    }}
-                    itemStyle={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}
-                    cursor={{ stroke: 'rgba(255,255,255,0.1)', strokeWidth: 1 }}
-                  />
-                  <Area type="monotone" dataKey="sales" stroke="hsl(var(--primary))" strokeWidth={8} fillOpacity={1} fill="url(#colorSales)" animationDuration={3000} />
-                  <Area type="monotone" dataKey="conv" stroke="hsl(var(--accent))" strokeWidth={4} fillOpacity={1} fill="url(#colorConv)" strokeDasharray="15 15" animationDuration={4500} />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </GlassCard>
-        </motion.div>
+          </div>
+          <div className="h-[400px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={data}>
+                <defs>
+                  <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#ffffff" stopOpacity={0.05}/>
+                    <stop offset="95%" stopColor="#ffffff" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                <XAxis dataKey="name" stroke="#3f3f46" fontSize={11} tickLine={false} axisLine={false} dy={10} />
+                <YAxis hide />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: '#09090b', border: '1px solid #18181b', borderRadius: '8px', fontSize: '12px' }}
+                  itemStyle={{ color: '#fff' }}
+                />
+                <Area type="monotone" dataKey="sales" stroke="#ffffff" strokeWidth={1.5} fillOpacity={1} fill="url(#colorSales)" />
+                <Area type="monotone" dataKey="conv" stroke="#52525b" strokeWidth={1.5} fill="none" strokeDasharray="5 5" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </GlassCard>
 
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          className="space-y-10"
-        >
-          <GlassCard className="h-full border-white/[0.04] p-16 rounded-[3.5rem]" variant="darker">
-            <h3 className="font-headline font-bold text-3xl mb-20 text-center tracking-tight">Emotional Sentiment</h3>
-            <div className="h-[350px] relative">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={satisfactionData}
-                    innerRadius={110}
-                    outerRadius={150}
-                    paddingAngle={15}
-                    dataKey="value"
-                    stroke="none"
-                  >
-                    {satisfactionData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <p className="text-7xl font-bold font-headline tracking-tighter text-white">98%</p>
-                <p className="text-[12px] text-primary uppercase font-black tracking-[0.5em]">Resolved</p>
-              </div>
+        <GlassCard className="border-white/5 p-8 flex flex-col justify-center">
+          <h3 className="font-bold text-xl mb-10 text-center">Satisfaction</h3>
+          <div className="h-[250px] relative">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={satisfactionData}
+                  innerRadius={70}
+                  outerRadius={90}
+                  paddingAngle={8}
+                  dataKey="value"
+                  stroke="none"
+                >
+                  {satisfactionData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              <p className="text-4xl font-bold tracking-tight text-white">98%</p>
+              <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest">Positive</p>
             </div>
-            
-            <div className="mt-20 space-y-8">
-              {satisfactionData.map((item, i) => (
-                <div key={i} className="flex items-center justify-between group">
-                  <div className="flex items-center gap-5">
-                    <div className="w-4 h-4 rounded-full shadow-[0_0_15px_currentColor]" style={{ backgroundColor: item.color, color: item.color }} />
-                    <span className="text-xs font-black text-muted-foreground group-hover:text-white transition-all uppercase tracking-[0.3em]">{item.name}</span>
-                  </div>
-                  <span className="text-lg font-bold text-white tracking-tight">{item.value}%</span>
+          </div>
+          
+          <div className="mt-10 space-y-4">
+            {satisfactionData.map((item, i) => (
+              <div key={i} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                  <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{item.name}</span>
                 </div>
-              ))}
-            </div>
-            
-            <div className="mt-20 pt-12 border-t border-white/[0.05]">
-              <Button className="w-full h-16 bg-white/[0.04] hover:bg-white/[0.08] rounded-[2rem] text-[10px] font-black uppercase tracking-widest gap-4 transition-all duration-700 shadow-2xl group text-white">
-                <Zap size={20} className="text-primary group-hover:animate-pulse" /> Review Strategy Report
-              </Button>
-            </div>
-          </GlassCard>
-        </motion.div>
+                <span className="text-sm font-bold text-white">{item.value}%</span>
+              </div>
+            ))}
+          </div>
+        </GlassCard>
       </div>
     </div>
   );

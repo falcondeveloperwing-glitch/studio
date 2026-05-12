@@ -45,82 +45,70 @@ export default function InboxPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] lg:h-screen flex flex-col bg-zinc-950 overflow-hidden">
-      {/* Top Header - Minimal SaaS Style */}
-      <div className="h-16 border-b border-zinc-800 bg-zinc-950/50 backdrop-blur-md flex items-center justify-between px-6 shrink-0 z-20">
+    <div className="h-[calc(100vh-64px)] lg:h-[calc(100vh-100px)] flex flex-col bg-zinc-950 border border-white/5 rounded-2xl overflow-hidden max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 shrink-0 z-20">
         <div className="flex items-center gap-4">
-          <h1 className="text-lg font-bold tracking-tight">Display Inbox</h1>
-          <Badge variant="outline" className="text-[10px] uppercase tracking-widest border-zinc-800 text-zinc-500 font-bold bg-zinc-900/50">
-            {MOCK_CHATS.length} Active Threads
+          <h1 className="text-sm font-bold">Inbox</h1>
+          <Badge variant="outline" className="text-[10px] uppercase tracking-widest border-white/10 text-zinc-500 font-bold">
+            {MOCK_CHATS.length} Active
           </Badge>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="text-zinc-500 hover:text-white hover:bg-zinc-800 h-8 px-3 text-xs gap-2">
-            <Filter size={14} /> View Filter
+          <Button variant="ghost" size="sm" className="text-zinc-500 hover:text-white h-8 text-xs gap-2">
+            <Filter size={12} /> Filter
           </Button>
           <Button variant="ghost" size="icon" className="text-zinc-500 h-8 w-8">
-            <MoreVertical size={16} />
+            <MoreVertical size={14} />
           </Button>
         </div>
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Column 1: Chat List */}
+        {/* Chat List */}
         <div className={cn(
-          "w-full lg:w-[320px] xl:w-[380px] border-r border-zinc-800 flex flex-col shrink-0 transition-all bg-zinc-950",
+          "w-full lg:w-80 border-r border-white/5 flex flex-col shrink-0 transition-all",
           !showMobileList && "hidden lg:flex"
         )}>
-          <div className="p-4 border-b border-zinc-800">
+          <div className="p-3 border-b border-white/5">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={14} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={12} />
               <Input 
-                className="pl-9 h-10 bg-zinc-900/50 border-zinc-800 rounded-lg text-xs placeholder:text-zinc-600 focus-visible:ring-zinc-700" 
-                placeholder="Search conversations..." 
+                className="pl-8 h-9 bg-white/5 border-white/10 rounded-lg text-xs placeholder:text-zinc-600 focus-visible:ring-zinc-700" 
+                placeholder="Search..." 
               />
             </div>
           </div>
           
           <ScrollArea className="flex-1">
-            <div className="divide-y divide-zinc-900">
+            <div className="divide-y divide-white/[0.02]">
               {MOCK_CHATS.map((chat) => (
                 <div 
                   key={chat.id} 
                   onClick={() => handleSelectChat(chat.id)} 
                   className={cn(
-                    "p-4 flex items-start gap-3 cursor-pointer transition-colors relative group",
-                    activeChatId === chat.id ? "bg-zinc-900" : "hover:bg-zinc-900/40"
+                    "p-4 flex items-start gap-3 cursor-pointer transition-colors relative",
+                    activeChatId === chat.id ? "bg-white/5" : "hover:bg-white/[0.02]"
                   )}
                 >
-                  <div className="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 shrink-0 overflow-hidden relative">
-                    <img 
-                      src={`https://picsum.photos/seed/${chat.avatarSeed || chat.id}/100/100`} 
-                      alt="" 
-                      className="w-full h-full object-cover opacity-80" 
-                    />
+                  <div className="w-9 h-9 rounded-full bg-zinc-800 border border-white/5 shrink-0 overflow-hidden relative">
+                    <img src={`https://picsum.photos/seed/${chat.avatarSeed || chat.id}/100/100`} alt="" className="w-full h-full object-cover" />
                     {chat.unread && (
-                      <div className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-zinc-200 border-2 border-zinc-950 shadow-lg" />
+                      <div className="absolute top-0 right-0 w-2 h-2 rounded-full bg-white border-2 border-zinc-950" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-0.5">
-                      <p className={cn("text-xs truncate", chat.unread ? "font-bold text-white" : "text-zinc-400 font-medium")}>
+                      <p className={cn("text-xs truncate font-bold", chat.unread ? "text-white" : "text-zinc-400")}>
                         {chat.customerName}
                       </p>
-                      <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">
+                      <span className="text-[9px] text-zinc-600 font-bold uppercase">
                         {chat.id === '1' ? '2m' : '1h'}
                       </span>
                     </div>
-                    <p className={cn("text-[11px] truncate leading-tight", chat.unread ? "text-zinc-300 font-medium" : "text-zinc-500")}>
+                    <p className={cn("text-[11px] truncate leading-tight", chat.unread ? "text-zinc-300" : "text-zinc-500")}>
                       {chat.lastMessage}
                     </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <Badge variant="outline" className="text-[8px] h-4 px-1.5 border-zinc-800 text-zinc-600 uppercase font-black tracking-tighter">
-                        {chat.intent.split(' ')[0]}
-                      </Badge>
-                      {chat.status === 'Escalated' && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                      )}
-                    </div>
                   </div>
                 </div>
               ))}
@@ -128,201 +116,108 @@ export default function InboxPage() {
           </ScrollArea>
         </div>
 
-        {/* Column 2: Chat View */}
+        {/* Chat View */}
         <div className={cn(
-          "flex-1 flex flex-col bg-zinc-950/20",
+          "flex-1 flex flex-col bg-zinc-950",
           showMobileList && "hidden lg:flex"
         )}>
-          <AnimatePresence mode="wait">
-            {activeChat ? (
-              <motion.div 
-                key={activeChat.id} 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }} 
-                className="flex flex-col h-full relative"
-              >
-                {/* Chat Header */}
-                <div className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950/80 backdrop-blur-xl shrink-0">
-                  <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="icon" onClick={() => setShowMobileList(true)} className="lg:hidden h-8 w-8 text-zinc-500">
-                      <ArrowLeft size={18} />
-                    </Button>
-                    <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 overflow-hidden">
-                      <img src={`https://picsum.photos/seed/${activeChat.avatarSeed || activeChat.id}/100/100`} alt="" className="w-full h-full object-cover" />
-                    </div>
-                    <div>
-                      <h2 className="text-sm font-bold text-white leading-tight">{activeChat.customerName}</h2>
-                      <div className="flex items-center gap-2 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
-                        <span className="text-zinc-600">@{activeChat.customerUsername}</span>
-                        <span className="w-1 h-1 rounded-full bg-zinc-800" />
-                        <span className="text-zinc-400">{activeChat.intent}</span>
-                      </div>
-                    </div>
+          {activeChat ? (
+            <div className="flex flex-col h-full relative">
+              <div className="px-6 py-3 border-b border-white/5 flex items-center justify-between bg-zinc-950 shrink-0">
+                <div className="flex items-center gap-3">
+                  <Button variant="ghost" size="icon" onClick={() => setShowMobileList(true)} className="lg:hidden h-8 w-8 text-zinc-500">
+                    <ArrowLeft size={16} />
+                  </Button>
+                  <div className="w-8 h-8 rounded-full bg-zinc-900 border border-white/10 overflow-hidden">
+                    <img src={`https://picsum.photos/seed/${activeChat.avatarSeed || activeChat.id}/100/100`} alt="" className="w-full h-full object-cover" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon" className="text-zinc-500 hover:text-white h-9 w-9">
-                      <MoreVertical size={18} />
-                    </Button>
+                  <div>
+                    <h2 className="text-xs font-bold text-white">{activeChat.customerName}</h2>
+                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">@{activeChat.customerUsername}</p>
                   </div>
-                </div>
-
-                {/* Messages Area */}
-                <ScrollArea className="flex-1 p-6 lg:p-10">
-                  <div className="space-y-8 max-w-3xl mx-auto">
-                    {activeChat.messages.map((msg, i) => (
-                      <div key={i} className={cn("flex flex-col", msg.role === 'customer' ? "items-start" : "items-end")}>
-                        <div className="max-w-[85%] lg:max-w-[75%] relative group">
-                          <div className={cn(
-                            "rounded-2xl px-5 py-3 text-sm leading-relaxed shadow-sm transition-all",
-                            msg.role === 'customer' 
-                              ? "bg-zinc-900 text-zinc-300 rounded-bl-none border border-zinc-800" 
-                              : "bg-white text-zinc-950 rounded-br-none font-medium"
-                          )}>
-                            {msg.content}
-                            {msg.type === 'automated' && (
-                              <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-zinc-950 border border-zinc-800 flex items-center justify-center text-zinc-400" title="AI Automated Response">
-                                <Zap size={10} fill="currentColor" />
-                              </div>
-                            )}
-                          </div>
-                          <div className={cn(
-                            "flex items-center gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity",
-                            msg.role === 'customer' ? "justify-start" : "justify-end"
-                          )}>
-                            <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">
-                              {msg.role === 'customer' ? 'Customer' : msg.type === 'automated' ? 'Neural Agent' : 'Business'} • 12:42 PM
-                            </span>
-                            {msg.role !== 'customer' && <CheckCircle2 size={10} className="text-zinc-700" />}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-
-                {/* Input Area */}
-                <div className="p-6 border-t border-zinc-800 bg-zinc-950/50 backdrop-blur-md shrink-0">
-                  <div className="max-w-3xl mx-auto space-y-4">
-                    <div className="flex flex-wrap gap-2">
-                      <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest self-center mr-2">Suggestions</span>
-                      {["Send pricing audit", "Apply loyalty discount", "Escalate to logistics"].map((hint, i) => (
-                        <button key={i} className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-[10px] font-bold text-zinc-500 hover:text-zinc-200 hover:border-zinc-600 transition-all flex items-center gap-2 group">
-                          <Sparkles size={12} className="text-zinc-700 group-hover:text-zinc-400" /> {hint}
-                        </button>
-                      ))}
-                    </div>
-                    <form className="relative flex items-center gap-3" onSubmit={(e) => e.preventDefault()}>
-                      <div className="relative flex-1">
-                        <Input 
-                          className="w-full h-12 bg-zinc-900/80 border-zinc-800 rounded-xl text-sm focus-visible:ring-zinc-700 px-5 placeholder:text-zinc-700" 
-                          placeholder="Type manual override or supervise AI..." 
-                        />
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-700">
-                          <Activity size={16} />
-                        </div>
-                      </div>
-                      <Button type="submit" size="icon" className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-xl w-12 h-12 shrink-0 shadow-lg">
-                        <Send size={18} />
-                      </Button>
-                    </form>
-                  </div>
-                </div>
-              </motion.div>
-            ) : (
-              <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 p-12 text-center bg-zinc-950">
-                <div className="w-16 h-16 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-6">
-                  <History size={32} className="text-zinc-800" />
-                </div>
-                <h2 className="text-lg font-bold text-white mb-2 tracking-tight">Select Infrastructure Thread</h2>
-                <p className="text-xs max-w-[240px] text-zinc-500 leading-relaxed font-medium">Observe high-intent lead recovery and autonomous agent performance across the fleet.</p>
-              </div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Column 3: Customer Insights (Hidden on small screens) */}
-        {activeChat && (
-          <div className="hidden xl:flex w-[320px] border-l border-zinc-800 flex-col bg-zinc-950 shrink-0">
-            <div className="p-6 border-b border-zinc-800">
-              <p className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.2em] mb-4">Customer Integrity</p>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center overflow-hidden">
-                  <img src={`https://picsum.photos/seed/${activeChat.avatarSeed}/100/100`} alt="" className="w-full h-full object-cover grayscale" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-white">{activeChat.customerName}</h3>
-                  <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">@{activeChat.customerUsername}</p>
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase">
-                    <TrendingUp size={12} className="text-zinc-600" /> Intent Level
-                  </div>
-                  <Badge className={cn(
-                    "text-[9px] font-black uppercase h-5",
-                    activeChat.intent.includes('High') ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20" : "bg-zinc-800 text-zinc-400 border border-zinc-700"
-                  )}>
-                    {activeChat.intent.split(' ')[0]}
-                  </Badge>
+              <ScrollArea className="flex-1 p-6">
+                <div className="space-y-6 max-w-2xl mx-auto">
+                  {activeChat.messages.map((msg, i) => (
+                    <div key={i} className={cn("flex flex-col", msg.role === 'customer' ? "items-start" : "items-end")}>
+                      <div className="max-w-[80%] relative group">
+                        <div className={cn(
+                          "rounded-xl px-4 py-2 text-sm leading-relaxed",
+                          msg.role === 'customer' 
+                            ? "bg-white/5 text-zinc-300 border border-white/10" 
+                            : "bg-white text-zinc-950 font-medium"
+                        )}>
+                          {msg.content}
+                          {msg.type === 'automated' && (
+                            <div className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-zinc-950 border border-white/10 flex items-center justify-center text-zinc-400" title="Automated">
+                              <Zap size={8} fill="currentColor" />
+                            </div>
+                          )}
+                        </div>
+                        <p className={cn("text-[9px] text-zinc-600 font-bold uppercase mt-1.5", msg.role === 'customer' ? "text-left" : "text-right")}>
+                          {msg.role === 'customer' ? 'Customer' : 'ReplyRush'} • 12:42 PM
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase">
-                    <Activity size={12} className="text-zinc-600" /> Sentiment
-                  </div>
-                  <span className="text-[10px] font-bold text-white">{activeChat.sentiment}</span>
-                </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-900/50 border border-zinc-800">
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase">
-                    <Tag size={12} className="text-zinc-600" /> Projected Value
-                  </div>
-                  <span className="text-[10px] font-bold text-white">{activeChat.value}</span>
+              </ScrollArea>
+
+              <div className="p-4 border-t border-white/5 bg-zinc-950/50 shrink-0">
+                <div className="max-w-2xl mx-auto">
+                  <form className="relative flex items-center gap-2" onSubmit={(e) => e.preventDefault()}>
+                    <Input 
+                      className="flex-1 h-10 bg-white/5 border-white/10 rounded-lg text-sm focus-visible:ring-zinc-700 px-4 placeholder:text-zinc-700" 
+                      placeholder="Type a message..." 
+                    />
+                    <Button type="submit" size="icon" className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-lg w-10 h-10 shrink-0">
+                      <Send size={14} />
+                    </Button>
+                  </form>
                 </div>
               </div>
             </div>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 p-8 text-center">
+              <History size={32} className="text-zinc-800 mb-4" />
+              <h2 className="text-sm font-bold text-white mb-1">Select a conversation</h2>
+              <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest">Select a thread to start messaging</p>
+            </div>
+          )}
+        </div>
 
-            <ScrollArea className="flex-1">
-              <div className="p-6 space-y-8">
-                <div>
-                  <p className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.2em] mb-4">Suggested Actions</p>
-                  <div className="space-y-2">
-                    <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase tracking-widest h-10 border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 transition-all gap-3">
-                      <Zap size={14} className="text-zinc-600" /> Send Discount Link
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase tracking-widest h-10 border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 transition-all gap-3">
-                      <Clock size={14} className="text-zinc-600" /> Schedule Follow-up
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase tracking-widest h-10 border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800 transition-all gap-3">
-                      <User size={14} className="text-zinc-600" /> Human Override
-                    </Button>
-                  </div>
+        {/* Insights Panel */}
+        {activeChat && (
+          <div className="hidden xl:flex w-72 border-l border-white/5 flex-col bg-zinc-950 shrink-0">
+            <div className="p-6">
+              <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-6">Customer Insights</p>
+              
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+                  <span className="text-[10px] font-bold text-zinc-500 uppercase">Intent</span>
+                  <Badge variant="outline" className="text-[9px] h-5 border-white/10 text-emerald-500 font-bold">
+                    {activeChat.intent.split(' ')[0]}
+                  </Badge>
                 </div>
-
-                <Separator className="bg-zinc-800" />
-
-                <div>
-                  <p className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.2em] mb-4">Recent Activity</p>
-                  <div className="space-y-4">
-                    {[
-                      { action: 'Viewed Checkout', time: '14m ago' },
-                      { action: 'Applied BULK15 Code', time: '22m ago' },
-                      { action: 'IG Story Interaction', time: '2h ago' }
-                    ].map((act, i) => (
-                      <div key={i} className="flex items-center justify-between">
-                        <span className="text-[11px] text-zinc-400 font-medium">{act.action}</span>
-                        <span className="text-[9px] text-zinc-600 font-bold uppercase">{act.time}</span>
-                      </div>
-                    ))}
-                  </div>
+                <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+                  <span className="text-[10px] font-bold text-zinc-500 uppercase">Sentiment</span>
+                  <span className="text-[10px] font-bold text-white">{activeChat.sentiment}</span>
                 </div>
               </div>
-            </ScrollArea>
 
-            <div className="p-6 border-t border-zinc-800 bg-zinc-900/20">
-              <Button variant="ghost" className="w-full h-10 text-[10px] font-bold uppercase tracking-widest text-zinc-500 hover:text-white hover:bg-zinc-800 gap-2">
-                <Info size={14} /> Full Customer Audit
-              </Button>
+              <Separator className="my-8 bg-white/5" />
+
+              <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-4">Quick Actions</p>
+              <div className="space-y-2">
+                <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/10 bg-white/5 hover:bg-white/10 gap-2">
+                  <Zap size={12} className="text-zinc-500" /> Send Discount
+                </Button>
+                <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/10 bg-white/5 hover:bg-white/10 gap-2">
+                  <Clock size={12} className="text-zinc-500" /> Follow Up
+                </Button>
+              </div>
             </div>
           </div>
         )}

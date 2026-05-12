@@ -7,19 +7,19 @@ import { cn } from '@/lib/utils';
 import { 
   LayoutDashboard, 
   Inbox, 
-  BrainCircuit, 
+  Database, 
   Zap, 
   BarChart3, 
   Settings, 
   LogOut,
-  ShieldCheck
+  Briefcase
 } from 'lucide-react';
 import { useLocalAuth } from '@/hooks/use-local-auth';
 
 const navItems = [
   { label: 'Overview', icon: LayoutDashboard, href: '/dashboard' },
-  { label: 'Neural Inbox', icon: Inbox, href: '/dashboard/inbox' },
-  { label: 'Intelligence', icon: BrainCircuit, href: '/dashboard/knowledge' },
+  { label: 'Inbox', icon: Inbox, href: '/dashboard/inbox' },
+  { label: 'Knowledge Base', icon: Database, href: '/dashboard/knowledge' },
   { label: 'Automations', icon: Zap, href: '/dashboard/automations' },
   { label: 'Analytics', icon: BarChart3, href: '/dashboard/analytics' },
   { label: 'Settings', icon: Settings, href: '/dashboard/settings' },
@@ -62,10 +62,10 @@ export function DashboardSidebar() {
       <div className="p-6 border-t border-white/5 space-y-6">
         <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
           <div className="flex items-center gap-2 mb-3">
-            <ShieldCheck size={14} className="text-zinc-500" />
-            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Enterprise Mode</span>
+            <Briefcase size={14} className="text-zinc-500" />
+            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Workspace</span>
           </div>
-          <p className="text-[11px] text-zinc-600 leading-normal font-medium">Monitoring 142 active commerce threads across global hubs.</p>
+          <p className="text-[11px] text-zinc-600 leading-normal font-medium">Managing 142 active customer conversations.</p>
         </div>
 
         <button 
@@ -78,7 +78,7 @@ export function DashboardSidebar() {
             </div>
             <div className="min-w-0 text-left">
               <p className="text-xs font-bold text-white truncate">{user?.displayName || 'User'}</p>
-              <p className="text-[9px] text-zinc-500 truncate uppercase font-bold tracking-widest">HQ Admin</p>
+              <p className="text-[9px] text-zinc-500 truncate uppercase font-bold tracking-widest">Admin</p>
             </div>
           </div>
           <LogOut size={14} className="text-zinc-600 group-hover:text-white transition-colors" />
