@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { GlassCard } from '@/components/ui/glass-card';
 import { 
@@ -11,8 +11,8 @@ import {
   ArrowRight,
   Activity,
   ChevronRight,
-  ShieldCheck,
-  CheckCircle2
+  CheckCircle2,
+  Loader2
 } from 'lucide-react';
 import { 
   XAxis, 
@@ -27,6 +27,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { MOCK_STATS, MOCK_LIVE_FEED } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 const chartData = [
   { name: 'Mon', revenue: 142000 },
@@ -39,6 +40,27 @@ const chartData = [
 ];
 
 export default function DashboardOverview() {
+  const { toast } = useToast();
+  const [configuring, setConfiguring] = useState(false);
+
+  const handleConfigure = () => {
+    setConfiguring(true);
+    setTimeout(() => {
+      setConfiguring(false);
+      toast({
+        title: "Workspace Optimized",
+        description: "AI nodes have been recalibrated for current traffic.",
+      });
+    }, 1500);
+  };
+
+  const handleAudit = () => {
+    toast({
+      title: "Logs Exported",
+      description: "Audit trail for the last 24h sent to your email.",
+    });
+  };
+
   return (
     <div className="space-y-12 max-w-7xl mx-auto w-full">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -56,11 +78,20 @@ export default function DashboardOverview() {
           <p className="text-zinc-500 font-medium">Real-time overview of your customer conversations and sales efficiency.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold rounded-lg px-4 hover:bg-white/5 transition-all">
+          <Button 
+            variant="outline" 
+            onClick={handleAudit}
+            className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold rounded-lg px-4 hover:bg-white/5 transition-all"
+          >
             Audit Logs
           </Button>
-          <Button className="h-10 bg-white text-black hover:bg-zinc-200 text-xs font-bold rounded-lg px-6 shadow-xl transition-all active:scale-95">
-            Configure Fleet
+          <Button 
+            onClick={handleConfigure}
+            disabled={configuring}
+            className="h-10 bg-white text-black hover:bg-zinc-200 text-xs font-bold rounded-lg px-6 shadow-xl transition-all active:scale-95"
+          >
+            {configuring ? <Loader2 className="animate-spin mr-2" size={14} /> : null}
+            {configuring ? 'Syncing...' : 'Configure Workspace'}
           </Button>
         </div>
       </div>
@@ -69,7 +100,7 @@ export default function DashboardOverview() {
         {[
           { label: 'Recovered Revenue', value: MOCK_STATS.revenueRecovered, change: '+18.5%', icon: DollarSign, color: 'text-emerald-500' },
           { label: 'AI Responses', value: MOCK_STATS.aiReplies, change: '+12.2%', icon: Zap, color: 'text-zinc-400' },
-          { label: 'Avg Response Time', value: MOCK_STATS.avgSpeed, change: '-42%', icon: Activity, color: 'text-zinc-400' },
+          { label: 'Avg Speed', value: MOCK_STATS.avgSpeed, change: '-42%', icon: Activity, color: 'text-zinc-400' },
           { label: 'Conversion Rate', value: MOCK_STATS.conversionRate, change: '+4.1%', icon: TrendingUp, color: 'text-zinc-400' }
         ].map((stat, i) => (
           <GlassCard key={i} className="border-white/5 bg-white/[0.01] p-6 hover:border-white/10 transition-colors cursor-default">
@@ -126,7 +157,7 @@ export default function DashboardOverview() {
           <h3 className="font-bold text-xl mb-8">Recent Activity</h3>
           <div className="space-y-8 flex-1 overflow-y-auto pr-2 custom-scrollbar max-h-[400px]">
             {MOCK_LIVE_FEED.map((item) => (
-              <div key={item.id} className="flex gap-4 group">
+              <div key={item.id} className="flex gap-4 group cursor-pointer">
                 <div className="w-8 h-8 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center shrink-0 text-zinc-600 group-hover:text-white transition-colors">
                   {item.type === 'sale' ? <CheckCircle2 size={14} className="text-emerald-500" /> : <MessageSquare size={14} />}
                 </div>
@@ -141,7 +172,11 @@ export default function DashboardOverview() {
             ))}
           </div>
           <div className="mt-8 pt-6 border-t border-white/5">
-            <Button variant="ghost" className="w-full justify-between h-10 text-zinc-500 hover:text-white px-4 text-xs font-bold transition-all">
+            <Button 
+              variant="ghost" 
+              onClick={() => toast({ title: "Opening Full History", description: "Loading comprehensive audit logs..." })}
+              className="w-full justify-between h-10 text-zinc-500 hover:text-white px-4 text-xs font-bold transition-all"
+            >
               Full Activity Feed <ChevronRight size={14} />
             </Button>
           </div>

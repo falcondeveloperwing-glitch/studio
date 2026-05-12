@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,7 @@ import {
   Download,
   Calendar,
   ChevronDown,
-  BarChart
+  Loader2
 } from 'lucide-react';
 import { 
   ResponsiveContainer, 
@@ -28,6 +28,7 @@ import {
 } from 'recharts';
 import { Badge } from '@/components/ui/badge';
 import { MOCK_STATS } from '@/lib/mock-data';
+import { useToast } from '@/hooks/use-toast';
 
 const data = [
   { name: 'Jan', sales: 42000, conv: 24000 },
@@ -46,6 +47,27 @@ const satisfactionData = [
 ];
 
 export default function AnalyticsPage() {
+  const { toast } = useToast();
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = () => {
+    setExporting(true);
+    setTimeout(() => {
+      setExporting(false);
+      toast({
+        title: "Report Generated",
+        description: "Your July performance PDF is ready for download.",
+      });
+    }, 2000);
+  };
+
+  const handleFilter = () => {
+    toast({
+      title: "Date Range Applied",
+      description: "Recalculating metrics for the last 30 days...",
+    });
+  };
+
   return (
     <div className="space-y-12">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -54,10 +76,16 @@ export default function AnalyticsPage() {
           <p className="text-zinc-500 font-medium">Detailed performance insights and sales metrics.</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold gap-2">
-            <Download size={16} /> Export Data
+          <Button 
+            variant="outline" 
+            onClick={handleExport}
+            disabled={exporting}
+            className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold gap-2"
+          >
+            {exporting ? <Loader2 className="animate-spin" size={14} /> : <Download size={16} />}
+            {exporting ? 'Processing...' : 'Export Data'}
           </Button>
-          <Button variant="outline" className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold gap-2">
+          <Button variant="outline" onClick={handleFilter} className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold gap-2">
             <Calendar size={16} /> Last 30 Days <ChevronDown size={12} className="opacity-50" />
           </Button>
         </div>

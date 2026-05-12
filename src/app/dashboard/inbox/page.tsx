@@ -9,29 +9,29 @@ import {
   Search, 
   Send, 
   MoreVertical, 
-  Sparkles, 
   Zap,
   Filter,
   ArrowLeft,
-  CheckCircle2,
-  Activity,
-  User,
-  Info,
-  TrendingUp,
-  Tag,
   Clock,
-  History
+  History,
+  Tag,
+  Loader2
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { MOCK_CHATS } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 export default function InboxPage() {
+  const { toast } = useToast();
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [showMobileList, setShowMobileList] = useState(true);
+  const [inputText, setInputText] = useState('');
+  const [sending, setSending] = useState(false);
+  const [chats, setChats] = useState(MOCK_CHATS);
 
-  const activeChat = MOCK_CHATS.find(c => c.id === activeChatId);
+  const activeChat = chats.find(c => c.id === activeChatId);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.innerWidth > 1024 && !activeChatId) {
@@ -44,6 +44,40 @@ export default function InboxPage() {
     setShowMobileList(false);
   };
 
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputText.trim() || !activeChatId) return;
+
+    setSending(true);
+    const text = inputText;
+    setInputText('');
+
+    setTimeout(() => {
+      setChats(prev => prev.map(c => {
+        if (c.id === activeChatId) {
+          return {
+            ...c,
+            messages: [...c.messages, {
+              role: 'business',
+              content: text,
+              type: 'text',
+              timestamp: new Date().toISOString()
+            }]
+          };
+        }
+        return c;
+      }));
+      setSending(false);
+    }, 600);
+  };
+
+  const handleQuickAction = (action: string) => {
+    toast({
+      title: "Action Initialized",
+      description: `Sending ${action} to ${activeChat?.customerName}...`,
+    });
+  };
+
   return (
     <div className="h-[calc(100vh-64px)] lg:h-[calc(100vh-100px)] flex flex-col bg-zinc-950 border border-white/5 rounded-2xl overflow-hidden max-w-7xl mx-auto flex-1">
       {/* Header */}
@@ -51,11 +85,11 @@ export default function InboxPage() {
         <div className="flex items-center gap-4">
           <h1 className="text-sm font-bold">Inbox</h1>
           <Badge variant="outline" className="text-[10px] uppercase tracking-widest border-white/10 text-zinc-500 font-bold">
-            {MOCK_CHATS.length} Active
+            {chats.length} Active
           </Badge>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="text-zinc-500 hover:text-white h-8 text-xs gap-2">
+          <Button variant="ghost" size="sm" onClick={() => toast({ title: "Filters Active", description: "Showing high-priority conversations." })} className="text-zinc-500 hover:text-white h-8 text-xs gap-2">
             <Filter size={12} /> Filter
           </Button>
           <Button variant="ghost" size="icon" className="text-zinc-500 h-8 w-8">
@@ -82,7 +116,7 @@ export default function InboxPage() {
           
           <ScrollArea className="flex-1">
             <div className="divide-y divide-white/[0.02]">
-              {MOCK_CHATS.map((chat) => (
+              {chats.map((chat) => (
                 <div 
                   key={chat.id} 
                   onClick={() => handleSelectChat(chat.id)} 
@@ -107,7 +141,7 @@ export default function InboxPage() {
                       </span>
                     </div>
                     <p className={cn("text-[11px] truncate leading-tight", chat.unread ? "text-zinc-300" : "text-zinc-500")}>
-                      {chat.lastMessage}
+                      {chat.messages[chat.messages.length - 1].content}
                     </p>
                   </div>
                 </div>
@@ -147,32 +181,42 @@ export default function InboxPage() {
                           "rounded-xl px-4 py-2 text-sm leading-relaxed",
                           msg.role === 'customer' 
                             ? "bg-zinc-900 text-zinc-300 border border-white/5" 
-                            : "bg-white text-zinc-950 font-medium"
+                            : "bg-white text-zinc-950 font-medium shadow-sm"
                         )}>
                           {msg.content}
                           {msg.type === 'automated' && (
-                            <div className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-zinc-950 border border-white/10 flex items-center justify-center text-zinc-400" title="Automated">
+                            <div className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-zinc-950 border border-white/10 flex items-center justify-center text-zinc-400" title="AI Responded">
                               <Zap size={8} fill="currentColor" />
                             </div>
                           )}
                         </div>
                         <p className={cn("text-[9px] text-zinc-600 font-bold uppercase mt-1.5", msg.role === 'customer' ? "text-left" : "text-right")}>
-                          {msg.role === 'customer' ? 'Customer' : 'ReplyRush AI'} • 12:42 PM
+                          {msg.role === 'customer' ? 'Customer' : 'ReplyRush AI'} • {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </p>
                       </div>
                     </div>
                   ))}
+                  {sending && (
+                    <div className="flex flex-col items-end">
+                      <div className="bg-white/10 rounded-xl px-4 py-2 flex items-center gap-2">
+                        <Loader2 size={12} className="animate-spin text-zinc-500" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Sending...</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </ScrollArea>
 
               <div className="p-4 border-t border-white/5 bg-zinc-950/80 backdrop-blur-md shrink-0">
                 <div className="max-w-2xl mx-auto">
-                  <form className="relative flex items-center gap-2" onSubmit={(e) => e.preventDefault()}>
+                  <form className="relative flex items-center gap-2" onSubmit={handleSendMessage}>
                     <Input 
                       className="flex-1 h-10 bg-white/5 border-white/10 rounded-lg text-sm focus-visible:ring-zinc-800 px-4 placeholder:text-zinc-700" 
                       placeholder="Type your message..." 
+                      value={inputText}
+                      onChange={(e) => setInputText(e.target.value)}
                     />
-                    <Button type="submit" size="icon" className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-lg w-10 h-10 shrink-0 shadow-xl transition-transform active:scale-95">
+                    <Button type="submit" disabled={!inputText.trim()} size="icon" className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-lg w-10 h-10 shrink-0 shadow-xl transition-transform active:scale-95 disabled:opacity-50">
                       <Send size={14} />
                     </Button>
                   </form>
@@ -198,7 +242,7 @@ export default function InboxPage() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] border border-white/5">
                     <span className="text-[10px] font-bold text-zinc-500 uppercase">Intent</span>
-                    <Badge variant="outline" className="text-[9px] h-5 border-white/10 text-emerald-500 font-bold bg-emerald-500/5">
+                    <Badge variant="outline" className="text-[9px] h-5 border-none text-emerald-500 font-bold bg-emerald-500/5">
                       {activeChat.intent.split(' ')[0]}
                     </Badge>
                   </div>
@@ -206,24 +250,32 @@ export default function InboxPage() {
                     <span className="text-[10px] font-bold text-zinc-500 uppercase">Sentiment</span>
                     <span className="text-[10px] font-bold text-white">{activeChat.sentiment}</span>
                   </div>
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] border border-white/5">
-                    <span className="text-[10px] font-bold text-zinc-500 uppercase">Status</span>
-                    <span className="text-[10px] font-bold text-zinc-400">High Lead</span>
-                  </div>
                 </div>
 
                 <Separator className="my-8 bg-white/5" />
 
                 <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-4">Quick Actions</p>
                 <div className="space-y-2">
-                  <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => handleQuickAction("Bulk Discount")}
+                    className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all"
+                  >
                     <Zap size={12} className="text-zinc-500" /> Send Bulk Discount
                   </Button>
-                  <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => handleQuickAction("Schedule Follow-up")}
+                    className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all"
+                  >
                     <Clock size={12} className="text-zinc-500" /> Schedule Follow Up
                   </Button>
-                  <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all text-red-400 hover:text-red-300">
-                    <Tag size={12} /> Mark as Spam
+                  <Button 
+                    variant="outline" 
+                    onClick={() => handleQuickAction("Mark as Priority")}
+                    className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all"
+                  >
+                    <Tag size={12} className="text-zinc-500" /> Mark as Priority
                   </Button>
                 </div>
 

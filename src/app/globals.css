@@ -37,10 +37,10 @@
   }
 }
 
-/* Premium SaaS Scrollbar */
+/* Premium SaaS Scrollbar - Global */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -49,11 +49,16 @@
 
 ::-webkit-scrollbar-thumb {
   background: #27272a;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #3f3f46;
+}
+
+/* Specific scroll areas for high-density components */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
 }
 
 /* Smooth Scrolling */
@@ -61,16 +66,10 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Surface styles for professional UI */
-.surface-card {
-  @apply bg-zinc-900/20 border border-white/5 rounded-xl transition-all duration-200;
-}
-
-.surface-card-hover {
-  @apply hover:border-white/10 hover:bg-white/[0.02];
-}
-
-/* Typography refinements */
 .font-headline {
   font-family: 'Space Grotesk', sans-serif;
+}
+
+.glass-surface {
+  @apply bg-zinc-900/40 border border-white/5 backdrop-blur-md;
 }
