@@ -24,6 +24,18 @@ interface DemoContextType {
 
 const DemoContext = createContext<DemoContextType | undefined>(undefined);
 
+const DEMO_TIMINGS: Record<DemoStep, number> = {
+  idle: 0,
+  landing: 4500,
+  login: 3000,
+  dashboard: 7000,
+  inbox: 12000,
+  automations: 8000,
+  analytics: 8000,
+  pricing: 6000,
+  complete: 10000
+};
+
 export function DemoProvider({ children }: { children: React.ReactNode }) {
   const [isActive, setIsActive] = useState(false);
   const [currentStep, setCurrentStep] = useState<DemoStep>('idle');
@@ -44,44 +56,30 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const nextStep = useCallback(() => {
     const steps: DemoStep[] = ['landing', 'login', 'dashboard', 'inbox', 'automations', 'analytics', 'pricing', 'complete'];
     const nextIdx = steps.indexOf(currentStep) + 1;
+    
     if (nextIdx < steps.length) {
       const next = steps[nextIdx];
       setCurrentStep(next);
       
-      // Auto Navigation Logic
-      if (next === 'login') router.push('/login');
-      if (next === 'dashboard') router.push('/dashboard');
-      if (next === 'inbox') router.push('/dashboard/inbox');
-      if (next === 'automations') router.push('/dashboard/automations');
-      if (next === 'analytics') router.push('/dashboard/analytics');
-      if (next === 'pricing') router.push('/pricing');
-      if (next === 'complete') {
-        setTimeout(stopDemo, 3000);
+      // Navigation Dispatcher
+      switch(next) {
+        case 'login': router.push('/login'); break;
+        case 'dashboard': router.push('/dashboard'); break;
+        case 'inbox': router.push('/dashboard/inbox'); break;
+        case 'automations': router.push('/dashboard/automations'); break;
+        case 'analytics': router.push('/dashboard/analytics'); break;
+        case 'pricing': router.push('/pricing'); break;
       }
     }
-  }, [currentStep, router, stopDemo]);
+  }, [currentStep, router]);
 
-  // Handle manual navigation during demo
+  // Autoplay Logic
   useEffect(() => {
-    if (!isActive) return;
-    
-    const timeoutMap: Record<DemoStep, number> = {
-      idle: 0,
-      landing: 4000,
-      login: 3000,
-      dashboard: 6000,
-      inbox: 10000,
-      automations: 5000,
-      analytics: 7000,
-      pricing: 6000,
-      complete: 0
-    };
+    if (!isActive || currentStep === 'complete') return;
 
     const timer = setTimeout(() => {
-      if (isActive && currentStep !== 'complete') {
-        nextStep();
-      }
-    }, timeoutMap[currentStep]);
+      nextStep();
+    }, DEMO_TIMINGS[currentStep]);
 
     return () => clearTimeout(timer);
   }, [isActive, currentStep, nextStep]);

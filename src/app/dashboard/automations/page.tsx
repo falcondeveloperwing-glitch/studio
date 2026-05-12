@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
+import { useDemo } from '@/components/demo/demo-context';
 import { 
   Zap, 
   Plus, 
@@ -13,7 +14,8 @@ import {
   AlertCircle,
   MoreHorizontal,
   Instagram,
-  Loader2
+  Loader2,
+  CheckCircle2
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { MOCK_WORKFLOWS } from '@/lib/mock-data';
@@ -32,8 +34,20 @@ import { Label } from '@/components/ui/label';
 
 export default function AutomationsPage() {
   const { toast } = useToast();
+  const { isActive, currentStep } = useDemo();
   const [creating, setCreating] = useState(false);
   const [open, setOpen] = useState(false);
+  const [executionStep, setExecutionStep] = useState(0);
+
+  // Demo Execution Simulation
+  useEffect(() => {
+    if (isActive && currentStep === 'automations') {
+      const timer = setInterval(() => {
+        setExecutionStep(prev => (prev < 4 ? prev + 1 : 0));
+      }, 1500);
+      return () => clearInterval(timer);
+    }
+  }, [isActive, currentStep]);
 
   const handleCreateAutomation = (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,6 +118,49 @@ export default function AutomationsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-4">
+          {/* Demo Execution Tracker */}
+          <AnimatePresence>
+            {isActive && currentStep === 'automations' && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <GlassCard className="border-primary/20 bg-primary/[0.02] mb-6 p-6">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                      <Zap size={16} fill="currentColor" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold">Live Execution Demo</h4>
+                      <p className="text-[10px] text-zinc-500 uppercase tracking-widest">Simulating real-time workflow logic</p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {[
+                      { label: "Trigger Detected", detail: "Customer asked for bulk pricing", icon: MessageSquare },
+                      { label: "Logic Applied", detail: "Applying Tier 2 Discount (15%)", icon: Tag },
+                      { label: "AI Response Sent", detail: "Pricing link dispatched to Marcus", icon: Instagram },
+                      { label: "Lead Captured", detail: "High priority tag added to CRM", icon: CheckCircle2 }
+                    ].map((step, i) => (
+                      <div key={i} className={`flex items-center gap-4 transition-all duration-500 ${executionStep >= i + 1 ? 'opacity-100 translate-x-0' : 'opacity-20 -translate-x-2'}`}>
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center ${executionStep >= i + 1 ? 'bg-primary text-black' : 'bg-white/5 border border-white/10'}`}>
+                          {executionStep > i + 1 ? <CheckCircle2 size={12} /> : <step.icon size={12} />}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs font-bold">{step.label}</p>
+                          <p className="text-[10px] text-zinc-500">{step.detail}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </GlassCard>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 ml-1">
             Active Automations
           </div>

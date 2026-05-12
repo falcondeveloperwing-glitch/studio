@@ -52,8 +52,12 @@ export default function AnalyticsPage() {
   const { isActive, currentStep } = useDemo();
   const [exporting, setExporting] = useState(false);
   const [data, setData] = useState(initialData);
+  const [liveStats, setLiveStats] = useState({
+    inquiries: 142942,
+    conversion: 31.4
+  });
 
-  // Demo Chart Simulation
+  // Demo Simulation Logic
   useEffect(() => {
     if (isActive && currentStep === 'analytics') {
       const interval = setInterval(() => {
@@ -61,11 +65,15 @@ export default function AnalyticsPage() {
           const last = prev[prev.length - 1];
           return [...prev.slice(0, -1), { 
             ...last, 
-            sales: last.sales + 200, 
-            conv: last.conv + 150 
+            sales: last.sales + Math.floor(Math.random() * 500), 
+            conv: last.conv + Math.floor(Math.random() * 300) 
           }];
         });
-      }, 500);
+        setLiveStats(prev => ({
+          inquiries: prev.inquiries + 1,
+          conversion: prev.conversion + 0.01
+        }));
+      }, 800);
       return () => clearInterval(interval);
     }
   }, [isActive, currentStep]);
@@ -79,13 +87,6 @@ export default function AnalyticsPage() {
         description: "Your July performance PDF is ready for download.",
       });
     }, 2000);
-  };
-
-  const handleFilter = () => {
-    toast({
-      title: "Date Range Applied",
-      description: "Recalculating metrics for the last 30 days...",
-    });
   };
 
   return (
@@ -105,7 +106,7 @@ export default function AnalyticsPage() {
             {exporting ? <Loader2 className="animate-spin" size={14} /> : <Download size={16} />}
             {exporting ? 'Processing...' : 'Export Data'}
           </Button>
-          <Button variant="outline" onClick={handleFilter} className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold gap-2">
+          <Button variant="outline" className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold gap-2">
             <Calendar size={16} /> Last 30 Days <ChevronDown size={12} className="opacity-50" />
           </Button>
         </div>
@@ -113,9 +114,9 @@ export default function AnalyticsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Inquiries', value: MOCK_STATS.aiReplies, change: '+22.4%', icon: MessageSquare },
+          { label: 'Total Inquiries', value: isActive ? liveStats.inquiries.toLocaleString() : MOCK_STATS.aiReplies, change: '+22.4%', icon: MessageSquare },
           { label: 'Avg Speed', value: MOCK_STATS.avgSpeed, change: '-42.1%', icon: Clock },
-          { label: 'Conversion Rate', value: MOCK_STATS.conversionRate, change: '+4.8%', icon: TrendingUp },
+          { label: 'Conversion Rate', value: isActive ? `${liveStats.conversion.toFixed(1)}%` : MOCK_STATS.conversionRate, change: '+4.8%', icon: TrendingUp },
           { label: 'Customer Satisfaction', value: MOCK_STATS.satisfaction, change: '+0.4%', icon: Smile }
         ].map((stat, i) => (
           <GlassCard key={i} className="border-white/5 p-6 bg-zinc-950/50">
