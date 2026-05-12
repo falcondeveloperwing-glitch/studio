@@ -38,12 +38,15 @@ export default function InboxPage() {
   // Demo Simulation Logic
   useEffect(() => {
     if (isActive && currentStep === 'inbox') {
-      // Auto-select Marcus
-      handleSelectChat('1');
+      // Auto-select Marcus with a human delay
+      const selectTimer = setTimeout(() => {
+        handleSelectChat('1');
+      }, 1500);
       
-      const timer = setTimeout(() => {
+      const typeTimer = setTimeout(() => {
         setSending(true);
-        setTimeout(() => {
+        // Realistic human typing pause
+        const messageTimer = setTimeout(() => {
           setChats(prev => prev.map(c => {
             if (c.id === '1') {
               return {
@@ -59,18 +62,27 @@ export default function InboxPage() {
             return c;
           }));
           setSending(false);
-        }, 3000);
-      }, 4000);
+          toast({
+            title: "Opportunity Captured",
+            description: "AI successfully converted bulk inquiry.",
+          });
+        }, 4000);
 
-      return () => clearTimeout(timer);
+        return () => clearTimeout(messageTimer);
+      }, 6000);
+
+      return () => {
+        clearTimeout(selectTimer);
+        clearTimeout(typeTimer);
+      };
     }
   }, [isActive, currentStep]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth > 1024 && !activeChatId) {
+    if (typeof window !== 'undefined' && window.innerWidth > 1024 && !activeChatId && !isActive) {
       setActiveChatId(MOCK_CHATS[0].id);
     }
-  }, [activeChatId]);
+  }, [activeChatId, isActive]);
 
   const handleSelectChat = (id: string) => {
     setActiveChatId(id);
@@ -102,13 +114,6 @@ export default function InboxPage() {
       }));
       setSending(false);
     }, 600);
-  };
-
-  const handleQuickAction = (action: string) => {
-    toast({
-      title: "Action Initialized",
-      description: `Sending ${action} to ${activeChat?.customerName}...`,
-    });
   };
 
   return (
@@ -159,7 +164,7 @@ export default function InboxPage() {
                   )}
                 >
                   <div className="w-9 h-9 rounded-full bg-zinc-900 border border-white/5 shrink-0 overflow-hidden relative">
-                    <img src={`https://picsum.photos/seed/${chat.avatarSeed || chat.id}/100/100`} alt="" className="w-full h-full object-cover" />
+                    <img src={`https://picsum.photos/seed/${chat.avatarSeed || chat.id}/100/100`} alt="" className="w-full h-full object-cover grayscale" />
                     {chat.unread && (
                       <div className="absolute top-0 right-0 w-2 h-2 rounded-full bg-white border-2 border-zinc-950" />
                     )}
@@ -196,7 +201,7 @@ export default function InboxPage() {
                     <ArrowLeft size={16} />
                   </Button>
                   <div className="w-8 h-8 rounded-full bg-zinc-900 border border-white/10 overflow-hidden">
-                    <img src={`https://picsum.photos/seed/${activeChat.avatarSeed || activeChat.id}/100/100`} alt="" className="w-full h-full object-cover" />
+                    <img src={`https://picsum.photos/seed/${activeChat.avatarSeed || activeChat.id}/100/100`} alt="" className="w-full h-full object-cover grayscale" />
                   </div>
                   <div>
                     <h2 className="text-xs font-bold text-white">{activeChat.customerName}</h2>
@@ -233,7 +238,7 @@ export default function InboxPage() {
                     <div className="flex flex-col items-end">
                       <div className="bg-white/10 rounded-xl px-4 py-2 flex items-center gap-2">
                         <Loader2 size={12} className="animate-spin text-zinc-500" />
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Sending...</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Typing...</span>
                       </div>
                     </div>
                   )}
@@ -291,21 +296,18 @@ export default function InboxPage() {
                 <div className="space-y-2">
                   <Button 
                     variant="outline" 
-                    onClick={() => handleQuickAction("Bulk Discount")}
                     className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all"
                   >
                     <Zap size={12} className="text-zinc-500" /> Send Bulk Discount
                   </Button>
                   <Button 
                     variant="outline" 
-                    onClick={() => handleQuickAction("Schedule Follow-up")}
                     className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all"
                   >
                     <Clock size={12} className="text-zinc-500" /> Schedule Follow Up
                   </Button>
                   <Button 
                     variant="outline" 
-                    onClick={() => handleQuickAction("Mark as Priority")}
                     className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all"
                   >
                     <Tag size={12} className="text-zinc-500" /> Mark as Priority
