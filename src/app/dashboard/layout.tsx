@@ -70,16 +70,17 @@ export default function DashboardLayout({
       </div>
       
       <main className="flex-1 h-screen overflow-y-auto relative z-10 flex flex-col custom-scrollbar">
-        <div className="lg:hidden p-4 flex items-center justify-between border-b border-white/5 bg-zinc-950">
+        {/* Responsive Header Fix */}
+        <div className="lg:hidden h-16 px-6 flex items-center justify-between border-b border-white/5 bg-zinc-950 shrink-0">
           <div className="flex items-center gap-3">
-            <Zap className="text-white" size={18} />
-            <span className="font-bold text-lg">ReplyRush</span>
+            <Zap className="text-white fill-white" size={20} />
+            <span className="font-bold text-lg tracking-tighter">ReplyRush</span>
           </div>
           <Button 
             variant="ghost" 
             size="icon" 
             onClick={() => setIsSidebarOpen(true)}
-            className="bg-white/5 rounded-xl"
+            className="bg-white/5 rounded-xl h-10 w-10"
           >
             <Menu size={20} />
           </Button>
