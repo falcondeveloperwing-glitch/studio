@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { GlassCard } from '@/components/ui/glass-card';
+import { useDemo } from '@/components/demo/demo-context';
 import { 
   DollarSign,
   MessageSquare,
@@ -41,7 +42,23 @@ const chartData = [
 
 export default function DashboardOverview() {
   const { toast } = useToast();
+  const { isActive } = useDemo();
   const [configuring, setConfiguring] = useState(false);
+  const [demoStats, setDemoStats] = useState({
+    revenue: 842850,
+    replies: 142942
+  });
+
+  useEffect(() => {
+    if (!isActive) return;
+    const interval = setInterval(() => {
+      setDemoStats(prev => ({
+        revenue: prev.revenue + Math.floor(Math.random() * 500),
+        replies: prev.replies + Math.floor(Math.random() * 2)
+      }));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isActive]);
 
   const handleConfigure = () => {
     setConfiguring(true);
@@ -98,8 +115,20 @@ export default function DashboardOverview() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Recovered Revenue', value: MOCK_STATS.revenueRecovered, change: '+18.5%', icon: DollarSign, color: 'text-emerald-500' },
-          { label: 'AI Responses', value: MOCK_STATS.aiReplies, change: '+12.2%', icon: Zap, color: 'text-zinc-400' },
+          { 
+            label: 'Recovered Revenue', 
+            value: isActive ? `$${demoStats.revenue.toLocaleString()}` : MOCK_STATS.revenueRecovered, 
+            change: '+18.5%', 
+            icon: DollarSign, 
+            color: 'text-emerald-500' 
+          },
+          { 
+            label: 'AI Responses', 
+            value: isActive ? demoStats.replies.toLocaleString() : MOCK_STATS.aiReplies, 
+            change: '+12.2%', 
+            icon: Zap, 
+            color: 'text-zinc-400' 
+          },
           { label: 'Avg Speed', value: MOCK_STATS.avgSpeed, change: '-42%', icon: Activity, color: 'text-zinc-400' },
           { label: 'Conversion Rate', value: MOCK_STATS.conversionRate, change: '+4.1%', icon: TrendingUp, color: 'text-zinc-400' }
         ].map((stat, i) => (

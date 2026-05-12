@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
+import { useDemo } from '@/components/demo/demo-context';
 import { 
   TrendingUp, 
   Clock, 
@@ -30,7 +31,7 @@ import { Badge } from '@/components/ui/badge';
 import { MOCK_STATS } from '@/lib/mock-data';
 import { useToast } from '@/hooks/use-toast';
 
-const data = [
+const initialData = [
   { name: 'Jan', sales: 42000, conv: 24000 },
   { name: 'Feb', sales: 58000, conv: 32000 },
   { name: 'Mar', sales: 65000, conv: 41000 },
@@ -48,7 +49,26 @@ const satisfactionData = [
 
 export default function AnalyticsPage() {
   const { toast } = useToast();
+  const { isActive, currentStep } = useDemo();
   const [exporting, setExporting] = useState(false);
+  const [data, setData] = useState(initialData);
+
+  // Demo Chart Simulation
+  useEffect(() => {
+    if (isActive && currentStep === 'analytics') {
+      const interval = setInterval(() => {
+        setData(prev => {
+          const last = prev[prev.length - 1];
+          return [...prev.slice(0, -1), { 
+            ...last, 
+            sales: last.sales + 200, 
+            conv: last.conv + 150 
+          }];
+        });
+      }, 500);
+      return () => clearInterval(interval);
+    }
+  }, [isActive, currentStep]);
 
   const handleExport = () => {
     setExporting(true);

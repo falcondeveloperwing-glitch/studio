@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { useDemo } from '@/components/demo/demo-context';
 import { 
   Zap, 
   ArrowRight, 
@@ -13,10 +14,13 @@ import {
   ShieldCheck,
   Clock,
   CheckCircle2,
-  Target
+  Target,
+  Play
 } from 'lucide-react';
 
 export default function LandingPage() {
+  const { startDemo } = useDemo();
+
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white/10 font-body">
       {/* Navigation */}
@@ -37,11 +41,20 @@ export default function LandingPage() {
             <Link href="/login" className="hover:text-white transition-colors">Sign In</Link>
           </div>
 
-          <Link href="/signup">
-            <Button className="bg-white text-black hover:bg-zinc-200 rounded-lg px-6 h-10 text-xs font-bold">
-              Start Free Trial
+          <div className="flex items-center gap-3">
+            <Button 
+              onClick={startDemo}
+              variant="outline" 
+              className="hidden sm:flex border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-lg px-4 h-10 text-xs font-bold gap-2"
+            >
+              <Play size={14} fill="currentColor" /> Start Demo
             </Button>
-          </Link>
+            <Link href="/signup">
+              <Button className="bg-white text-black hover:bg-zinc-200 rounded-lg px-6 h-10 text-xs font-bold">
+                Start Free Trial
+              </Button>
+            </Link>
+          </div>
         </div>
       </nav>
 
@@ -54,7 +67,7 @@ export default function LandingPage() {
           className="max-w-3xl mx-auto"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-900 bg-zinc-900/40 text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-8">
-            Now in public beta
+            Infrastructure for Instagram Commerce
           </div>
           <h1 className="text-5xl md:text-7xl font-bold font-headline tracking-tight mb-8">
             Automate your Instagram sales.
@@ -68,33 +81,36 @@ export default function LandingPage() {
                 Start Free Trial <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={16} />
               </Button>
             </Link>
-            <Link href="/login">
-              <Button variant="outline" size="lg" className="border-zinc-800 text-zinc-400 hover:text-white rounded-lg px-8 h-12 text-sm font-medium bg-zinc-900/20">
-                View Demo
-              </Button>
-            </Link>
+            <Button 
+              onClick={startDemo}
+              variant="outline" 
+              size="lg" 
+              className="border-zinc-800 text-zinc-400 hover:text-white rounded-lg px-8 h-12 text-sm font-medium bg-zinc-900/20 gap-2"
+            >
+              <Play size={16} fill="currentColor" /> Watch Cinematic Demo
+            </Button>
           </div>
         </motion.div>
       </section>
 
-      {/* Business Value Section */}
+      {/* Value Section */}
       <section className="py-24 border-y border-zinc-900 bg-zinc-950">
         <div className="container max-w-6xl mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center mb-20">
             <h2 className="text-3xl md:text-4xl font-bold font-headline tracking-tight mb-6">
-              Recover lost sales instantly.
+              How ReplyRush recovers lost Instagram sales
             </h2>
             <p className="text-zinc-500 text-lg font-medium">
-              Businesses lose up to 40% of leads due to slow response times. ReplyRush automates the human bottleneck.
+              Businesses lose up to 40% of customers due to slow response times. We bridge the gap between inquiry and checkout.
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { title: "Instant Response", desc: "Respond to inquiries in under 1 second to capture purchase intent.", icon: Clock },
-              { title: "Lead Recovery", desc: "Automatically follow up with customers who haven't completed checkout.", icon: Target },
-              { title: "Sales Automation", desc: "Provide accurate pricing and availability for your entire inventory.", icon: CheckCircle2 },
-              { title: "24/7 Operations", desc: "Qualify leads and close sales even while your team is offline.", icon: TrendingUp }
+              { title: "Instant Conversion", desc: "Respond to inquiries in under 1 second to capture high-intent purchase interest.", icon: Clock },
+              { title: "Lead Recovery", desc: "Automatically follow up with customers who didn't complete their initial inquiry.", icon: Target },
+              { title: "Sales Automation", desc: "Instantly provide pricing, sizing, and availability for your entire inventory.", icon: CheckCircle2 },
+              { title: "24/7 Availability", desc: "Qualify leads and close sales even when your manual support team is offline.", icon: TrendingUp }
             ].map((item, i) => (
               <div key={i} className="p-6 rounded-xl border border-zinc-900 bg-black hover:border-zinc-800 transition-colors group">
                 <div className="w-9 h-9 rounded-lg bg-zinc-900 flex items-center justify-center mb-6 text-zinc-500 group-hover:text-white transition-colors">

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useDemo } from '@/components/demo/demo-context';
 import { 
   Search, 
   Send, 
@@ -25,6 +26,7 @@ import { useToast } from '@/hooks/use-toast';
 
 export default function InboxPage() {
   const { toast } = useToast();
+  const { isActive, currentStep } = useDemo();
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [showMobileList, setShowMobileList] = useState(true);
   const [inputText, setInputText] = useState('');
@@ -32,6 +34,37 @@ export default function InboxPage() {
   const [chats, setChats] = useState(MOCK_CHATS);
 
   const activeChat = chats.find(c => c.id === activeChatId);
+
+  // Demo Simulation Logic
+  useEffect(() => {
+    if (isActive && currentStep === 'inbox') {
+      // Auto-select Marcus
+      handleSelectChat('1');
+      
+      const timer = setTimeout(() => {
+        setSending(true);
+        setTimeout(() => {
+          setChats(prev => prev.map(c => {
+            if (c.id === '1') {
+              return {
+                ...c,
+                messages: [...c.messages, {
+                  role: 'business',
+                  content: "Perfect, Marcus! I've sent the secure payment link to your DM. Your 15% bulk discount is applied. Let me know once done!",
+                  type: 'text',
+                  timestamp: new Date().toISOString()
+                }]
+              };
+            }
+            return c;
+          }));
+          setSending(false);
+        }, 3000);
+      }, 4000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isActive, currentStep]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.innerWidth > 1024 && !activeChatId) {
