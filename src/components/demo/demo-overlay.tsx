@@ -3,7 +3,7 @@
 import React from 'react';
 import { useDemo } from './demo-context';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Loader2, X, ChevronRight, ArrowRight, MousePointer2 } from 'lucide-react';
+import { Zap, Loader2, X, ChevronRight, ArrowRight, MousePointer2, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function DemoOverlay() {
@@ -13,19 +13,19 @@ export function DemoOverlay() {
 
   const stepLabels: Record<string, string> = {
     landing: "Converting DMs into Revenue",
-    login: "Authenticating AI Fleet",
-    dashboard: "Business Intelligence Overview",
-    inbox: "AI-Driven Sales Conversations",
-    automations: "Deploying Operational Logic",
+    login: "Infrastructure Authentication",
+    dashboard: "Business Performance Overview",
+    inbox: "Intelligent Sales Engagement",
+    automations: "Deploying Conversion Logic",
     analytics: "Real-time Sales Impact",
-    pricing: "Scaling with Growth Plan",
+    pricing: "Infrastructure Scaling",
     complete: "Demo Concluded"
   };
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 pointer-events-none z-[9998] overflow-hidden">
-        {/* Human-like Cursor Simulation */}
+      <div className="fixed inset-0 pointer-events-none z-[9999] overflow-hidden">
+        {/* Cinematic Human-Like Cursor Overlay */}
         <motion.div
           animate={{ 
             x: `${cursorPos.x}vw`, 
@@ -34,53 +34,50 @@ export function DemoOverlay() {
           }}
           transition={{ 
             type: "spring", 
-            damping: 25, 
-            stiffness: 120,
+            damping: 30, 
+            stiffness: 100,
+            mass: 0.8,
             scale: { duration: 0.1 }
           }}
-          className="absolute top-0 left-0 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] z-[10000]"
+          className="absolute top-0 left-0 text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)] z-[10001]"
         >
-          <MousePointer2 size={24} fill="white" />
+          <MousePointer2 size={24} fill="white" strokeWidth={1.5} />
           {isClicking && (
-            <motion.div 
-              initial={{ scale: 0, opacity: 1 }}
-              animate={{ scale: 4, opacity: 0 }}
-              className="absolute top-0 left-0 w-6 h-6 rounded-full border border-white/50"
-            />
+            <div className="click-ripple absolute top-0 left-0" />
           )}
         </motion.div>
 
-        {/* Cinematic Final Screen */}
+        {/* Cinematic End Screen */}
         {currentStep === 'complete' && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-[#020203] flex items-center justify-center p-6 pointer-events-auto"
+            className="absolute inset-0 bg-[#020203] flex items-center justify-center p-8 pointer-events-auto z-[10002]"
           >
-            <div className="max-w-2xl w-full text-center space-y-12">
+            <div className="max-w-3xl w-full text-center space-y-12">
               <motion.div 
-                initial={{ scale: 0.9, opacity: 0 }}
+                initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="inline-flex items-center gap-4 px-6 py-2 rounded-full border border-white/10 bg-white/5"
+                transition={{ delay: 0.2 }}
+                className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/5 bg-white/[0.03]"
               >
-                <Zap size={24} className="text-white fill-white" />
-                <span className="text-xs font-bold tracking-[0.4em] uppercase text-zinc-400">ReplyRush AI</span>
+                <Zap size={20} className="text-white fill-white" />
+                <span className="text-[10px] font-black tracking-[0.4em] uppercase text-zinc-500">Infrastructure Finalized</span>
               </motion.div>
               
-              <div className="space-y-6">
-                <h2 className="text-5xl md:text-7xl font-bold font-headline tracking-tight text-white">
-                  Conversations into <span className="text-zinc-600">revenue</span>.
+              <div className="space-y-8">
+                <h2 className="text-5xl md:text-7xl font-bold font-headline tracking-tighter text-white">
+                  Automate your <span className="text-zinc-600">sales fleet</span>.
                 </h2>
-                <p className="text-xl text-zinc-500 font-medium max-w-lg mx-auto leading-relaxed">
-                  Enterprise infrastructure for high-performance Instagram commerce.
+                <p className="text-lg text-zinc-500 font-medium max-w-xl mx-auto leading-relaxed">
+                  Enterprise-grade infrastructure for high-performance Instagram commerce. Every inquiry is a checkout opportunity.
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-12">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-10">
                 <Button 
                   size="lg" 
-                  className="bg-white text-black hover:bg-zinc-200 rounded-2xl px-12 h-14 text-base font-bold group shadow-2xl transition-all active:scale-95"
+                  className="bg-white text-black hover:bg-zinc-200 rounded-xl px-10 h-14 text-sm font-bold group shadow-2xl transition-all active:scale-95"
                   onClick={stopDemo}
                 >
                   Start Free Trial <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
@@ -88,7 +85,7 @@ export function DemoOverlay() {
                 <Button 
                   variant="outline" 
                   size="lg" 
-                  className="border-white/10 bg-white/5 text-white hover:bg-white/10 rounded-2xl px-12 h-14 text-base font-bold transition-all active:scale-95"
+                  className="border-white/10 bg-white/5 text-white hover:bg-white/10 rounded-xl px-10 h-14 text-sm font-bold transition-all active:scale-95"
                   onClick={() => { stopDemo(); window.location.href = '/pricing'; }}
                 >
                   View Infrastructure
@@ -98,35 +95,34 @@ export function DemoOverlay() {
           </motion.div>
         )}
 
-        {/* Floating HUD */}
+        {/* Global Demo HUD */}
         {currentStep !== 'complete' && (
           <motion.div 
-            initial={{ y: 50, opacity: 0 }}
+            initial={{ y: 60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 50, opacity: 0 }}
+            exit={{ y: 60, opacity: 0 }}
             className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-lg px-6 pointer-events-auto"
           >
-            <div className="bg-zinc-950/90 backdrop-blur-2xl border border-white/10 rounded-3xl p-5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center justify-between gap-8">
-              <div className="flex items-center gap-5">
-                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center relative group">
-                  <Zap size={20} className="text-white fill-white" />
-                  <div className="absolute inset-0 bg-white/10 animate-pulse rounded-2xl" />
+            <div className="bg-zinc-950/95 backdrop-blur-3xl border border-white/10 rounded-3xl p-5 shadow-[0_24px_64px_rgba(0,0,0,0.6)] flex items-center justify-between gap-10">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center relative">
+                  <Play size={18} className="text-white fill-white animate-pulse" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em] mb-1">Infrastructure Demo</p>
+                  <p className="text-[9px] font-black text-zinc-600 uppercase tracking-[0.3em] mb-1">Guided Simulation</p>
                   <h4 className="text-sm font-bold text-white flex items-center gap-3">
                     {stepLabels[currentStep]}
-                    <Loader2 size={14} className="animate-spin text-zinc-700" />
+                    <Loader2 size={12} className="animate-spin text-zinc-700" />
                   </h4>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   onClick={nextStep}
-                  className="h-10 px-5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-white border border-white/5 transition-all"
+                  className="h-10 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-white border border-white/5"
                 >
                   Skip <ChevronRight size={14} className="ml-1" />
                 </Button>
@@ -134,7 +130,7 @@ export function DemoOverlay() {
                   variant="ghost" 
                   size="icon" 
                   onClick={stopDemo}
-                  className="h-10 w-10 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 transition-all"
+                  className="h-10 w-10 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/10"
                 >
                   <X size={18} />
                 </Button>

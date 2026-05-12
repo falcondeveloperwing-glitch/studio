@@ -37,10 +37,10 @@
   }
 }
 
-/* Premium SaaS Scrollbar - Global System-wide */
+/* Premium SaaS Scrollbar - Linear/Resend Style */
 *::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
 }
 
 *::-webkit-scrollbar-track {
@@ -50,18 +50,18 @@
 *::-webkit-scrollbar-thumb {
   background: #27272a;
   border-radius: 20px;
+  border: 1px solid transparent;
+  background-clip: content-box;
 }
 
 *::-webkit-scrollbar-thumb:hover {
   background: #3f3f46;
 }
 
-/* Specific scroll areas for high-density components */
 .custom-scrollbar::-webkit-scrollbar {
   width: 3px;
 }
 
-/* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
 }
@@ -70,16 +70,19 @@ html {
   font-family: 'Space Grotesk', sans-serif;
 }
 
-.glass-surface {
-  @apply bg-zinc-900/40 border border-white/5 backdrop-blur-md;
-}
-
 .noise {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   opacity: 0.02;
   pointer-events: none;
 }
 
-.cursor-simulation {
-  @apply pointer-events-none fixed z-[9999] transition-transform duration-300;
+/* Click Ripple Animation for Demo Mode */
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 0.8; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+.click-ripple {
+  @apply absolute top-0 left-0 w-8 h-8 rounded-full border border-white pointer-events-none;
+  animation: ripple 0.5s ease-out;
 }
