@@ -26,6 +26,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { MOCK_STATS, MOCK_LIVE_FEED } from '@/lib/mock-data';
+import { cn } from '@/lib/utils';
 
 const chartData = [
   { name: 'Mon', revenue: 142000 },
