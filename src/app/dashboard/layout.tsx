@@ -71,10 +71,12 @@ export default function DashboardLayout({
       
       <main className="flex-1 h-screen overflow-y-auto relative z-10 flex flex-col custom-scrollbar">
         {/* Responsive Header Fix */}
-        <div className="lg:hidden h-16 px-6 flex items-center justify-between border-b border-white/5 bg-zinc-950 shrink-0">
+        <div className="lg:hidden h-20 px-6 flex items-center justify-between border-b border-white/5 bg-zinc-950 shrink-0">
           <div className="flex items-center gap-3">
-            <Zap className="text-white fill-white" size={20} />
-            <span className="font-bold text-lg tracking-tighter">ReplyRush</span>
+            <div className="w-9 h-9 rounded-xl bg-zinc-950 border border-white/10 flex items-center justify-center shadow-2xl">
+              <Zap className="text-white fill-white" size={18} />
+            </div>
+            <span className="font-headline font-bold text-lg tracking-tight uppercase">Reply<span className="text-zinc-500">Rush</span></span>
           </div>
           <Button 
             variant="ghost" 

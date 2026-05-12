@@ -21,12 +21,14 @@ export default function LandingPage() {
     <div className="min-h-screen bg-black text-white selection:bg-white/10 font-body">
       {/* Navigation */}
       <nav className="border-b border-zinc-900 bg-black/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="container max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-7 h-7 rounded-lg bg-white flex items-center justify-center transition-transform group-hover:scale-105">
-              <Zap className="text-black" size={16} fill="black" />
+        <div className="container max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-xl bg-zinc-950 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:border-white/20 shadow-2xl">
+              <Zap className="text-white fill-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" size={20} />
             </div>
-            <span className="font-bold text-base tracking-tight">ReplyRush</span>
+            <span className="font-headline text-xl font-bold tracking-tight text-white uppercase">
+              Reply<span className="text-zinc-500">Rush</span>
+            </span>
           </Link>
           
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-500">
@@ -36,8 +38,8 @@ export default function LandingPage() {
           </div>
 
           <Link href="/signup">
-            <Button className="bg-white text-black hover:bg-zinc-200 rounded-lg px-5 h-9 text-xs font-bold">
-              Get Started
+            <Button className="bg-white text-black hover:bg-zinc-200 rounded-lg px-6 h-10 text-xs font-bold">
+              Start Free Trial
             </Button>
           </Link>
         </div>

@@ -58,12 +58,14 @@ export default function PricingPage() {
     <div className="min-h-screen bg-black text-white selection:bg-white/10 font-body">
       {/* Navigation */}
       <nav className="border-b border-zinc-800 bg-black/80 backdrop-blur-xl sticky top-0 z-50">
-        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center transition-transform group-hover:scale-105">
-              <Zap className="text-black" size={18} fill="black" />
+        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-xl bg-zinc-950 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:border-white/20 shadow-2xl">
+              <Zap className="text-white fill-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" size={20} />
             </div>
-            <span className="font-bold text-lg tracking-tight">ReplyRush AI</span>
+            <span className="font-headline text-xl font-bold tracking-tight text-white uppercase">
+              Reply<span className="text-zinc-500">Rush</span>
+            </span>
           </Link>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
@@ -71,7 +73,7 @@ export default function PricingPage() {
             <Link href="/login" className="hover:text-white transition-colors">Sign In</Link>
           </div>
           <Link href="/signup">
-            <Button className="bg-white text-black hover:bg-zinc-200 rounded-lg h-9 px-5 text-xs font-bold">
+            <Button className="bg-white text-black hover:bg-zinc-200 rounded-lg h-10 px-6 text-xs font-bold">
               Get Started
             </Button>
           </Link>

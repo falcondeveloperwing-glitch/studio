@@ -65,10 +65,12 @@ export default function LoginPage() {
       >
         <div className="text-center mb-12">
           <Link href="/" className="inline-flex items-center gap-3 mb-10 group">
-            <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center glow-primary group-hover:scale-110 transition-transform duration-500">
-              <Zap className="text-white fill-white" size={24} />
+            <div className="w-12 h-12 rounded-2xl bg-zinc-950 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:border-white/20 shadow-2xl">
+              <Zap className="text-white fill-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" size={24} />
             </div>
-            <span className="font-headline text-3xl font-bold tracking-tighter text-white">ReplyRush<span className="text-primary">AI</span></span>
+            <span className="font-headline text-3xl font-bold tracking-tight text-white uppercase">
+              Reply<span className="text-zinc-500">Rush</span>
+            </span>
           </Link>
           <h1 className="font-headline text-4xl font-bold mb-4 tracking-tighter text-white">Command Center</h1>
           <p className="text-muted-foreground text-lg">Sign in to manage your AI fleet.</p>
@@ -101,7 +103,7 @@ export default function LoginPage() {
               />
             </div>
             
-            <Button type="submit" className="w-full h-14 bg-primary hover:bg-primary/90 glow-primary rounded-2xl font-bold text-lg group transition-all duration-500 active:scale-95 text-white" disabled={loading}>
+            <Button type="submit" className="w-full h-14 bg-primary text-black hover:bg-primary/90 rounded-2xl font-bold text-lg group transition-all duration-500 active:scale-95" disabled={loading}>
               {loading ? <Loader2 className="animate-spin" /> : <>Sign In <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" /></>}
             </Button>
           </form>
@@ -119,7 +121,7 @@ export default function LoginPage() {
               onClick={() => fillDemo('demo@replyrush.ai')}
               type="button"
             >
-              <ShieldCheck size={14} className="text-primary" /> Admin
+              <ShieldCheck size={14} className="text-white" /> Admin
             </Button>
             <Button 
               variant="outline" 
@@ -127,7 +129,7 @@ export default function LoginPage() {
               onClick={() => fillDemo('business@replyrush.ai')}
               type="button"
             >
-              <Zap size={14} className="text-accent" /> Business
+              <Zap size={14} className="text-white" /> Business
             </Button>
           </div>
         </GlassCard>

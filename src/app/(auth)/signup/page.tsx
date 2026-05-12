@@ -15,13 +15,15 @@ export default function SignupPage() {
       <div className="w-full max-w-lg grid grid-cols-1 lg:grid-cols-1 gap-12 relative z-10">
         <div className="max-w-md mx-auto w-full">
           <div className="text-center mb-10">
-            <Link href="/" className="inline-flex items-center gap-2 mb-8">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center glow-primary">
-                <Zap className="text-white fill-white" size={20} />
+            <Link href="/" className="inline-flex items-center gap-3 mb-8 group">
+              <div className="w-10 h-10 rounded-xl bg-zinc-950 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:border-white/20 shadow-2xl">
+                <Zap className="text-white fill-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" size={20} />
               </div>
-              <span className="font-headline text-2xl font-bold">ReplyRush<span className="text-primary">AI</span></span>
+              <span className="font-headline text-2xl font-bold tracking-tight text-white uppercase">
+                Reply<span className="text-zinc-500">Rush</span>
+              </span>
             </Link>
-            <h1 className="font-headline text-3xl font-bold mb-2">Create your account</h1>
+            <h1 className="font-headline text-3xl font-bold mb-2 text-white">Create your account</h1>
             <p className="text-muted-foreground">Start your 7-day free trial. Setup in 2 minutes.</p>
           </div>
 
@@ -51,7 +53,7 @@ export default function SignupPage() {
                 </div>
                 <p className="text-[11px] text-muted-foreground leading-relaxed">I agree to the <Link href="#" className="text-primary hover:underline">Terms of Service</Link> and <Link href="#" className="text-primary hover:underline">Privacy Policy</Link>.</p>
               </div>
-              <Button className="w-full h-12 bg-primary hover:bg-primary/90 glow-primary rounded-xl font-bold text-lg mt-2">
+              <Button className="w-full h-12 bg-primary text-black hover:bg-primary/90 rounded-xl font-bold text-lg mt-2">
                 Create Account
               </Button>
             </form>

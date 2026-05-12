@@ -34,10 +34,12 @@ export function DashboardSidebar() {
     <div className="w-64 h-screen border-r border-white/5 flex flex-col bg-zinc-950 sticky top-0 z-50 overflow-hidden">
       <div className="p-8 pb-10">
         <Link href="/dashboard" className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center transition-transform group-hover:scale-105 shadow-xl">
-            <Zap className="text-black" size={18} fill="black" />
+          <div className="w-10 h-10 rounded-xl bg-zinc-950 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:border-white/20 shadow-2xl">
+            <Zap className="text-white fill-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" size={20} />
           </div>
-          <span className="font-bold text-lg tracking-tighter text-white">ReplyRush</span>
+          <span className="font-headline text-xl font-bold tracking-tight text-white uppercase">
+            Reply<span className="text-zinc-500">Rush</span>
+          </span>
         </Link>
       </div>
 
