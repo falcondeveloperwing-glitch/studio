@@ -39,7 +39,7 @@ export default function DashboardLayout({
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-[#09090b] text-zinc-50 relative">
+    <div className="flex min-h-screen bg-[#09090b] text-zinc-50 relative overflow-hidden">
       <div className="fixed inset-0 bg-[#09090b] z-0" />
       
       <AnimatePresence>
@@ -69,7 +69,7 @@ export default function DashboardLayout({
         </Button>
       </div>
       
-      <main className="flex-1 h-screen overflow-y-auto relative z-10 flex flex-col">
+      <main className="flex-1 h-screen overflow-y-auto relative z-10 flex flex-col custom-scrollbar">
         <div className="lg:hidden p-4 flex items-center justify-between border-b border-white/5 bg-zinc-950">
           <div className="flex items-center gap-3">
             <Zap className="text-white" size={18} />
@@ -85,7 +85,7 @@ export default function DashboardLayout({
           </Button>
         </div>
 
-        <div className="max-w-7xl mx-auto w-full px-6 lg:px-10 py-8 lg:py-12">
+        <div className="max-w-7xl mx-auto w-full px-6 lg:px-10 py-8 lg:py-12 flex-1 flex flex-col">
           {children}
         </div>
       </main>

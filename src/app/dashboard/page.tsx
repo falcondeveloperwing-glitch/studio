@@ -10,7 +10,9 @@ import {
   TrendingUp,
   ArrowRight,
   Activity,
-  ChevronRight
+  ChevronRight,
+  ShieldCheck,
+  CheckCircle2
 } from 'lucide-react';
 import { 
   XAxis, 
@@ -37,44 +39,44 @@ const chartData = [
 
 export default function DashboardOverview() {
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 max-w-7xl mx-auto w-full">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <div className="flex items-center gap-3 mb-4">
             <Badge variant="outline" className="border-white/10 bg-white/[0.02] text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 text-zinc-500">
-              v4.2.0
+              v4.2.1-stable
             </Badge>
             <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-emerald-500">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Connected
             </div>
           </div>
           <h1 className="text-4xl font-bold tracking-tight mb-2">Dashboard</h1>
-          <p className="text-zinc-500 font-medium">Real-time overview of your customer conversations and sales.</p>
+          <p className="text-zinc-500 font-medium">Real-time overview of your customer conversations and sales efficiency.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold rounded-lg px-4">
-            View Logs
+          <Button variant="outline" className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold rounded-lg px-4 hover:bg-white/5 transition-all">
+            Audit Logs
           </Button>
-          <Button className="h-10 bg-white text-black hover:bg-zinc-200 text-xs font-bold rounded-lg px-4">
-            Update Settings
+          <Button className="h-10 bg-white text-black hover:bg-zinc-200 text-xs font-bold rounded-lg px-6 shadow-xl transition-all active:scale-95">
+            Configure Fleet
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Recovered Revenue', value: MOCK_STATS.revenueRecovered, change: '+18.5%', icon: DollarSign },
-          { label: 'AI Responses', value: MOCK_STATS.aiReplies, change: '+12.2%', icon: Zap },
-          { label: 'Avg Response Time', value: MOCK_STATS.avgSpeed, change: '-42%', icon: Activity },
-          { label: 'Conversion Rate', value: MOCK_STATS.conversionRate, change: '+4.1%', icon: TrendingUp }
+          { label: 'Recovered Revenue', value: MOCK_STATS.revenueRecovered, change: '+18.5%', icon: DollarSign, color: 'text-emerald-500' },
+          { label: 'AI Responses', value: MOCK_STATS.aiReplies, change: '+12.2%', icon: Zap, color: 'text-zinc-400' },
+          { label: 'Avg Response Time', value: MOCK_STATS.avgSpeed, change: '-42%', icon: Activity, color: 'text-zinc-400' },
+          { label: 'Conversion Rate', value: MOCK_STATS.conversionRate, change: '+4.1%', icon: TrendingUp, color: 'text-zinc-400' }
         ].map((stat, i) => (
-          <GlassCard key={i} className="border-white/5 bg-white/[0.01] p-6 hover:border-white/10 transition-colors">
+          <GlassCard key={i} className="border-white/5 bg-white/[0.01] p-6 hover:border-white/10 transition-colors cursor-default">
             <div className="flex items-center justify-between mb-6">
               <div className="w-8 h-8 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-500">
                 <stat.icon size={16} />
               </div>
-              <Badge variant="outline" className="border-none font-bold text-[10px] text-emerald-500 bg-emerald-500/10 px-2">
+              <Badge variant="outline" className={cn("border-none font-bold text-[10px] px-2", stat.change.startsWith('+') ? 'text-emerald-500 bg-emerald-500/10' : 'text-zinc-500 bg-zinc-500/10')}>
                 {stat.change}
               </Badge>
             </div>
@@ -89,7 +91,11 @@ export default function DashboardOverview() {
           <div className="flex items-center justify-between mb-10">
             <div>
               <h3 className="font-bold text-xl mb-1">Revenue Recovery</h3>
-              <p className="text-xs text-zinc-500">Daily sales recovered via automated responses.</p>
+              <p className="text-xs text-zinc-500">Sales recaptured via automated pricing and follow-up logic.</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-white/20" />
+              <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">7 Day Trend</span>
             </div>
           </div>
           <div className="h-[350px] w-full">
@@ -107,25 +113,26 @@ export default function DashboardOverview() {
                 <Tooltip 
                   contentStyle={{ backgroundColor: '#09090b', border: '1px solid #18181b', borderRadius: '8px', fontSize: '12px' }}
                   itemStyle={{ color: '#fff' }}
+                  cursor={{ stroke: '#ffffff10', strokeWidth: 1 }}
                 />
-                <Area type="monotone" dataKey="revenue" stroke="#ffffff" fillOpacity={1} fill="url(#colorRevenue)" strokeWidth={1.5} />
+                <Area type="monotone" dataKey="revenue" stroke="#ffffff" fillOpacity={1} fill="url(#colorRevenue)" strokeWidth={1.5} animationDuration={1000} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </GlassCard>
 
-        <GlassCard className="border-white/5 bg-white/[0.01] p-8">
-          <h3 className="font-bold text-xl mb-8">Activity</h3>
-          <div className="space-y-8 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+        <GlassCard className="border-white/5 bg-white/[0.01] p-8 flex flex-col">
+          <h3 className="font-bold text-xl mb-8">Recent Activity</h3>
+          <div className="space-y-8 flex-1 overflow-y-auto pr-2 custom-scrollbar max-h-[400px]">
             {MOCK_LIVE_FEED.map((item) => (
-              <div key={item.id} className="flex gap-4">
-                <div className="w-8 h-8 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center shrink-0 text-zinc-600">
-                  {item.type === 'sale' ? <DollarSign size={14} /> : <MessageSquare size={14} />}
+              <div key={item.id} className="flex gap-4 group">
+                <div className="w-8 h-8 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center shrink-0 text-zinc-600 group-hover:text-white transition-colors">
+                  {item.type === 'sale' ? <CheckCircle2 size={14} className="text-emerald-500" /> : <MessageSquare size={14} />}
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center justify-between mb-0.5">
                     <p className="text-sm font-bold truncate text-white/90">{item.title}</p>
-                    <span className="text-[10px] text-zinc-600 font-bold uppercase whitespace-nowrap">{item.timestamp}</span>
+                    <span className="text-[10px] text-zinc-600 font-bold uppercase whitespace-nowrap ml-2">{item.timestamp}</span>
                   </div>
                   <p className="text-xs text-zinc-500 leading-normal line-clamp-2">{item.description}</p>
                 </div>
@@ -133,8 +140,8 @@ export default function DashboardOverview() {
             ))}
           </div>
           <div className="mt-8 pt-6 border-t border-white/5">
-            <Button variant="ghost" className="w-full justify-between h-10 text-zinc-500 hover:text-white px-4 text-xs">
-              View All Activity <ChevronRight size={14} />
+            <Button variant="ghost" className="w-full justify-between h-10 text-zinc-500 hover:text-white px-4 text-xs font-bold transition-all">
+              Full Activity Feed <ChevronRight size={14} />
             </Button>
           </div>
         </GlassCard>

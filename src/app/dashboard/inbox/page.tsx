@@ -45,9 +45,9 @@ export default function InboxPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] lg:h-[calc(100vh-100px)] flex flex-col bg-zinc-950 border border-white/5 rounded-2xl overflow-hidden max-w-7xl mx-auto">
+    <div className="h-[calc(100vh-64px)] lg:h-[calc(100vh-100px)] flex flex-col bg-zinc-950 border border-white/5 rounded-2xl overflow-hidden max-w-7xl mx-auto flex-1">
       {/* Header */}
-      <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 shrink-0 z-20">
+      <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 shrink-0 z-20 bg-zinc-950">
         <div className="flex items-center gap-4">
           <h1 className="text-sm font-bold">Inbox</h1>
           <Badge variant="outline" className="text-[10px] uppercase tracking-widest border-white/10 text-zinc-500 font-bold">
@@ -67,15 +67,15 @@ export default function InboxPage() {
       <div className="flex-1 flex overflow-hidden">
         {/* Chat List */}
         <div className={cn(
-          "w-full lg:w-80 border-r border-white/5 flex flex-col shrink-0 transition-all",
+          "w-full lg:w-80 border-r border-white/5 flex flex-col shrink-0 transition-all bg-zinc-950",
           !showMobileList && "hidden lg:flex"
         )}>
           <div className="p-3 border-b border-white/5">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={12} />
               <Input 
-                className="pl-8 h-9 bg-white/5 border-white/10 rounded-lg text-xs placeholder:text-zinc-600 focus-visible:ring-zinc-700" 
-                placeholder="Search..." 
+                className="pl-8 h-9 bg-white/5 border-white/10 rounded-lg text-xs placeholder:text-zinc-600 focus-visible:ring-zinc-800" 
+                placeholder="Search conversations..." 
               />
             </div>
           </div>
@@ -91,7 +91,7 @@ export default function InboxPage() {
                     activeChatId === chat.id ? "bg-white/5" : "hover:bg-white/[0.02]"
                   )}
                 >
-                  <div className="w-9 h-9 rounded-full bg-zinc-800 border border-white/5 shrink-0 overflow-hidden relative">
+                  <div className="w-9 h-9 rounded-full bg-zinc-900 border border-white/5 shrink-0 overflow-hidden relative">
                     <img src={`https://picsum.photos/seed/${chat.avatarSeed || chat.id}/100/100`} alt="" className="w-full h-full object-cover" />
                     {chat.unread && (
                       <div className="absolute top-0 right-0 w-2 h-2 rounded-full bg-white border-2 border-zinc-950" />
@@ -118,12 +118,12 @@ export default function InboxPage() {
 
         {/* Chat View */}
         <div className={cn(
-          "flex-1 flex flex-col bg-zinc-950",
+          "flex-1 flex flex-col bg-[#09090b]",
           showMobileList && "hidden lg:flex"
         )}>
           {activeChat ? (
             <div className="flex flex-col h-full relative">
-              <div className="px-6 py-3 border-b border-white/5 flex items-center justify-between bg-zinc-950 shrink-0">
+              <div className="px-6 py-3 border-b border-white/5 flex items-center justify-between bg-zinc-950 shrink-0 z-10">
                 <div className="flex items-center gap-3">
                   <Button variant="ghost" size="icon" onClick={() => setShowMobileList(true)} className="lg:hidden h-8 w-8 text-zinc-500">
                     <ArrowLeft size={16} />
@@ -138,7 +138,7 @@ export default function InboxPage() {
                 </div>
               </div>
 
-              <ScrollArea className="flex-1 p-6">
+              <ScrollArea className="flex-1 p-6 bg-[#09090b]">
                 <div className="space-y-6 max-w-2xl mx-auto">
                   {activeChat.messages.map((msg, i) => (
                     <div key={i} className={cn("flex flex-col", msg.role === 'customer' ? "items-start" : "items-end")}>
@@ -146,7 +146,7 @@ export default function InboxPage() {
                         <div className={cn(
                           "rounded-xl px-4 py-2 text-sm leading-relaxed",
                           msg.role === 'customer' 
-                            ? "bg-white/5 text-zinc-300 border border-white/10" 
+                            ? "bg-zinc-900 text-zinc-300 border border-white/5" 
                             : "bg-white text-zinc-950 font-medium"
                         )}>
                           {msg.content}
@@ -157,7 +157,7 @@ export default function InboxPage() {
                           )}
                         </div>
                         <p className={cn("text-[9px] text-zinc-600 font-bold uppercase mt-1.5", msg.role === 'customer' ? "text-left" : "text-right")}>
-                          {msg.role === 'customer' ? 'Customer' : 'ReplyRush'} • 12:42 PM
+                          {msg.role === 'customer' ? 'Customer' : 'ReplyRush AI'} • 12:42 PM
                         </p>
                       </div>
                     </div>
@@ -165,14 +165,14 @@ export default function InboxPage() {
                 </div>
               </ScrollArea>
 
-              <div className="p-4 border-t border-white/5 bg-zinc-950/50 shrink-0">
+              <div className="p-4 border-t border-white/5 bg-zinc-950/80 backdrop-blur-md shrink-0">
                 <div className="max-w-2xl mx-auto">
                   <form className="relative flex items-center gap-2" onSubmit={(e) => e.preventDefault()}>
                     <Input 
-                      className="flex-1 h-10 bg-white/5 border-white/10 rounded-lg text-sm focus-visible:ring-zinc-700 px-4 placeholder:text-zinc-700" 
-                      placeholder="Type a message..." 
+                      className="flex-1 h-10 bg-white/5 border-white/10 rounded-lg text-sm focus-visible:ring-zinc-800 px-4 placeholder:text-zinc-700" 
+                      placeholder="Type your message..." 
                     />
-                    <Button type="submit" size="icon" className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-lg w-10 h-10 shrink-0">
+                    <Button type="submit" size="icon" className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-lg w-10 h-10 shrink-0 shadow-xl transition-transform active:scale-95">
                       <Send size={14} />
                     </Button>
                   </form>
@@ -180,10 +180,10 @@ export default function InboxPage() {
               </div>
             </div>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 p-8 text-center">
+            <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 p-8 text-center bg-[#09090b]">
               <History size={32} className="text-zinc-800 mb-4" />
               <h2 className="text-sm font-bold text-white mb-1">Select a conversation</h2>
-              <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest">Select a thread to start messaging</p>
+              <p className="text-[10px] text-zinc-500 font-medium uppercase tracking-widest">Open a thread to start messaging</p>
             </div>
           )}
         </div>
@@ -191,34 +191,57 @@ export default function InboxPage() {
         {/* Insights Panel */}
         {activeChat && (
           <div className="hidden xl:flex w-72 border-l border-white/5 flex-col bg-zinc-950 shrink-0">
-            <div className="p-6">
-              <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-6">Customer Insights</p>
-              
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                  <span className="text-[10px] font-bold text-zinc-500 uppercase">Intent</span>
-                  <Badge variant="outline" className="text-[9px] h-5 border-white/10 text-emerald-500 font-bold">
-                    {activeChat.intent.split(' ')[0]}
-                  </Badge>
+            <ScrollArea className="flex-1">
+              <div className="p-6">
+                <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-6">Customer Insights</p>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] border border-white/5">
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase">Intent</span>
+                    <Badge variant="outline" className="text-[9px] h-5 border-white/10 text-emerald-500 font-bold bg-emerald-500/5">
+                      {activeChat.intent.split(' ')[0]}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] border border-white/5">
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase">Sentiment</span>
+                    <span className="text-[10px] font-bold text-white">{activeChat.sentiment}</span>
+                  </div>
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] border border-white/5">
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase">Status</span>
+                    <span className="text-[10px] font-bold text-zinc-400">High Lead</span>
+                  </div>
                 </div>
-                <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
-                  <span className="text-[10px] font-bold text-zinc-500 uppercase">Sentiment</span>
-                  <span className="text-[10px] font-bold text-white">{activeChat.sentiment}</span>
+
+                <Separator className="my-8 bg-white/5" />
+
+                <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-4">Quick Actions</p>
+                <div className="space-y-2">
+                  <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all">
+                    <Zap size={12} className="text-zinc-500" /> Send Bulk Discount
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all">
+                    <Clock size={12} className="text-zinc-500" /> Schedule Follow Up
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-2 transition-all text-red-400 hover:text-red-300">
+                    <Tag size={12} /> Mark as Spam
+                  </Button>
+                </div>
+
+                <Separator className="my-8 bg-white/5" />
+                
+                <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-4">Order Context</p>
+                <div className="p-3 rounded-lg bg-zinc-900 border border-white/5 space-y-2">
+                  <div className="flex justify-between text-[10px] font-bold">
+                    <span className="text-zinc-500 uppercase">Last Order</span>
+                    <span className="text-white">#8421</span>
+                  </div>
+                  <div className="flex justify-between text-[10px] font-bold">
+                    <span className="text-zinc-500 uppercase">Total Value</span>
+                    <span className="text-white">$2,840.00</span>
+                  </div>
                 </div>
               </div>
-
-              <Separator className="my-8 bg-white/5" />
-
-              <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-4">Quick Actions</p>
-              <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/10 bg-white/5 hover:bg-white/10 gap-2">
-                  <Zap size={12} className="text-zinc-500" /> Send Discount
-                </Button>
-                <Button variant="outline" className="w-full justify-start text-[10px] font-bold uppercase h-9 border-white/10 bg-white/5 hover:bg-white/10 gap-2">
-                  <Clock size={12} className="text-zinc-500" /> Follow Up
-                </Button>
-              </div>
-            </div>
+            </ScrollArea>
           </div>
         )}
       </div>
