@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
-import { useLocalAuth } from '@/hooks/use-local-auth';
+import { useUser, useFirestore, useDoc } from '@/firebase';
 import { Loader2, Menu, X, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -16,25 +16,26 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, loading } = useLocalAuth();
+  const { user, loading: authLoading } = useUser();
+  const db = useFirestore();
   const router = useRouter();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+
+  // Use useDoc to get user profile (including role)
+  const userRef = React.useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
+  const { data: profile, loading: profileLoading } = useDoc(userRef);
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!authLoading && !user) {
       router.push('/login');
     }
-  }, [user, loading, router]);
+  }, [user, authLoading, router]);
 
-  useEffect(() => {
-    setIsSidebarOpen(false);
-  }, [router]);
-
-  if (loading) {
+  if (authLoading || profileLoading) {
     return (
       <div className="min-h-screen bg-[#020203] flex flex-col items-center justify-center gap-6">
         <Loader2 className="w-12 h-12 text-zinc-500 animate-spin" />
-        <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-zinc-600 animate-pulse">Loading Workspace</p>
+        <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-zinc-600 animate-pulse">Initializing Neural Link</p>
       </div>
     );
   }
@@ -61,7 +62,7 @@ export default function DashboardLayout({
         fixed inset-y-0 left-0 z-[70] transition-transform duration-300 transform lg:relative lg:translate-x-0
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <DashboardSidebar />
+        <DashboardSidebar user={user} profile={profile} />
         <Button 
           variant="ghost" 
           size="icon" 
@@ -73,7 +74,6 @@ export default function DashboardLayout({
       </div>
       
       <main className="flex-1 h-screen overflow-y-auto relative z-10 flex flex-col w-full">
-        {/* Global Dashboard Header - Contained */}
         <header className="h-16 border-b border-white/5 bg-zinc-950/50 backdrop-blur-xl sticky top-0 z-50 shrink-0 w-full">
           <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-10 flex items-center justify-between">
             <div className="flex items-center gap-4 flex-1">
@@ -82,7 +82,6 @@ export default function DashboardLayout({
                   <Zap className="text-white fill-white" size={16} />
                 </div>
               </div>
-              
               <div className="hidden lg:block w-full max-w-md">
                 <CommandPalette />
               </div>
@@ -93,11 +92,8 @@ export default function DashboardLayout({
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">Operational</span>
               </Link>
-              
               <div className="h-4 w-px bg-white/10 mx-2 hidden sm:block" />
-              
               <NotificationsPanel />
-              
               <Button 
                 variant="ghost" 
                 size="icon" 
@@ -110,7 +106,6 @@ export default function DashboardLayout({
           </div>
         </header>
 
-        {/* Main Content Area - Contained */}
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 flex-1 flex flex-col overflow-x-hidden">
           {children}
         </div>
@@ -118,3 +113,5 @@ export default function DashboardLayout({
     </div>
   );
 }
+
+import { doc } from 'firebase/firestore';

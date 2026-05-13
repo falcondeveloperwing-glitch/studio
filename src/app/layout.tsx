@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { DemoProvider } from '@/components/demo/demo-context';
 import { DemoOverlay } from '@/components/demo/demo-overlay';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
   title: 'ReplyRush | Customer Conversation Automation',
@@ -22,10 +23,12 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased bg-background text-foreground selection:bg-white/10">
-        <DemoProvider>
-          {children}
-          <DemoOverlay />
-        </DemoProvider>
+        <FirebaseClientProvider>
+          <DemoProvider>
+            {children}
+            <DemoOverlay />
+          </DemoProvider>
+        </FirebaseClientProvider>
         <Toaster />
       </body>
     </html>

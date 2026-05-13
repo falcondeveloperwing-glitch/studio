@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { 
   LayoutDashboard, 
@@ -15,13 +15,17 @@ import {
   ShieldCheck,
   Users,
   CreditCard,
-  MessageSquare,
   Activity
 } from 'lucide-react';
-import { useLocalAuth } from '@/hooks/use-local-auth';
+import { useAuth } from '@/firebase';
+import { signOut } from 'firebase/auth';
 import { WorkspaceSwitcher } from './workspace-switcher';
 
-// Navigation groups for better role-based separation
+interface DashboardSidebarProps {
+  user: any;
+  profile: any;
+}
+
 const adminGroups = [
   {
     label: 'Control',
@@ -65,11 +69,17 @@ const agentGroups = [
   }
 ];
 
-export function DashboardSidebar() {
+export function DashboardSidebar({ user, profile }: DashboardSidebarProps) {
   const pathname = usePathname();
-  const { user, logout } = useLocalAuth();
+  const auth = useAuth();
+  const router = useRouter();
 
-  const groups = user?.role === 'admin' ? adminGroups : agentGroups;
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push('/login');
+  };
+
+  const groups = profile?.role === 'admin' ? adminGroups : agentGroups;
 
   return (
     <div className="w-64 h-screen border-r border-white/5 flex flex-col bg-zinc-950 sticky top-0 z-50 overflow-hidden">
@@ -82,7 +92,6 @@ export function DashboardSidebar() {
             Reply<span className="text-zinc-500">Rush</span>
           </span>
         </Link>
-
         <WorkspaceSwitcher />
       </div>
 
@@ -114,16 +123,16 @@ export function DashboardSidebar() {
 
       <div className="p-6 border-t border-white/5">
         <button 
-          onClick={() => logout()} 
+          onClick={handleLogout} 
           className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-white/[0.03] transition-colors group"
         >
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-8 h-8 rounded-full border border-white/10 overflow-hidden bg-zinc-900 shadow-lg">
-              <img src={user?.avatar || `https://picsum.photos/seed/${user?.email}/100/100`} alt="Profile" className="w-full h-full object-cover grayscale" />
+              <img src={user?.photoURL || `https://picsum.photos/seed/${user?.email}/100/100`} alt="Profile" className="w-full h-full object-cover grayscale" />
             </div>
             <div className="min-w-0 text-left">
-              <p className="text-xs font-bold text-white truncate">{user?.displayName || 'Admin'}</p>
-              <p className="text-[9px] text-zinc-500 truncate uppercase font-bold tracking-widest">{user?.role || 'Premium'} Fleet</p>
+              <p className="text-xs font-bold text-white truncate">{user?.displayName || profile?.brandName || 'Operator'}</p>
+              <p className="text-[9px] text-zinc-500 truncate uppercase font-bold tracking-widest">{profile?.role || 'User'} Level</p>
             </div>
           </div>
           <LogOut size={14} className="text-zinc-600 group-hover:text-white transition-colors" />
