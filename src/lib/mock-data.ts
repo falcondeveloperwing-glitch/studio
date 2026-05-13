@@ -12,7 +12,7 @@ export const MOCK_CHATS = [
     status: 'AI Handled',
     unread: true,
     updatedAt: new Date().toISOString(),
-    avatarSeed: 'marcus',
+    avatarSeed: 'vip_founder',
     sentiment: 'Positive',
     intent: 'High Purchase Intent',
     value: '$1,240.00',
@@ -32,7 +32,7 @@ export const MOCK_CHATS = [
     status: 'AI Handled',
     unread: false,
     updatedAt: new Date(Date.now() - 7200000).toISOString(),
-    avatarSeed: 'elena',
+    avatarSeed: 'returning_buyer',
     sentiment: 'Neutral',
     intent: 'Information Seeking',
     value: '$499.00',
@@ -49,7 +49,7 @@ export const MOCK_CHATS = [
     status: 'Escalated',
     unread: true,
     updatedAt: new Date(Date.now() - 14400000).toISOString(),
-    avatarSeed: 'jordan',
+    avatarSeed: 'frustrated_buyer',
     sentiment: 'Frustrated',
     intent: 'Support Request',
     value: '$0.00',
@@ -71,14 +71,14 @@ export const MOCK_STATS = {
 
 export const MOCK_LIVE_FEED = [
   { id: 'f1', title: 'Payment Confirmed', description: 'AI closed a $1,020 bulk order with Marcus Sterling.', timestamp: 'Just now', type: 'sale' },
-  { id: 'f2', title: 'New Lead', description: '@elenar_designs inquired about international shipping.', timestamp: '4m ago', type: 'lead' },
-  { id: 'f3', title: 'Cart Recovered', description: 'Sarah Jenkins completed checkout via follow-up automation.', timestamp: '12m ago', type: 'sale' },
-  { id: 'f4', title: 'Ticket Escalated', description: 'Manual review required for order #8492.', timestamp: '22m ago', type: 'info' }
+  { id: 'f2', title: 'New Inquiry', description: '@elenar_designs inquired about international shipping.', timestamp: '4m ago', type: 'lead' },
+  { id: 'f3', title: 'Cart Recovered', description: 'Sarah Jenkins completed checkout via automated follow-up.', timestamp: '12m ago', type: 'sale' },
+  { id: 'f4', title: 'Escalated', description: 'Manual review required for order #8492.', timestamp: '22m ago', type: 'info' }
 ];
 
 export const MOCK_WORKFLOWS = [
-  { id: 'w1', name: 'Pricing Automation', trigger: 'Customer asks about price or bulk discounts', action: 'Apply loyalty discount tier', status: 'Active', runs: 8450 },
-  { id: 'w2', name: 'Inventory Automation', trigger: 'Product availability inquiry', action: 'Check stock levels and respond', status: 'Active', runs: 12120 },
-  { id: 'w3', name: 'Follow-up Automation', trigger: 'No response after 24 hours', action: 'Send courtesy check-in', status: 'Active', runs: 4680 },
-  { id: 'w4', name: 'Support Escalation', trigger: 'Frustrated sentiment detected', action: 'Notify team and send apology', status: 'Active', runs: 1240 }
+  { id: 'w1', name: 'Pricing Tiers', trigger: 'Customer asks about price or bulk', action: 'Apply loyalty discount', status: 'Active', runs: 8450 },
+  { id: 'w2', name: 'Availability Logic', trigger: 'Stock inquiry', action: 'Respond with availability', status: 'Active', runs: 12120 },
+  { id: 'w3', name: 'Follow-up Logic', trigger: 'No response after 24 hours', action: 'Send courtesy check-in', status: 'Active', runs: 4680 },
+  { id: 'w4', name: 'Sentiment Alert', trigger: 'Negative sentiment detected', action: 'Notify team and apologize', status: 'Active', runs: 1240 }
 ];

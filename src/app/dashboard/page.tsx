@@ -9,7 +9,6 @@ import {
   MessageSquare,
   Zap,
   TrendingUp,
-  ArrowRight,
   Activity,
   ChevronRight,
   CheckCircle2,
@@ -44,19 +43,26 @@ export default function DashboardOverview() {
   const { toast } = useToast();
   const { isActive } = useDemo();
   const [configuring, setConfiguring] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [demoStats, setDemoStats] = useState({
     revenue: 842850,
     replies: 142942
   });
 
+  // Metric Recalibration Animation
   useEffect(() => {
     if (!isActive) return;
     const interval = setInterval(() => {
-      setDemoStats(prev => ({
-        revenue: prev.revenue + Math.floor(Math.random() * 500),
-        replies: prev.replies + Math.floor(Math.random() * 2)
-      }));
-    }, 1000);
+      setIsProcessing(true);
+      
+      setTimeout(() => {
+        setDemoStats(prev => ({
+          revenue: prev.revenue + Math.floor(Math.random() * 500),
+          replies: prev.replies + Math.floor(Math.random() * 2)
+        }));
+        setIsProcessing(false);
+      }, 500); // Processing Dwell
+    }, 2500);
     return () => clearInterval(interval);
   }, [isActive]);
 
@@ -66,7 +72,7 @@ export default function DashboardOverview() {
       setConfiguring(false);
       toast({
         title: "Workspace Optimized",
-        description: "AI nodes have been recalibrated for current traffic.",
+        description: "AI nodes recalibrated for current traffic.",
       });
     }, 1500);
   };
@@ -92,23 +98,23 @@ export default function DashboardOverview() {
             </div>
           </div>
           <h1 className="text-4xl font-bold tracking-tight mb-2">Dashboard</h1>
-          <p className="text-zinc-500 font-medium">Real-time overview of your customer conversations and sales efficiency.</p>
+          <p className="text-zinc-500 font-medium">Real-time overview of customer conversations and sales efficiency.</p>
         </div>
         <div className="flex items-center gap-3">
           <Button 
             variant="outline" 
             onClick={handleAudit}
-            className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold rounded-lg px-4 hover:bg-white/5 transition-all"
+            className="h-10 border-white/5 bg-white/[0.02] text-xs font-bold rounded-lg px-4 active:scale-[0.98]"
           >
             Audit Logs
           </Button>
           <Button 
             onClick={handleConfigure}
             disabled={configuring}
-            className="h-10 bg-white text-black hover:bg-zinc-200 text-xs font-bold rounded-lg px-6 shadow-xl transition-all active:scale-95"
+            className="h-10 bg-white text-black hover:bg-zinc-200 text-xs font-bold rounded-lg px-6 shadow-xl active:scale-[0.98]"
           >
             {configuring ? <Loader2 className="animate-spin mr-2" size={14} /> : null}
-            {configuring ? 'Syncing...' : 'Configure Workspace'}
+            {configuring ? 'Syncing...' : 'Sync Workspace'}
           </Button>
         </div>
       </div>
@@ -132,7 +138,10 @@ export default function DashboardOverview() {
           { label: 'Avg Speed', value: MOCK_STATS.avgSpeed, change: '-42%', icon: Activity, color: 'text-zinc-400' },
           { label: 'Conversion Rate', value: MOCK_STATS.conversionRate, change: '+4.1%', icon: TrendingUp, color: 'text-zinc-400' }
         ].map((stat, i) => (
-          <GlassCard key={i} className="border-white/5 bg-white/[0.01] p-6 hover:border-white/10 transition-colors cursor-default">
+          <GlassCard key={i} className={cn(
+            "border-white/5 bg-white/[0.01] p-6 transition-all duration-300",
+            isProcessing && i < 2 ? "processing-blur" : ""
+          )}>
             <div className="flex items-center justify-between mb-6">
               <div className="w-8 h-8 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-500">
                 <stat.icon size={16} />
@@ -151,8 +160,8 @@ export default function DashboardOverview() {
         <GlassCard className="lg:col-span-2 border-white/5 bg-white/[0.01] p-8">
           <div className="flex items-center justify-between mb-10">
             <div>
-              <h3 className="font-bold text-xl mb-1">Revenue Recovery</h3>
-              <p className="text-xs text-zinc-500">Sales recaptured via automated pricing and follow-up logic.</p>
+              <h3 className="font-bold text-xl mb-1">Sales Recovery</h3>
+              <p className="text-xs text-zinc-500">Revenue recaptured via automated follow-up logic.</p>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-white/20" />
@@ -183,10 +192,10 @@ export default function DashboardOverview() {
         </GlassCard>
 
         <GlassCard className="border-white/5 bg-white/[0.01] p-8 flex flex-col">
-          <h3 className="font-bold text-xl mb-8">Recent Activity</h3>
+          <h3 className="font-bold text-xl mb-8">Activity Feed</h3>
           <div className="space-y-8 flex-1 overflow-y-auto pr-2 custom-scrollbar max-h-[400px]">
             {MOCK_LIVE_FEED.map((item) => (
-              <div key={item.id} className="flex gap-4 group cursor-pointer">
+              <div key={item.id} className="flex gap-4 group cursor-pointer active:scale-[0.98] transition-transform">
                 <div className="w-8 h-8 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center shrink-0 text-zinc-600 group-hover:text-white transition-colors">
                   {item.type === 'sale' ? <CheckCircle2 size={14} className="text-emerald-500" /> : <MessageSquare size={14} />}
                 </div>
@@ -203,10 +212,9 @@ export default function DashboardOverview() {
           <div className="mt-8 pt-6 border-t border-white/5">
             <Button 
               variant="ghost" 
-              onClick={() => toast({ title: "Opening Full History", description: "Loading comprehensive audit logs..." })}
-              className="w-full justify-between h-10 text-zinc-500 hover:text-white px-4 text-xs font-bold transition-all"
+              className="w-full justify-between h-10 text-zinc-500 hover:text-white px-4 text-xs font-bold active:scale-[0.98]"
             >
-              Full Activity Feed <ChevronRight size={14} />
+              Full History <ChevronRight size={14} />
             </Button>
           </div>
         </GlassCard>

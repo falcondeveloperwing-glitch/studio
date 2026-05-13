@@ -24,6 +24,7 @@ interface DemoContextType {
   currentStep: DemoStep;
   cursorPos: CursorPos;
   isClicking: boolean;
+  isDwelling: boolean;
   startDemo: () => void;
   stopDemo: () => void;
   nextStep: () => void;
@@ -33,17 +34,16 @@ const DemoContext = createContext<DemoContextType | undefined>(undefined);
 
 const DEMO_TIMINGS: Record<DemoStep, number> = {
   idle: 0,
-  landing: 4500,
-  login: 3500,
-  dashboard: 6000,
-  inbox: 14000,
-  automations: 8000,
-  analytics: 7000,
-  pricing: 5000,
-  complete: 10000
+  landing: 5000,
+  login: 4000,
+  dashboard: 7000,
+  inbox: 16000,
+  automations: 9000,
+  analytics: 8000,
+  pricing: 6000,
+  complete: 12000
 };
 
-// Precise viewport targets for human-like cursor movement
 const CURSOR_TARGETS: Record<DemoStep, CursorPos> = {
   idle: { x: 50, y: 50 },
   landing: { x: 55, y: 45 },    // Hero CTA
@@ -61,6 +61,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const [currentStep, setCurrentStep] = useState<DemoStep>('idle');
   const [cursorPos, setCursorPos] = useState<CursorPos>({ x: 50, y: 50 });
   const [isClicking, setIsClicking] = useState(false);
+  const [isDwelling, setIsDwelling] = useState(false);
   const router = useRouter();
   const stepTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -68,6 +69,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     setIsActive(false);
     setCurrentStep('idle');
     setIsClicking(false);
+    setIsDwelling(false);
     if (stepTimerRef.current) clearTimeout(stepTimerRef.current);
   }, []);
 
@@ -85,36 +87,39 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     if (nextIdx < steps.length) {
       const next = steps[nextIdx];
       
-      // Simulate click
-      setIsClicking(true);
-      
+      // Simulate Human Dwell (Observe the target before clicking)
+      setIsDwelling(true);
+      const randomDwell = 300 + Math.random() * 200;
+
       setTimeout(() => {
-        setIsClicking(false);
-        setCurrentStep(next);
+        setIsClicking(true);
+        setIsDwelling(false);
         
-        // Navigation Script
-        switch(next) {
-          case 'login': router.push('/login'); break;
-          case 'dashboard': router.push('/dashboard'); break;
-          case 'inbox': router.push('/dashboard/inbox'); break;
-          case 'automations': router.push('/dashboard/automations'); break;
-          case 'analytics': router.push('/dashboard/analytics'); break;
-          case 'pricing': router.push('/pricing'); break;
-        }
-      }, 500);
+        setTimeout(() => {
+          setIsClicking(false);
+          setCurrentStep(next);
+          
+          switch(next) {
+            case 'login': router.push('/login'); break;
+            case 'dashboard': router.push('/dashboard'); break;
+            case 'inbox': router.push('/dashboard/inbox'); break;
+            case 'automations': router.push('/dashboard/automations'); break;
+            case 'analytics': router.push('/dashboard/analytics'); break;
+            case 'pricing': router.push('/pricing'); break;
+          }
+        }, 300);
+      }, randomDwell);
     }
   }, [currentStep, router]);
 
-  // Cinematic cursor movement with spring physics logic handled in overlay via Framer Motion
   useEffect(() => {
     if (!isActive) return;
     const moveTimer = setTimeout(() => {
       setCursorPos(CURSOR_TARGETS[currentStep]);
-    }, 1200); // Wait for viewer to digest page before moving cursor
+    }, 1000); 
     return () => clearTimeout(moveTimer);
   }, [currentStep, isActive]);
 
-  // Autoplay progression
   useEffect(() => {
     if (!isActive || currentStep === 'complete') return;
     stepTimerRef.current = setTimeout(() => {
@@ -126,7 +131,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   }, [isActive, currentStep, nextStep]);
 
   return (
-    <DemoContext.Provider value={{ isActive, currentStep, cursorPos, isClicking, startDemo, stopDemo, nextStep }}>
+    <DemoContext.Provider value={{ isActive, currentStep, cursorPos, isClicking, isDwelling, startDemo, stopDemo, nextStep }}>
       {children}
     </DemoContext.Provider>
   );

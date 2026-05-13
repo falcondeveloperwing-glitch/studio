@@ -38,6 +38,11 @@
 }
 
 /* Premium SaaS Scrollbar - Linear/Resend Style */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #27272a transparent;
+}
+
 *::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -58,12 +63,14 @@
   background: #3f3f46;
 }
 
+/* Force consistency across all dashboard containers */
 .custom-scrollbar::-webkit-scrollbar {
   width: 3px;
 }
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 .font-headline {
@@ -76,7 +83,7 @@ html {
   pointer-events: none;
 }
 
-/* Click Ripple Animation for Demo Mode */
+/* Click Ripple Animation */
 @keyframes ripple {
   0% { transform: scale(0); opacity: 0.8; }
   100% { transform: scale(3); opacity: 0; }
@@ -85,4 +92,14 @@ html {
 .click-ripple {
   @apply absolute top-0 left-0 w-8 h-8 rounded-full border border-white pointer-events-none;
   animation: ripple 0.5s ease-out;
+}
+
+/* Tactile UI Physics */
+.interactive-element {
+  @apply transition-all duration-200 active:scale-[0.98] cursor-pointer;
+}
+
+.processing-blur {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
 }

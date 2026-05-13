@@ -31,12 +31,11 @@ export default function InboxPage() {
   const [showMobileList, setShowMobileList] = useState(true);
   const [inputText, setInputText] = useState('');
   const [sending, setSending] = useState(false);
-  const [typingText, setTypingText] = useState('');
   const [chats, setChats] = useState(MOCK_CHATS);
 
   const activeChat = chats.find(c => c.id === activeChatId);
 
-  // Cinematic Demo Typing Simulation
+  // Human-Mimetic Typing Simulation
   useEffect(() => {
     if (isActive && currentStep === 'inbox') {
       const selectTimer = setTimeout(() => {
@@ -46,7 +45,11 @@ export default function InboxPage() {
       
       const typeTimer = setTimeout(() => {
         setSending(true);
-        // Human-like typing delay before the actual message appears
+        
+        // Staggered typing rhythm
+        const fullMessage = "Perfect, Marcus! I've dispatched the secure payment link to your DM. Your 15% bulk discount is applied. Let me know once complete!";
+        
+        // We simulate the delay as if a human was validating or composing
         setTimeout(() => {
           setChats(prev => prev.map(c => {
             if (c.id === '1') {
@@ -54,7 +57,7 @@ export default function InboxPage() {
                 ...c,
                 messages: [...c.messages, {
                   role: 'business',
-                  content: "Perfect, Marcus! I've dispatched the secure payment link to your DM. Your 15% bulk discount is applied. Let me know once complete!",
+                  content: fullMessage,
                   type: 'text',
                   timestamp: new Date().toISOString()
                 }]
@@ -64,11 +67,11 @@ export default function InboxPage() {
           }));
           setSending(false);
           toast({
-            title: "Opportunity Captured",
-            description: "AI agent successfully converted bulk inquiry.",
+            title: "Inquiry Resolved",
+            description: "AI successfully converted bulk inquiry to checkout.",
           });
-        }, 5000);
-      }, 6500);
+        }, 4500 + Math.random() * 2000); // Randomized "Cognitive Load"
+      }, 7000);
 
       return () => {
         clearTimeout(selectTimer);
@@ -117,16 +120,15 @@ export default function InboxPage() {
 
   return (
     <div className="h-[calc(100vh-64px)] lg:h-[calc(100vh-100px)] flex flex-col bg-zinc-950 border border-white/5 rounded-2xl overflow-hidden max-w-7xl mx-auto flex-1">
-      {/* Inbox Header */}
       <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 shrink-0 z-20 bg-zinc-950">
         <div className="flex items-center gap-4">
           <h1 className="text-sm font-bold tracking-tight">Inbox</h1>
           <Badge variant="outline" className="text-[9px] uppercase tracking-widest border-white/10 text-zinc-500 font-bold px-2 py-0">
-            {chats.length} Active Threads
+            {chats.length} Threads
           </Badge>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={() => toast({ title: "Filters Optimized", description: "Showing high-intent conversations." })} className="text-zinc-500 hover:text-white h-8 text-[11px] gap-2 font-bold uppercase tracking-widest">
+          <Button variant="ghost" size="sm" className="text-zinc-500 hover:text-white h-8 text-[11px] gap-2 font-bold uppercase tracking-widest">
             <Filter size={12} /> Filter
           </Button>
           <Button variant="ghost" size="icon" className="text-zinc-500 h-8 w-8 hover:bg-white/5">
@@ -136,7 +138,6 @@ export default function InboxPage() {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Thread List */}
         <div className={cn(
           "w-full lg:w-80 border-r border-white/5 flex flex-col shrink-0 transition-all bg-zinc-950",
           !showMobileList && "hidden lg:flex"
@@ -145,8 +146,8 @@ export default function InboxPage() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" size={12} />
               <Input 
-                className="pl-8 h-9 bg-white/5 border-white/10 rounded-lg text-[11px] placeholder:text-zinc-700 focus-visible:ring-zinc-800" 
-                placeholder="Search fleet history..." 
+                className="pl-8 h-9 bg-white/5 border-white/10 rounded-lg text-[11px] placeholder:text-zinc-700" 
+                placeholder="Search..." 
               />
             </div>
           </div>
@@ -158,7 +159,7 @@ export default function InboxPage() {
                   key={chat.id} 
                   onClick={() => handleSelectChat(chat.id)} 
                   className={cn(
-                    "p-4 flex items-start gap-3 cursor-pointer transition-colors relative",
+                    "p-4 flex items-start gap-3 cursor-pointer transition-colors relative active:bg-white/[0.08]",
                     activeChatId === chat.id ? "bg-white/5" : "hover:bg-white/[0.02]"
                   )}
                 >
@@ -174,7 +175,7 @@ export default function InboxPage() {
                         {chat.customerName}
                       </p>
                       <span className="text-[9px] text-zinc-600 font-black uppercase tracking-tighter">
-                        {chat.id === '1' ? 'Just Now' : '1h'}
+                        {chat.id === '1' ? 'Now' : '1h'}
                       </span>
                     </div>
                     <p className={cn("text-[11px] truncate leading-tight", chat.unread ? "text-zinc-300" : "text-zinc-500")}>
@@ -187,7 +188,6 @@ export default function InboxPage() {
           </ScrollArea>
         </div>
 
-        {/* Message Thread */}
         <div className={cn(
           "flex-1 flex flex-col bg-[#09090b]",
           showMobileList && "hidden lg:flex"
@@ -196,7 +196,7 @@ export default function InboxPage() {
             <div className="flex flex-col h-full relative">
               <div className="px-6 py-3 border-b border-white/5 flex items-center justify-between bg-zinc-950 shrink-0 z-10">
                 <div className="flex items-center gap-3">
-                  <Button variant="ghost" size="icon" onClick={() => setShowMobileList(true)} className="lg:hidden h-8 w-8 text-zinc-500 hover:bg-white/5">
+                  <Button variant="ghost" size="icon" onClick={() => setShowMobileList(true)} className="lg:hidden h-8 w-8 text-zinc-500">
                     <ArrowLeft size={16} />
                   </Button>
                   <div className="w-8 h-8 rounded-full bg-zinc-900 border border-white/10 overflow-hidden grayscale">
@@ -210,34 +210,43 @@ export default function InboxPage() {
               </div>
 
               <ScrollArea className="flex-1 p-6">
-                <div className="space-y-8 max-w-2xl mx-auto">
-                  {activeChat.messages.map((msg, i) => (
-                    <div key={i} className={cn("flex flex-col", msg.role === 'customer' ? "items-start" : "items-end")}>
-                      <div className="max-w-[85%] relative group">
-                        <div className={cn(
-                          "rounded-xl px-4 py-2.5 text-xs leading-relaxed transition-all duration-300",
-                          msg.role === 'customer' 
-                            ? "bg-zinc-900 text-zinc-400 border border-white/5" 
-                            : "bg-white text-zinc-950 font-medium shadow-2xl"
-                        )}>
-                          {msg.content}
-                          {msg.type === 'automated' && (
-                            <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-zinc-950 border border-white/10 flex items-center justify-center text-zinc-400 shadow-xl" title="Automated Logic">
-                              <Zap size={10} fill="currentColor" />
-                            </div>
+                <div className="space-y-4 max-w-2xl mx-auto">
+                  {activeChat.messages.map((msg, i) => {
+                    const isSameSenderAsPrev = i > 0 && activeChat.messages[i-1].role === msg.role;
+                    return (
+                      <div key={i} className={cn(
+                        "flex flex-col", 
+                        msg.role === 'customer' ? "items-start" : "items-end",
+                        isSameSenderAsPrev ? "mt-1" : "mt-8"
+                      )}>
+                        <div className="max-w-[85%] relative group">
+                          <div className={cn(
+                            "rounded-xl px-4 py-2.5 text-xs leading-relaxed transition-all duration-300 active:scale-[0.99]",
+                            msg.role === 'customer' 
+                              ? "bg-zinc-900 text-zinc-400 border border-white/5" 
+                              : "bg-white text-zinc-950 font-medium shadow-2xl"
+                          )}>
+                            {msg.content}
+                            {msg.type === 'automated' && (
+                              <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-zinc-950 border border-white/10 flex items-center justify-center text-zinc-400 shadow-xl" title="Automated Logic">
+                                <Zap size={10} fill="currentColor" />
+                              </div>
+                            )}
+                          </div>
+                          {!isSameSenderAsPrev && (
+                            <p className={cn("text-[9px] text-zinc-600 font-black uppercase mt-2 tracking-widest", msg.role === 'customer' ? "text-left" : "text-right")}>
+                              {msg.role === 'customer' ? 'Inquiry' : 'Autopilot'} • {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </p>
                           )}
                         </div>
-                        <p className={cn("text-[9px] text-zinc-600 font-black uppercase mt-2 tracking-widest", msg.role === 'customer' ? "text-left" : "text-right")}>
-                          {msg.role === 'customer' ? 'Customer Inquiry' : 'Fleet Autopilot'} • {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </p>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                   {sending && (
-                    <div className="flex flex-col items-end">
+                    <div className="flex flex-col items-end mt-4">
                       <div className="bg-white/5 border border-white/5 rounded-xl px-4 py-2.5 flex items-center gap-3">
                         <Loader2 size={12} className="animate-spin text-zinc-500" />
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-600">Autopilot composing...</span>
+                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-600">Composing...</span>
                       </div>
                     </div>
                   )}
@@ -248,12 +257,12 @@ export default function InboxPage() {
                 <div className="max-w-2xl mx-auto">
                   <form className="relative flex items-center gap-2" onSubmit={handleSendMessage}>
                     <Input 
-                      className="flex-1 h-11 bg-white/5 border-white/10 rounded-xl text-xs focus-visible:ring-zinc-800 px-5 placeholder:text-zinc-800" 
-                      placeholder="Type a manual override message..." 
+                      className="flex-1 h-11 bg-white/5 border-white/10 rounded-xl text-xs px-5" 
+                      placeholder="Type a manual response..." 
                       value={inputText}
                       onChange={(e) => setInputText(e.target.value)}
                     />
-                    <Button type="submit" disabled={!inputText.trim()} size="icon" className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-xl w-11 h-11 shrink-0 shadow-2xl transition-all active:scale-95 disabled:opacity-30">
+                    <Button type="submit" disabled={!inputText.trim()} size="icon" className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-xl w-11 h-11 shrink-0 shadow-2xl active:scale-95 disabled:opacity-30">
                       <Send size={16} />
                     </Button>
                   </form>
@@ -264,17 +273,16 @@ export default function InboxPage() {
             <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 p-8 text-center bg-[#09090b]">
               <History size={32} className="text-zinc-900 mb-6" />
               <h2 className="text-[11px] font-black text-white uppercase tracking-[0.3em] mb-2">Workspace Idle</h2>
-              <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest max-w-[200px]">Select a conversation to initialize management</p>
+              <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest max-w-[200px]">Select a thread to begin</p>
             </div>
           )}
         </div>
 
-        {/* CRM Insights (Desktop Only) */}
         {activeChat && (
           <div className="hidden xl:flex w-72 border-l border-white/5 flex-col bg-zinc-950 shrink-0">
             <ScrollArea className="flex-1">
               <div className="p-6">
-                <p className="text-[10px] font-black text-zinc-700 uppercase tracking-[0.3em] mb-8">CRM Intel</p>
+                <p className="text-[10px] font-black text-zinc-700 uppercase tracking-[0.3em] mb-8">Customer Intelligence</p>
                 
                 <div className="space-y-4">
                   <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-4">
@@ -293,17 +301,17 @@ export default function InboxPage() {
 
                 <Separator className="my-10 bg-white/5" />
 
-                <p className="text-[10px] font-black text-zinc-700 uppercase tracking-[0.3em] mb-6">Quick Actions</p>
+                <p className="text-[10px] font-black text-zinc-700 uppercase tracking-[0.3em] mb-6">Actions</p>
                 <div className="space-y-2">
                   <Button 
                     variant="outline" 
-                    className="w-full justify-start text-[10px] font-black uppercase tracking-widest h-10 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-3 transition-all"
+                    className="w-full justify-start text-[10px] font-black uppercase tracking-widest h-10 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-3 active:scale-[0.98]"
                   >
-                    <Zap size={14} className="text-zinc-600" /> Send Bulk Tier 2
+                    <Zap size={14} className="text-zinc-600" /> Apply Tier 2
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="w-full justify-start text-[10px] font-black uppercase tracking-widest h-10 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-3 transition-all"
+                    className="w-full justify-start text-[10px] font-black uppercase tracking-widest h-10 border-white/5 bg-white/[0.02] hover:bg-white/5 gap-3 active:scale-[0.98]"
                   >
                     <Clock size={14} className="text-zinc-600" /> Mark Follow Up
                   </Button>
@@ -311,14 +319,14 @@ export default function InboxPage() {
 
                 <Separator className="my-10 bg-white/5" />
                 
-                <p className="text-[10px] font-black text-zinc-700 uppercase tracking-[0.3em] mb-6">Account History</p>
+                <p className="text-[10px] font-black text-zinc-700 uppercase tracking-[0.3em] mb-6">History</p>
                 <div className="p-4 rounded-xl bg-zinc-900 border border-white/5 space-y-4">
                   <div className="flex justify-between text-[10px] font-bold">
                     <span className="text-zinc-600 uppercase tracking-widest">Total Value</span>
-                    <span className="text-white tracking-widest">$2,840.00</span>
+                    <span className="text-white tracking-widest">{activeChat.value}</span>
                   </div>
                   <div className="flex justify-between text-[10px] font-bold">
-                    <span className="text-zinc-600 uppercase tracking-widest">LTV Rank</span>
+                    <span className="text-zinc-600 uppercase tracking-widest">Status</span>
                     <span className="text-white uppercase tracking-widest">Elite</span>
                   </div>
                 </div>
