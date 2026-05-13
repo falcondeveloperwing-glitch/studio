@@ -1,14 +1,14 @@
+
 'use client';
 
 import React, { useState, useMemo } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
-import { useUser, useFirestore, useCollection } from '@/firebase';
+import { useUser, useFirestore, useCollection, useDoc } from '@/firebase';
 import { 
   Zap, 
   Plus, 
   ArrowRight, 
-  MoreHorizontal,
   Instagram,
   Loader2
 } from 'lucide-react';
@@ -25,7 +25,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { collection, query, orderBy, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, query, orderBy, addDoc, doc, updateDoc } from 'firebase/firestore';
+import { logActivity } from '@/lib/activity-logger';
 
 export default function AutomationsPage() {
   const { toast } = useToast();
@@ -34,6 +35,9 @@ export default function AutomationsPage() {
   const [creating, setCreating] = useState(false);
   const [open, setOpen] = useState(false);
   
+  const userRef = useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
+  const { data: profile } = useDoc(userRef);
+
   const [formData, setFormData] = useState({
     name: '',
     trigger: '',
@@ -49,7 +53,7 @@ export default function AutomationsPage() {
 
   const handleCreateAutomation = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user || !profile) return;
     setCreating(true);
     try {
       await addDoc(collection(db, 'users', user.uid, 'automations'), {
@@ -58,6 +62,16 @@ export default function AutomationsPage() {
         runs: 0,
         createdAt: new Date().toISOString()
       });
+
+      await logActivity({
+        db,
+        userId: user.uid,
+        actorName: profile.brandName || 'Admin',
+        actorRole: profile.role || 'admin',
+        actionType: 'WORKFLOW_CREATED',
+        description: `Deployed new automation: ${formData.name}`
+      });
+
       setOpen(false);
       setFormData({ name: '', trigger: '', action: '' });
       toast({ title: "Automation Deployed", description: "New logic is now live." });
@@ -68,13 +82,23 @@ export default function AutomationsPage() {
     }
   };
 
-  const toggleStatus = async (id: string, currentStatus: string) => {
-    if (!user) return;
+  const toggleStatus = async (id: string, name: string, currentStatus: string) => {
+    if (!user || !profile) return;
     const newStatus = currentStatus === 'Active' ? 'Paused' : 'Active';
     try {
       await updateDoc(doc(db, 'users', user.uid, 'automations', id), {
         status: newStatus
       });
+
+      await logActivity({
+        db,
+        userId: user.uid,
+        actorName: profile.brandName || 'Admin',
+        actorRole: profile.role || 'admin',
+        actionType: 'WORKFLOW_TOGGLED',
+        description: `${newStatus} automation workflow: ${name}`
+      });
+
       toast({ title: "Status Updated", description: `Automation ${newStatus.toLowerCase()}.` });
     } catch (err) {
       toast({ title: "Error", description: "Update failed.", variant: "destructive" });
@@ -173,7 +197,7 @@ export default function AutomationsPage() {
 
                   <div className="flex items-center gap-4">
                     <Badge 
-                      onClick={() => toggleStatus(workflow.id, workflow.status)}
+                      onClick={() => toggleStatus(workflow.id, workflow.name, workflow.status)}
                       className={`h-6 px-3 text-[9px] uppercase font-bold cursor-pointer ${workflow.status === 'Active' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-zinc-800 text-zinc-500'}`}
                     >
                       {workflow.status}

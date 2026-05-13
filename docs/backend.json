@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "UserProfile": {
@@ -8,7 +9,8 @@
         "email": { "type": "string", "format": "email" },
         "brandName": { "type": "string" },
         "personality": { "type": "string", "enum": ["Professional", "Friendly", "Luxury"] },
-        "status": { "type": "string", "enum": ["free", "pro", "elite"] }
+        "status": { "type": "string", "enum": ["free", "pro", "elite"] },
+        "role": { "type": "string", "enum": ["admin", "manager", "agent", "viewer"] }
       },
       "required": ["email", "brandName"]
     },
@@ -23,7 +25,8 @@
         "status": { "type": "string", "enum": ["AI Handled", "Manual", "Escalated"] },
         "unread": { "type": "boolean" },
         "updatedAt": { "type": "string", "format": "date-time" },
-        "avatarSeed": { "type": "string" }
+        "avatarSeed": { "type": "string" },
+        "assignedTo": { "type": "string" }
       }
     },
     "Message": {
@@ -49,20 +52,34 @@
         "runs": { "type": "number" }
       }
     },
-    "Analytics": {
-      "title": "Analytics Snapshot",
-      "description": "Aggregated metrics for the business dashboard.",
+    "AuditLog": {
+      "title": "Audit Log",
+      "description": "Operational record of a workspace action.",
       "type": "object",
       "properties": {
-        "recoveredSales": { "type": "number" },
-        "totalConvs": { "type": "number" },
-        "avgReplyTime": { "type": "number" },
-        "csat": { "type": "number" }
+        "actorId": { "type": "string" },
+        "actorName": { "type": "string" },
+        "actorRole": { "type": "string" },
+        "actionType": { "type": "string" },
+        "description": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "In-app alert for team events.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string", "enum": ["info", "success", "alert"] },
+        "unread": { "type": "boolean" },
+        "timestamp": { "type": "string", "format": "date-time" }
       }
     }
   },
   "auth": {
-    "providers": ["password"]
+    "providers": ["password", "google.com"]
   },
   "firestore": {
     "/users/{userId}": {
@@ -81,9 +98,13 @@
       "schema": "Automation",
       "description": "AI triggers and responses."
     },
-    "/users/{userId}/analytics/overview": {
-      "schema": "Analytics",
-      "description": "Dashboard performance data."
+    "/users/{userId}/auditLogs/{logId}": {
+      "schema": "AuditLog",
+      "description": "Workspace activity logs."
+    },
+    "/users/{userId}/notifications/{notifId}": {
+      "schema": "Notification",
+      "description": "User notifications."
     }
   }
 }

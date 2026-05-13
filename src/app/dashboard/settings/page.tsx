@@ -1,44 +1,22 @@
+
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   User, 
   Instagram, 
-  Sparkles, 
-  Users, 
-  CreditCard,
-  ShieldCheck,
-  CheckCircle2,
-  Lock,
-  Plus,
-  MoreHorizontal,
-  Loader2,
-  Trash2,
-  ArrowUpRight,
-  Monitor,
-  Shield
+  Loader2
 } from 'lucide-react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
-import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { useUser, useFirestore, useDoc } from '@/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogTrigger,
-  DialogFooter
-} from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
+import { logActivity } from '@/lib/activity-logger';
 
 export default function SettingsPage() {
   const { user } = useUser();
@@ -46,10 +24,9 @@ export default function SettingsPage() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('general');
   const [savingProfile, setSavingProfile] = useState(false);
-  const [inviting, setInviting] = useState(false);
 
   // User profile data
-  const userRef = React.useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
+  const userRef = useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
   const { data: profile, loading } = useDoc(userRef);
 
   const [localProfile, setLocalProfile] = useState<any>({});
@@ -59,7 +36,7 @@ export default function SettingsPage() {
   }, [profile]);
 
   const handleSaveProfile = async () => {
-    if (!user) return;
+    if (!user || !profile) return;
     setSavingProfile(true);
     try {
       await updateDoc(doc(db, 'users', user.uid), {
@@ -67,6 +44,16 @@ export default function SettingsPage() {
         email: localProfile.email,
         personality: localProfile.personality
       });
+
+      await logActivity({
+        db,
+        userId: user.uid,
+        actorName: localProfile.brandName || 'Admin',
+        actorRole: profile.role || 'admin',
+        actionType: 'PROFILE_UPDATED',
+        description: `Updated business profile settings.`
+      });
+
       toast({ title: "Profile Updated", description: "Your settings have been synced." });
     } catch (err) {
       toast({ title: "Error", description: "Failed to save profile.", variant: "destructive" });
@@ -161,7 +148,6 @@ export default function SettingsPage() {
                 </GlassCard>
               </div>
             )}
-            {/* Other tabs remain largely visual or can be linked to other collections later */}
           </motion.div>
         </AnimatePresence>
       </Tabs>

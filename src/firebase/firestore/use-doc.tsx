@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   DocumentReference,
   onSnapshot,
@@ -13,20 +14,25 @@ export function useDoc<T = DocumentData>(ref: DocumentReference<T> | null) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
+  const docRef = useRef(ref);
   useEffect(() => {
-    if (!ref) {
+    docRef.current = ref;
+  }, [ref]);
+
+  useEffect(() => {
+    if (!docRef.current) {
       setLoading(false);
       return;
     }
 
     const unsubscribe = onSnapshot(
-      ref,
+      docRef.current,
       (snapshot: DocumentSnapshot<T>) => {
         setData(snapshot.exists() ? { ...snapshot.data(), id: snapshot.id } : null);
         setLoading(false);
       },
       (err) => {
-        console.error(err);
+        console.error('Firestore Document Error:', err);
         setError(err);
         setLoading(false);
       }

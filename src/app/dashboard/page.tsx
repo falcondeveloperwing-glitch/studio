@@ -1,8 +1,9 @@
+
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
-import { useUser, useFirestore, useDoc } from '@/firebase';
+import { useUser, useFirestore, useDoc, useCollection } from '@/firebase';
 import { 
   DollarSign,
   Zap,
@@ -11,8 +12,8 @@ import {
   ChevronRight,
   Loader2,
   History,
-  User as UserIcon,
-  Target
+  Target,
+  User as UserIcon
 } from 'lucide-react';
 import { 
   XAxis, 
@@ -25,8 +26,9 @@ import {
 } from 'recharts';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { doc } from 'firebase/firestore';
+import { doc, query, collection, orderBy, limit } from 'firebase/firestore';
 import Link from 'next/link';
+import { formatDistanceToNow } from 'date-fns';
 
 const chartData = [
   { name: 'Mon', revenue: 142000, interactions: 120 },
@@ -47,6 +49,13 @@ export default function DashboardOverview() {
 
   const analyticsRef = useMemo(() => (user ? doc(db, 'users', user.uid, 'analytics', 'overview') : null), [user, db]);
   const { data: stats, loading: statsLoading } = useDoc(analyticsRef);
+
+  // Real-time Audit Logs
+  const auditLogsQuery = useMemo(() => {
+    if (!user) return null;
+    return query(collection(db, 'users', user.uid, 'auditLogs'), orderBy('timestamp', 'desc'), limit(5));
+  }, [user, db]);
+  const { data: logs, loading: logsLoading } = useCollection(auditLogsQuery);
 
   const isAdmin = profile?.role === 'admin';
 
@@ -137,10 +146,31 @@ export default function DashboardOverview() {
             <h3 className="font-bold text-xl">Recent Logs</h3>
             <History size={16} className="text-zinc-600" />
           </div>
-          <div className="space-y-8 flex-1">
-            <div className="text-center py-10 text-zinc-500 text-xs">
-              No recent activity recorded.
-            </div>
+          <div className="space-y-6 flex-1">
+            {logsLoading ? (
+              <div className="flex justify-center p-8"><Loader2 className="animate-spin text-zinc-700" size={16} /></div>
+            ) : logs.length === 0 ? (
+              <div className="text-center py-10 text-zinc-500 text-xs font-bold uppercase tracking-widest">
+                No recent activity recorded.
+              </div>
+            ) : (
+              logs.map((log) => (
+                <div key={log.id} className="flex gap-4 pb-4 border-b border-white/[0.03] last:border-0 last:pb-0">
+                  <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                    <UserIcon size={14} className="text-zinc-500" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-xs font-bold text-white truncate">{log.actorName}</p>
+                      <span className="text-[9px] text-zinc-600 font-bold uppercase whitespace-nowrap">
+                        {log.timestamp ? formatDistanceToNow(new Date(log.timestamp), { addSuffix: true }) : ''}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-zinc-500 leading-normal mt-0.5">{log.description}</p>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </GlassCard>
       </div>

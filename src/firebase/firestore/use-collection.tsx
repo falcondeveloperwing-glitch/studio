@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   Query,
   onSnapshot,
@@ -13,14 +14,20 @@ export function useCollection<T = DocumentData>(query: Query<T> | null) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
+  // Use a ref for the query to help stabilize the effect
+  const queryRef = useRef(query);
   useEffect(() => {
-    if (!query) {
+    queryRef.current = query;
+  }, [query]);
+
+  useEffect(() => {
+    if (!queryRef.current) {
       setLoading(false);
       return;
     }
 
     const unsubscribe = onSnapshot(
-      query,
+      queryRef.current,
       (snapshot: QuerySnapshot<T>) => {
         const items = snapshot.docs.map((doc) => ({
           ...doc.data(),
@@ -30,14 +37,14 @@ export function useCollection<T = DocumentData>(query: Query<T> | null) {
         setLoading(false);
       },
       (err) => {
-        console.error(err);
+        console.error('Firestore Collection Error:', err);
         setError(err);
         setLoading(false);
       }
     );
 
     return () => unsubscribe();
-  }, [query]);
+  }, [query]); // Still depend on query, but internal ref handles stable check
 
   return { data, loading, error };
 }
