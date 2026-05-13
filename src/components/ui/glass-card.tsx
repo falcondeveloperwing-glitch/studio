@@ -18,7 +18,7 @@ export function GlassCard({
   return (
     <div
       className={cn(
-        "rounded-xl border transition-all duration-200",
+        "rounded-xl border transition-all duration-200 active:scale-[0.99]",
         variant === "default" && "bg-zinc-900/40 border-zinc-800 shadow-sm",
         variant === "darker" && "bg-zinc-950 border-zinc-800",
         variant === "borderless" && "border-transparent bg-transparent",
