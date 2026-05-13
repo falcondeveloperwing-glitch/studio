@@ -36,7 +36,7 @@ export default function LandingPage() {
           </Link>
           
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-500">
-            <Link href="#features" className="hover:text-white transition-colors">Features</Link>
+            <Link href="/dashboard" className="hover:text-white transition-colors">Platform</Link>
             <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
             <Link href="/login" className="hover:text-white transition-colors">Sign In</Link>
           </div>
@@ -133,8 +133,8 @@ export default function LandingPage() {
           </div>
           <div className="flex gap-10 text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
             <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
-            <Link href="#" className="hover:text-white transition-colors">Privacy</Link>
-            <Link href="#" className="hover:text-white transition-colors">Terms</Link>
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
           </div>
           <p className="text-[10px] text-zinc-800 font-bold uppercase tracking-widest">© 2025 ReplyRush</p>
         </div>

@@ -38,7 +38,7 @@ const DEMO_TIMINGS: Record<DemoStep, number> = {
   login: 4000,
   dashboard: 7000,
   inbox: 16000,
-  automations: 9000,
+  automations: 10000,
   analytics: 8000,
   pricing: 6000,
   complete: 12000
@@ -46,9 +46,9 @@ const DEMO_TIMINGS: Record<DemoStep, number> = {
 
 const CURSOR_TARGETS: Record<DemoStep, CursorPos> = {
   idle: { x: 50, y: 50 },
-  landing: { x: 55, y: 45 },    // Hero CTA
+  landing: { x: 55, y: 45 },    // Get Started CTA
   login: { x: 50, y: 68 },      // Auth Button
-  dashboard: { x: 88, y: 22 },  // Configure Workspace
+  dashboard: { x: 88, y: 22 },  // Sync Workspace
   inbox: { x: 18, y: 42 },      // First Thread
   automations: { x: 78, y: 18 },// Create Automation
   analytics: { x: 82, y: 14 },  // Export Data
@@ -71,7 +71,8 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     setIsClicking(false);
     setIsDwelling(false);
     if (stepTimerRef.current) clearTimeout(stepTimerRef.current);
-  }, []);
+    router.push('/');
+  }, [router]);
 
   const startDemo = useCallback(() => {
     setIsActive(true);
@@ -89,7 +90,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
       
       // Simulate Human Dwell (Observe the target before clicking)
       setIsDwelling(true);
-      const randomDwell = 300 + Math.random() * 200;
+      const randomDwell = 400 + Math.random() * 300;
 
       setTimeout(() => {
         setIsClicking(true);
@@ -106,6 +107,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
             case 'automations': router.push('/dashboard/automations'); break;
             case 'analytics': router.push('/dashboard/analytics'); break;
             case 'pricing': router.push('/pricing'); break;
+            case 'complete': break;
           }
         }, 300);
       }, randomDwell);
@@ -116,7 +118,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     if (!isActive) return;
     const moveTimer = setTimeout(() => {
       setCursorPos(CURSOR_TARGETS[currentStep]);
-    }, 1000); 
+    }, 1200); // Wait for page to settle
     return () => clearTimeout(moveTimer);
   }, [currentStep, isActive]);
 

@@ -12,9 +12,7 @@ import {
   BarChart3, 
   Settings, 
   LogOut,
-  Briefcase,
-  ShieldCheck,
-  ChevronRight
+  ShieldCheck
 } from 'lucide-react';
 import { useLocalAuth } from '@/hooks/use-local-auth';
 import { WorkspaceSwitcher } from './workspace-switcher';
@@ -77,7 +75,7 @@ export function DashboardSidebar() {
         </Link>
 
         <button 
-          onClick={logout} 
+          onClick={() => logout()} 
           className="w-full flex items-center justify-between p-3 rounded-2xl hover:bg-white/[0.03] transition-colors group"
         >
           <div className="flex items-center gap-3 min-w-0">
