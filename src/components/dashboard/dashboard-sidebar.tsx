@@ -13,9 +13,11 @@ import {
   Settings, 
   LogOut,
   Briefcase,
+  ShieldCheck,
   ChevronRight
 } from 'lucide-react';
 import { useLocalAuth } from '@/hooks/use-local-auth';
+import { WorkspaceSwitcher } from './workspace-switcher';
 
 const navItems = [
   { label: 'Overview', icon: LayoutDashboard, href: '/dashboard' },
@@ -32,8 +34,8 @@ export function DashboardSidebar() {
 
   return (
     <div className="w-64 h-screen border-r border-white/5 flex flex-col bg-zinc-950 sticky top-0 z-50 overflow-hidden">
-      <div className="p-8 pb-10">
-        <Link href="/dashboard" className="flex items-center gap-3 group">
+      <div className="p-6 pb-10">
+        <Link href="/dashboard" className="flex items-center gap-3 group mb-10">
           <div className="w-10 h-10 rounded-xl bg-zinc-950 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:border-white/20 shadow-2xl">
             <Zap className="text-white fill-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" size={20} />
           </div>
@@ -41,9 +43,12 @@ export function DashboardSidebar() {
             Reply<span className="text-zinc-500">Rush</span>
           </span>
         </Link>
+
+        <WorkspaceSwitcher />
       </div>
 
       <nav className="flex-1 px-4 space-y-1">
+        <p className="px-4 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-700">Infrastructure</p>
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -63,13 +68,13 @@ export function DashboardSidebar() {
       </nav>
 
       <div className="p-6 border-t border-white/5 space-y-6">
-        <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
-          <div className="flex items-center gap-2 mb-3">
-            <Briefcase size={14} className="text-zinc-500" />
-            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Workspace</span>
+        <Link href="/dashboard/status" className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/5 transition-colors group">
+          <div className="flex items-center gap-3">
+            <ShieldCheck size={14} className="text-zinc-500 group-hover:text-emerald-500 transition-colors" />
+            <span className="text-[11px] font-bold text-zinc-500 group-hover:text-white transition-colors">System Health</span>
           </div>
-          <p className="text-[11px] text-zinc-600 leading-normal font-medium">Monitoring 142 active customer conversations.</p>
-        </div>
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+        </Link>
 
         <button 
           onClick={logout} 
