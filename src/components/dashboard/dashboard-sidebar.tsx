@@ -18,17 +18,21 @@ import { useLocalAuth } from '@/hooks/use-local-auth';
 import { WorkspaceSwitcher } from './workspace-switcher';
 
 const navItems = [
-  { label: 'Overview', icon: LayoutDashboard, href: '/dashboard' },
-  { label: 'Inbox', icon: Inbox, href: '/dashboard/inbox' },
-  { label: 'Knowledge Base', icon: Database, href: '/dashboard/knowledge' },
-  { label: 'Automations', icon: Zap, href: '/dashboard/automations' },
-  { label: 'Analytics', icon: BarChart3, href: '/dashboard/analytics' },
-  { label: 'Settings', icon: Settings, href: '/dashboard/settings' },
+  { label: 'Overview', icon: LayoutDashboard, href: '/dashboard', roles: ['admin', 'manager', 'agent', 'viewer'] },
+  { label: 'Inbox', icon: Inbox, href: '/dashboard/inbox', roles: ['admin', 'manager', 'agent'] },
+  { label: 'Knowledge Base', icon: Database, href: '/dashboard/knowledge', roles: ['admin', 'manager', 'agent'] },
+  { label: 'Automations', icon: Zap, href: '/dashboard/automations', roles: ['admin', 'manager'] },
+  { label: 'Analytics', icon: BarChart3, href: '/dashboard/analytics', roles: ['admin', 'manager', 'agent', 'viewer'] },
+  { label: 'Settings', icon: Settings, href: '/dashboard/settings', roles: ['admin', 'manager'] },
 ];
 
 export function DashboardSidebar() {
   const pathname = usePathname();
   const { user, logout } = useLocalAuth();
+
+  const filteredItems = navItems.filter(item => 
+    !item.roles || (user?.role && item.roles.includes(user.role))
+  );
 
   return (
     <div className="w-64 h-screen border-r border-white/5 flex flex-col bg-zinc-950 sticky top-0 z-50 overflow-hidden">
@@ -47,7 +51,7 @@ export function DashboardSidebar() {
 
       <nav className="flex-1 px-4 space-y-1">
         <p className="px-4 mb-2 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-700">Infrastructure</p>
-        {navItems.map((item) => {
+        {filteredItems.map((item) => {
           const isActive = pathname === item.href;
           return (
             <Link key={item.href} href={item.href}>
@@ -84,7 +88,7 @@ export function DashboardSidebar() {
             </div>
             <div className="min-w-0 text-left">
               <p className="text-xs font-bold text-white truncate">{user?.displayName || 'Admin'}</p>
-              <p className="text-[9px] text-zinc-500 truncate uppercase font-bold tracking-widest">Premium Fleet</p>
+              <p className="text-[9px] text-zinc-500 truncate uppercase font-bold tracking-widest">{user?.role || 'Premium'} Fleet</p>
             </div>
           </div>
           <LogOut size={14} className="text-zinc-600 group-hover:text-white transition-colors" />

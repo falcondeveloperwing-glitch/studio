@@ -15,7 +15,8 @@ import {
   Loader2,
   History,
   ShieldCheck,
-  ArrowUpRight
+  ArrowUpRight,
+  User as UserIcon
 } from 'lucide-react';
 import { 
   XAxis, 
@@ -193,12 +194,16 @@ export default function DashboardOverview() {
                   <div className="w-8 h-8 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center shrink-0 text-zinc-600 group-hover:text-white transition-colors">
                     {item.type === 'sale' ? <CheckCircle2 size={14} className="text-emerald-500" /> : <MessageSquare size={14} />}
                   </div>
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between mb-0.5">
                       <p className="text-sm font-bold truncate text-white/90">{item.title}</p>
                       <span className="text-[10px] text-zinc-600 font-bold uppercase whitespace-nowrap ml-2">{item.timestamp}</span>
                     </div>
                     <p className="text-xs text-zinc-500 leading-normal line-clamp-2">{item.description}</p>
+                    <div className="flex items-center gap-1.5 mt-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                       <UserIcon size={10} className="text-zinc-500" />
+                       <span className="text-[9px] font-black uppercase tracking-widest text-zinc-600">Operator: {item.operator}</span>
+                    </div>
                   </div>
                 </div>
               ))}

@@ -14,7 +14,8 @@ import {
   ArrowLeft,
   Clock,
   History,
-  Loader2
+  Loader2,
+  User as UserIcon
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -203,6 +204,14 @@ export default function InboxPage() {
                     <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-[0.2em]">@{activeChat.customerUsername}</p>
                   </div>
                 </div>
+                <div className="hidden sm:flex items-center gap-4">
+                   <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/5">
+                      <UserIcon size={12} className="text-zinc-500" />
+                      <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                        {activeChat.assignedTo}
+                      </span>
+                   </div>
+                </div>
               </div>
 
               <ScrollArea className="flex-1 p-4 sm:p-6">
@@ -292,6 +301,16 @@ export default function InboxPage() {
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Sentiment</span>
                       <span className="text-[10px] font-black text-white uppercase tracking-widest">{activeChat.sentiment}</span>
+                    </div>
+                    <Separator className="bg-white/5" />
+                    <div className="flex flex-col gap-2">
+                       <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Ownership</span>
+                       <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center">
+                             <UserIcon size={10} />
+                          </div>
+                          <span className="text-[10px] font-black text-white uppercase tracking-widest">{activeChat.assignedTo}</span>
+                       </div>
                     </div>
                   </div>
                 </div>

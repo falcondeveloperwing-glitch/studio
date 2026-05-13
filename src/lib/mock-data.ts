@@ -1,6 +1,6 @@
 /**
  * @fileOverview Standardized business-grade mock data for ReplyRush.
- * Focused on operational clarity and realistic sales scenarios.
+ * Focused on operational clarity, team collaboration, and realistic sales scenarios.
  */
 
 export const MOCK_CHATS = [
@@ -16,6 +16,7 @@ export const MOCK_CHATS = [
     sentiment: 'Positive',
     intent: 'High Purchase Intent',
     value: '$1,240.00',
+    assignedTo: 'Elena Rossi',
     messages: [
       { role: 'customer', content: 'Hey, I love the new high-performance collection! The textures look premium.', type: 'text', timestamp: new Date(Date.now() - 3600000).toISOString() },
       { role: 'ai', content: 'Thank you Marcus! We designed it specifically for high-intensity training. Are you looking for the Stealth Hoodies or the Compression series?', type: 'automated', timestamp: new Date(Date.now() - 3500000).toISOString() },
@@ -36,6 +37,7 @@ export const MOCK_CHATS = [
     sentiment: 'Neutral',
     intent: 'Information Seeking',
     value: '$499.00',
+    assignedTo: 'Unassigned',
     messages: [
       { role: 'customer', content: 'Hi! What is the final price for the designer set with shipping to Milan?', type: 'text', timestamp: new Date(Date.now() - 7200000).toISOString() },
       { role: 'ai', content: 'The Designer Set is $499. Shipping to Milan is $45 via DHL Express (3-5 days). Would you like me to calculate the total with tax?', type: 'automated', timestamp: new Date(Date.now() - 7100000).toISOString() },
@@ -53,6 +55,7 @@ export const MOCK_CHATS = [
     sentiment: 'Frustrated',
     intent: 'Support Request',
     value: '$0.00',
+    assignedTo: 'Marcus Sterling',
     messages: [
       { role: 'customer', content: 'I ordered 3 days ago and havent seen tracking. Order #8492.', type: 'text', timestamp: new Date(Date.now() - 14400000).toISOString() },
       { role: 'ai', content: 'I apologize for the delay, Jordan. I am escalating this to our logistics team for a manual review. You will receive an update shortly.', type: 'automated', timestamp: new Date(Date.now() - 14300000).toISOString() },
@@ -70,10 +73,10 @@ export const MOCK_STATS = {
 };
 
 export const MOCK_LIVE_FEED = [
-  { id: 'f1', title: 'Payment Confirmed', description: 'AI closed a $1,020 bulk order with Marcus Sterling.', timestamp: 'Just now', type: 'sale' },
-  { id: 'f2', title: 'New Inquiry', description: '@elenar_designs inquired about international shipping.', timestamp: '4m ago', type: 'lead' },
-  { id: 'f3', title: 'Cart Recovered', description: 'Sarah Jenkins completed checkout via automated follow-up.', timestamp: '12m ago', type: 'sale' },
-  { id: 'f4', title: 'Escalated', description: 'Manual review required for order #8492.', timestamp: '22m ago', type: 'info' }
+  { id: 'f1', title: 'Payment Confirmed', description: 'Elena (Agent) closed a $1,020 bulk order with Marcus Sterling.', timestamp: 'Just now', type: 'sale', operator: 'Elena Rossi' },
+  { id: 'f2', title: 'New Inquiry', description: 'System detected inquiry from @elenar_designs.', timestamp: '4m ago', type: 'lead', operator: 'Autopilot' },
+  { id: 'f3', title: 'Cart Recovered', description: 'Sarah Jenkins completed checkout via automated follow-up.', timestamp: '12m ago', type: 'sale', operator: 'Autopilot' },
+  { id: 'f4', title: 'Escalated', description: 'Marcus (Admin) moved #8492 to priority queue.', timestamp: '22m ago', type: 'info', operator: 'Marcus Sterling' }
 ];
 
 export const MOCK_WORKFLOWS = [

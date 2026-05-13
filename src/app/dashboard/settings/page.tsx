@@ -22,7 +22,8 @@ import {
   Loader2,
   Trash2,
   ArrowUpRight,
-  Monitor
+  Monitor,
+  Shield
 } from 'lucide-react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
@@ -252,8 +253,11 @@ export default function SettingsPage() {
 
             {activeTab === 'team' && (
               <div className="space-y-6">
-                <div className="flex justify-between items-center mb-4">
-                  <p className="text-sm text-zinc-500">Manage access and roles for your sales team.</p>
+                <div className="flex justify-between items-center mb-4 px-1">
+                  <div>
+                    <h3 className="text-lg font-bold text-white">Fleet Members</h3>
+                    <p className="text-sm text-zinc-500">Manage infrastructure access and role-based permissions.</p>
+                  </div>
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button className="bg-white text-black hover:bg-zinc-200 h-9 px-4 text-xs font-bold gap-2">
@@ -263,20 +267,21 @@ export default function SettingsPage() {
                     <DialogContent className="bg-zinc-950 border-white/10 text-white">
                       <form onSubmit={handleInvite}>
                         <DialogHeader>
-                          <DialogTitle>Invite Team Member</DialogTitle>
-                          <DialogDescription className="text-zinc-500">Send an invitation to join your ReplyRush fleet.</DialogDescription>
+                          <DialogTitle>Invite Fleet Member</DialogTitle>
+                          <DialogDescription className="text-zinc-500">Send an invitation to join your ReplyRush infrastructure.</DialogDescription>
                         </DialogHeader>
                         <div className="space-y-6 py-6">
                           <div className="space-y-3">
-                            <Label className="text-xs font-bold text-zinc-500 uppercase">Email Address</Label>
+                            <Label className="text-xs font-bold text-zinc-500 uppercase">Work Email</Label>
                             <Input className="bg-white/5 border-white/10 rounded-lg text-white" placeholder="name@company.com" required />
                           </div>
                           <div className="space-y-3">
-                            <Label className="text-xs font-bold text-zinc-500 uppercase">Role</Label>
+                            <Label className="text-xs font-bold text-zinc-500 uppercase">Assigned Role</Label>
                             <select className="w-full bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-white/20">
-                              <option value="admin">Admin (Full Access)</option>
-                              <option value="manager">Manager (Operations Only)</option>
-                              <option value="sales">Sales Associate (Inbox Only)</option>
+                              <option value="admin">Owner (Full Infrastructure Access)</option>
+                              <option value="manager">Sales Manager (Logic & Operations)</option>
+                              <option value="agent">Support Agent (Inbox & Training)</option>
+                              <option value="viewer">Viewer (Read-only Analytics)</option>
                             </select>
                           </div>
                         </div>
@@ -293,25 +298,31 @@ export default function SettingsPage() {
 
                 <div className="grid grid-cols-1 gap-4">
                   {[
-                    { name: 'Marcus Sterling', email: 'marcus@nike.com', role: 'Owner', avatar: '1' },
-                    { name: 'Elena Rossi', email: 'elena@nike.com', role: 'Sales Lead', avatar: '2' },
-                    { name: 'Jordan Vance', email: 'jordan@nike.com', role: 'Support', avatar: '3' }
+                    { name: 'Marcus Sterling', email: 'marcus@nike.com', role: 'Owner', title: 'Chief Executive', status: 'Online', avatar: 'admin' },
+                    { name: 'Elena Rossi', email: 'elena@nike.com', role: 'Agent', title: 'Support Lead', status: 'Active', avatar: 'agent' },
+                    { name: 'Jordan Vance', email: 'jordan@nike.com', role: 'Manager', title: 'Ops Director', status: 'Offline', avatar: 'manager' }
                   ].map((member) => (
                     <GlassCard key={member.email} className="border-white/5 p-5 bg-zinc-950/50 hover:bg-zinc-900/40 transition-colors">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden bg-zinc-900 grayscale">
+                          <div className="w-12 h-12 rounded-xl border border-white/10 overflow-hidden bg-zinc-900 grayscale relative">
                             <img src={`https://picsum.photos/seed/${member.avatar}/100/100`} alt="" className="w-full h-full object-cover" />
+                            {member.status === 'Online' && (
+                               <div className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-zinc-950 rounded-full" />
+                            )}
                           </div>
                           <div>
                             <p className="text-sm font-bold text-white">{member.name}</p>
-                            <p className="text-[11px] text-zinc-500 font-medium">{member.email}</p>
+                            <p className="text-[11px] text-zinc-500 font-medium">{member.title} • {member.email}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <Badge variant="outline" className="text-[9px] uppercase tracking-widest border-white/10 text-zinc-500 py-0.5 px-3">
-                            {member.role}
-                          </Badge>
+                          <div className="hidden sm:flex flex-col items-end">
+                              <Badge variant="outline" className="text-[9px] uppercase tracking-widest border-white/10 text-zinc-500 py-0.5 px-3">
+                                {member.role}
+                              </Badge>
+                              <span className="text-[9px] text-zinc-600 font-bold uppercase mt-1 tracking-tighter">{member.status}</span>
+                          </div>
                           <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-600 hover:text-white">
                             <MoreHorizontal size={14} />
                           </Button>
@@ -319,6 +330,15 @@ export default function SettingsPage() {
                       </div>
                     </GlassCard>
                   ))}
+                </div>
+
+                <div className="mt-8 p-6 rounded-xl border border-dashed border-white/10 bg-white/[0.01]">
+                   <div className="flex items-center gap-3 mb-2">
+                      <Shield size={16} className="text-zinc-500" />
+                      <h4 className="text-sm font-bold text-white">Permission Matrix</h4>
+                   </div>
+                   <p className="text-xs text-zinc-600 leading-relaxed mb-4">Admins can manage billing and security settings. Managers can update automation logic and view full analytics. Agents are restricted to inbox interactions and knowledge base updates.</p>
+                   <Button variant="link" className="text-[10px] text-primary p-0 h-auto font-black uppercase tracking-widest">View Detailed Role Specs</Button>
                 </div>
               </div>
             )}
