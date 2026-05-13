@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,7 +14,6 @@ import {
   ArrowLeft,
   Clock,
   History,
-  Tag,
   Loader2
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -35,7 +33,6 @@ export default function InboxPage() {
 
   const activeChat = chats.find(c => c.id === activeChatId);
 
-  // Human-Mimetic Typing Simulation
   useEffect(() => {
     if (isActive && currentStep === 'inbox') {
       const selectTimer = setTimeout(() => {
@@ -45,11 +42,8 @@ export default function InboxPage() {
       
       const typeTimer = setTimeout(() => {
         setSending(true);
-        
-        // Staggered typing rhythm
         const fullMessage = "Perfect, Marcus! I've dispatched the secure payment link to your DM. Your 15% bulk discount is applied. Let me know once complete!";
         
-        // We simulate the delay as if a human was validating or composing
         setTimeout(() => {
           setChats(prev => prev.map(c => {
             if (c.id === '1') {
@@ -70,7 +64,7 @@ export default function InboxPage() {
             title: "Inquiry Resolved",
             description: "AI successfully converted bulk inquiry to checkout.",
           });
-        }, 4500 + Math.random() * 2000); // Randomized "Cognitive Load"
+        }, 4500 + Math.random() * 2000);
       }, 7000);
 
       return () => {
@@ -119,8 +113,8 @@ export default function InboxPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-64px)] lg:h-[calc(100vh-100px)] flex flex-col bg-zinc-950 border border-white/5 rounded-2xl overflow-hidden max-w-7xl mx-auto flex-1">
-      <div className="h-14 border-b border-white/5 flex items-center justify-between px-6 shrink-0 z-20 bg-zinc-950">
+    <div className="h-[calc(100vh-140px)] flex flex-col bg-zinc-950 border border-white/5 rounded-2xl overflow-hidden w-full max-w-7xl mx-auto transition-all duration-300">
+      <div className="h-14 border-b border-white/5 flex items-center justify-between px-4 sm:px-6 shrink-0 bg-zinc-950/50 backdrop-blur-md z-20">
         <div className="flex items-center gap-4">
           <h1 className="text-sm font-bold tracking-tight">Inbox</h1>
           <Badge variant="outline" className="text-[9px] uppercase tracking-widest border-white/10 text-zinc-500 font-bold px-2 py-0">
@@ -128,7 +122,7 @@ export default function InboxPage() {
           </Badge>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="text-zinc-500 hover:text-white h-8 text-[11px] gap-2 font-bold uppercase tracking-widest">
+          <Button variant="ghost" size="sm" className="hidden sm:flex text-zinc-500 hover:text-white h-8 text-[11px] gap-2 font-bold uppercase tracking-widest">
             <Filter size={12} /> Filter
           </Button>
           <Button variant="ghost" size="icon" className="text-zinc-500 h-8 w-8 hover:bg-white/5">
@@ -138,6 +132,7 @@ export default function InboxPage() {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
+        {/* Chat List */}
         <div className={cn(
           "w-full lg:w-80 border-r border-white/5 flex flex-col shrink-0 transition-all bg-zinc-950",
           !showMobileList && "hidden lg:flex"
@@ -188,8 +183,9 @@ export default function InboxPage() {
           </ScrollArea>
         </div>
 
+        {/* Chat Window */}
         <div className={cn(
-          "flex-1 flex flex-col bg-[#09090b]",
+          "flex-1 flex flex-col bg-[#09090b] transition-all relative overflow-hidden",
           showMobileList && "hidden lg:flex"
         )}>
           {activeChat ? (
@@ -209,8 +205,8 @@ export default function InboxPage() {
                 </div>
               </div>
 
-              <ScrollArea className="flex-1 p-6">
-                <div className="space-y-4 max-w-2xl mx-auto">
+              <ScrollArea className="flex-1 p-4 sm:p-6">
+                <div className="space-y-4 max-w-2xl mx-auto w-full">
                   {activeChat.messages.map((msg, i) => {
                     const isSameSenderAsPrev = i > 0 && activeChat.messages[i-1].role === msg.role;
                     return (
@@ -219,9 +215,9 @@ export default function InboxPage() {
                         msg.role === 'customer' ? "items-start" : "items-end",
                         isSameSenderAsPrev ? "mt-1" : "mt-8"
                       )}>
-                        <div className="max-w-[85%] relative group">
+                        <div className="max-w-[90%] sm:max-w-[85%] relative group">
                           <div className={cn(
-                            "rounded-xl px-4 py-2.5 text-xs leading-relaxed transition-all duration-300 active:scale-[0.99]",
+                            "rounded-xl px-4 py-2.5 text-xs leading-relaxed transition-all duration-300 active:scale-[0.99] break-words",
                             msg.role === 'customer' 
                               ? "bg-zinc-900 text-zinc-400 border border-white/5" 
                               : "bg-white text-zinc-950 font-medium shadow-2xl"
@@ -278,6 +274,7 @@ export default function InboxPage() {
           )}
         </div>
 
+        {/* Intelligence Panel (Hidden on Mobile/Tablet) */}
         {activeChat && (
           <div className="hidden xl:flex w-72 border-l border-white/5 flex-col bg-zinc-950 shrink-0">
             <ScrollArea className="flex-1">

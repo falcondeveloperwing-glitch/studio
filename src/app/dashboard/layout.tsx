@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
 import { useLocalAuth } from '@/hooks/use-local-auth';
-import { Loader2, Menu, X, Zap, ShieldCheck } from 'lucide-react';
+import { Loader2, Menu, X, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { CommandPalette } from '@/components/dashboard/command-palette';
@@ -42,7 +42,7 @@ export default function DashboardLayout({
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-[#09090b] text-zinc-50 relative overflow-hidden">
+    <div className="flex min-h-screen bg-[#09090b] text-zinc-50 relative overflow-hidden w-full">
       <div className="fixed inset-0 bg-[#09090b] z-0" />
       
       <AnimatePresence>
@@ -72,43 +72,46 @@ export default function DashboardLayout({
         </Button>
       </div>
       
-      <main className="flex-1 h-screen overflow-y-auto relative z-10 flex flex-col custom-scrollbar">
-        {/* Global Dashboard Header */}
-        <header className="h-16 px-6 lg:px-10 flex items-center justify-between border-b border-white/5 bg-zinc-950/50 backdrop-blur-xl sticky top-0 z-50 shrink-0">
-          <div className="flex items-center gap-8 flex-1">
-            <div className="lg:hidden flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-white/10 flex items-center justify-center">
-                <Zap className="text-white fill-white" size={16} />
+      <main className="flex-1 h-screen overflow-y-auto relative z-10 flex flex-col w-full">
+        {/* Global Dashboard Header - Contained */}
+        <header className="h-16 border-b border-white/5 bg-zinc-950/50 backdrop-blur-xl sticky top-0 z-50 shrink-0 w-full">
+          <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-10 flex items-center justify-between">
+            <div className="flex items-center gap-4 flex-1">
+              <div className="lg:hidden flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-white/10 flex items-center justify-center">
+                  <Zap className="text-white fill-white" size={16} />
+                </div>
+              </div>
+              
+              <div className="hidden lg:block w-full max-w-md">
+                <CommandPalette />
               </div>
             </div>
-            
-            <div className="hidden lg:block w-full max-w-md">
-              <CommandPalette />
-            </div>
-          </div>
 
-          <div className="flex items-center gap-2">
-            <Link href="/dashboard/status" className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/5 transition-colors group">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">All Systems Operational</span>
-            </Link>
-            
-            <div className="h-4 w-px bg-white/10 mx-2 hidden sm:block" />
-            
-            <NotificationsPanel />
-            
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden bg-white/5 rounded-lg h-9 w-9 ml-2"
-            >
-              <Menu size={18} />
-            </Button>
+            <div className="flex items-center gap-2">
+              <Link href="/dashboard/status" className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/5 transition-colors group">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">Operational</span>
+              </Link>
+              
+              <div className="h-4 w-px bg-white/10 mx-2 hidden sm:block" />
+              
+              <NotificationsPanel />
+              
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => setIsSidebarOpen(true)}
+                className="lg:hidden bg-white/5 rounded-lg h-9 w-9 ml-2"
+              >
+                <Menu size={18} />
+              </Button>
+            </div>
           </div>
         </header>
 
-        <div className="max-w-7xl mx-auto w-full px-6 lg:px-10 py-8 lg:py-12 flex-1 flex flex-col">
+        {/* Main Content Area - Contained */}
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 flex-1 flex flex-col overflow-x-hidden">
           {children}
         </div>
       </main>
