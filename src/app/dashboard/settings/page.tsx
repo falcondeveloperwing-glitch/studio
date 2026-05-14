@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -6,7 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   User, 
   Instagram, 
-  Loader2
+  Loader2,
+  Users,
+  CreditCard,
+  Shield,
+  Plus,
+  Mail,
+  CheckCircle2,
+  ExternalLink
 } from 'lucide-react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
@@ -17,6 +23,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useUser, useFirestore, useDoc } from '@/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 import { logActivity } from '@/lib/activity-logger';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 export default function SettingsPage() {
   const { user } = useUser();
@@ -62,6 +70,8 @@ export default function SettingsPage() {
     }
   };
 
+  const isAdmin = profile?.role === 'admin';
+
   if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-zinc-700" /></div>;
 
   return (
@@ -75,10 +85,10 @@ export default function SettingsPage() {
 
       <Tabs defaultValue="general" className="w-full" value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="bg-zinc-900/50 border border-white/5 p-1 h-12 mb-10 w-full md:w-auto overflow-x-auto justify-start">
-          <TabsTrigger value="general" className="px-6">General</TabsTrigger>
-          <TabsTrigger value="automation" className="px-6">Automation</TabsTrigger>
-          <TabsTrigger value="team" className="px-6">Team</TabsTrigger>
-          <TabsTrigger value="billing" className="px-6">Billing</TabsTrigger>
+          <TabsTrigger value="general" className="px-6 text-xs font-bold uppercase tracking-widest">General</TabsTrigger>
+          <TabsTrigger value="automation" className="px-6 text-xs font-bold uppercase tracking-widest">Logic</TabsTrigger>
+          {isAdmin && <TabsTrigger value="team" className="px-6 text-xs font-bold uppercase tracking-widest">Team</TabsTrigger>}
+          {isAdmin && <TabsTrigger value="billing" className="px-6 text-xs font-bold uppercase tracking-widest">Billing</TabsTrigger>}
         </TabsList>
 
         <AnimatePresence mode="wait">
@@ -102,7 +112,7 @@ export default function SettingsPage() {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
-                      <Label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Brand Name</Label>
+                      <Label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-1">Brand Name</Label>
                       <Input 
                         className="bg-white/5 border-white/10 rounded-lg h-11 text-white" 
                         value={localProfile.brandName || ''} 
@@ -110,7 +120,7 @@ export default function SettingsPage() {
                       />
                     </div>
                     <div className="space-y-3">
-                      <Label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Contact Email</Label>
+                      <Label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-1">Contact Email</Label>
                       <Input 
                         className="bg-white/5 border-white/10 rounded-lg h-11 text-white" 
                         value={localProfile.email || ''} 
@@ -138,12 +148,120 @@ export default function SettingsPage() {
                       <div>
                         <h3 className="font-bold text-base text-white">Instagram Integration</h3>
                         <div className="flex items-center gap-2 mt-1">
-                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          <p className="text-xs text-zinc-500 font-medium">Connected as <span className="text-white">@brand_official</span></p>
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <p className="text-xs text-zinc-500 font-medium">Connected as <span className="text-white">@{profile?.brandName?.toLowerCase().replace(/\s+/g, '_') || 'operator'}</span></p>
                         </div>
                       </div>
                     </div>
-                    <Button variant="outline" className="border-white/10 bg-white/5 h-10 rounded-lg px-6 text-xs font-bold text-white">Manage Connection</Button>
+                    <Button variant="outline" className="border-white/10 bg-white/5 h-10 rounded-lg px-6 text-xs font-bold text-white">Sync Workspace</Button>
+                  </div>
+                </GlassCard>
+              </div>
+            )}
+
+            {activeTab === 'team' && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500">Fleet Members</h3>
+                  <Button className="h-9 bg-white text-black hover:bg-zinc-200 font-bold text-xs px-4 rounded-lg">
+                    <Plus size={14} className="mr-2" /> Invite Member
+                  </Button>
+                </div>
+                <GlassCard className="border-white/5 bg-zinc-950/50 p-0 overflow-hidden">
+                  <div className="divide-y divide-white/[0.05]">
+                    {[
+                      { name: profile?.brandName || 'Admin', role: 'Owner', status: 'Online', email: user?.email },
+                      { name: 'Elena Rossi', role: 'Agent', status: 'Online', email: 'elena@replyrush.ai' },
+                      { name: 'Jordan Vance', role: 'Manager', status: 'Offline', email: 'jordan@replyrush.ai' }
+                    ].map((member, i) => (
+                      <div key={i} className="p-6 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-full bg-zinc-900 border border-white/10 overflow-hidden">
+                            <img src={`https://picsum.photos/seed/${member.name}/100/100`} className="w-full h-full object-cover grayscale" alt="" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-white">{member.name}</p>
+                            <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest">{member.email}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-6">
+                          <div className="text-right">
+                            <Badge variant="outline" className="border-white/5 bg-white/[0.02] text-[9px] font-black uppercase tracking-widest text-zinc-400">
+                              {member.role}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className={`w-1.5 h-1.5 rounded-full ${member.status === 'Online' ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-800'}`} />
+                            <span className="text-[9px] font-black uppercase tracking-widest text-zinc-600">{member.status}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </GlassCard>
+              </div>
+            )}
+
+            {activeTab === 'billing' && (
+              <div className="space-y-6">
+                <GlassCard className="border-white/5 bg-zinc-950/50 p-8">
+                  <div className="flex items-center justify-between mb-8">
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-1">Growth Infrastructure</h3>
+                      <p className="text-xs text-zinc-500">Currently on the <span className="text-white font-bold">Growth Monthly</span> plan.</p>
+                    </div>
+                    <Badge className="bg-emerald-500/10 text-emerald-500 border-none font-black text-[10px] tracking-widest px-3 py-1">ACTIVE</Badge>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    {[
+                      { label: 'Conversations', value: '429 / 5,000' },
+                      { label: 'AI Tokens', value: '1.2M / 10M' },
+                      { label: 'Team Seats', value: '3 / 5' }
+                    ].map((usage, i) => (
+                      <div key={i} className="p-4 rounded-xl border border-white/5 bg-white/[0.01]">
+                        <p className="text-[9px] font-black text-zinc-600 uppercase tracking-[0.2em] mb-2">{usage.label}</p>
+                        <p className="text-lg font-bold text-white">{usage.value}</p>
+                        <div className="mt-3 h-1 w-full bg-zinc-900 rounded-full overflow-hidden">
+                          <div className="h-full bg-zinc-700 w-1/3 rounded-full" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Separator className="bg-white/5 mb-8" />
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                        <CreditCard size={20} className="text-zinc-500" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-white">Visa ending in 4242</p>
+                        <p className="text-xs text-zinc-500">Expires 12/2026</p>
+                      </div>
+                    </div>
+                    <Button variant="outline" className="h-10 border-white/10 bg-white/5 text-xs font-bold text-white rounded-lg px-6">Manage Billing</Button>
+                  </div>
+                </GlassCard>
+
+                <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-600 uppercase tracking-widest ml-1 mb-2">
+                  <ExternalLink size={12} /> Billing History
+                </div>
+                <GlassCard className="border-white/5 bg-zinc-950/50 p-0 overflow-hidden">
+                  <div className="divide-y divide-white/[0.05]">
+                    {[
+                      { date: 'Aug 01, 2025', amount: '$99.00', id: 'INV-84920' },
+                      { date: 'Jul 01, 2025', amount: '$99.00', id: 'INV-83211' }
+                    ].map((inv, i) => (
+                      <div key={i} className="p-4 flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-8">
+                          <p className="font-bold text-white">{inv.date}</p>
+                          <p className="text-zinc-600 font-medium">{inv.id}</p>
+                        </div>
+                        <p className="font-bold text-white">{inv.amount}</p>
+                      </div>
+                    ))}
                   </div>
                 </GlassCard>
               </div>
