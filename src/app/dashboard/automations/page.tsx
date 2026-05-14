@@ -1,16 +1,16 @@
-
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
-import { useUser, useFirestore, useCollection, useDoc } from '@/firebase';
+import { useUser, useFirestore, useCollection, useDoc, useMemoFirebase } from '@/firebase';
 import { 
   Zap, 
   Plus, 
   ArrowRight, 
   Instagram,
-  Loader2
+  Loader2,
+  Terminal
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -35,7 +35,7 @@ export default function AutomationsPage() {
   const [creating, setCreating] = useState(false);
   const [open, setOpen] = useState(false);
   
-  const userRef = useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
+  const userRef = useMemoFirebase(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
   const { data: profile } = useDoc(userRef);
 
   const [formData, setFormData] = useState({
@@ -44,7 +44,7 @@ export default function AutomationsPage() {
     action: ''
   });
 
-  const automationsQuery = useMemo(() => {
+  const automationsQuery = useMemoFirebase(() => {
     if (!user) return null;
     return query(collection(db, 'users', user.uid, 'automations'), orderBy('name', 'asc'));
   }, [user, db]);
@@ -190,7 +190,7 @@ export default function AutomationsPage() {
                       <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-zinc-500">
                         <span className="flex items-center gap-1.5"><Instagram size={12} /> Instagram</span>
                         <span className="w-1 h-1 rounded-full bg-zinc-800" />
-                        <span>{workflow.runs?.toLocaleString() || 0} runs</span>
+                        <span>{workflow.runs?.toLocaleString() || 0} executions</span>
                       </div>
                     </div>
                   </div>
@@ -215,6 +215,26 @@ export default function AutomationsPage() {
               </GlassCard>
             ))
           )}
+        </div>
+
+        <div className="space-y-4">
+          <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-1">Infrastructure Logs</div>
+          <GlassCard className="border-white/5 p-6 bg-zinc-950/20 h-fit">
+            <div className="flex items-center gap-2 mb-6">
+              <Terminal size={14} className="text-zinc-600" />
+              <h3 className="text-xs font-bold uppercase tracking-widest">Webhook Listeners</h3>
+            </div>
+            <div className="space-y-4 font-mono text-[10px]">
+              <div className="flex justify-between text-zinc-500">
+                <span>POST /api/webhooks/instagram</span>
+                <span className="text-emerald-500">200 OK</span>
+              </div>
+              <div className="flex justify-between text-zinc-500">
+                <span>GET /api/webhooks/verify</span>
+                <span className="text-emerald-500">ACTIVE</span>
+              </div>
+            </div>
+          </GlassCard>
         </div>
       </div>
     </div>

@@ -1,33 +1,31 @@
-
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Query,
   onSnapshot,
   QuerySnapshot,
   DocumentData,
+  FirestoreError,
 } from 'firebase/firestore';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
 
 export function useCollection<T = DocumentData>(query: Query<T> | null) {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  // Use a ref for the query to help stabilize the effect
-  const queryRef = useRef(query);
-  useEffect(() => {
-    queryRef.current = query;
-  }, [query]);
+  const [error, setError] = useState<FirestoreError | null>(null);
 
   useEffect(() => {
-    if (!queryRef.current) {
+    if (!query) {
       setLoading(false);
       return;
     }
 
+    setLoading(true);
+
     const unsubscribe = onSnapshot(
-      queryRef.current,
+      query,
       (snapshot: QuerySnapshot<T>) => {
         const items = snapshot.docs.map((doc) => ({
           ...doc.data(),
@@ -36,15 +34,23 @@ export function useCollection<T = DocumentData>(query: Query<T> | null) {
         setData(items);
         setLoading(false);
       },
-      (err) => {
-        console.error('Firestore Collection Error:', err);
-        setError(err);
+      async (serverError: FirestoreError) => {
+        // Create contextual error for the developer overlay
+        const permissionError = new FirestorePermissionError({
+          path: 'Collection Query',
+          operation: 'list',
+        } satisfies SecurityRuleContext);
+
+        setError(serverError);
         setLoading(false);
+        
+        // Emit for central error listener
+        errorEmitter.emit('permission-error', permissionError);
       }
     );
 
     return () => unsubscribe();
-  }, [query]); // Still depend on query, but internal ref handles stable check
+  }, [query]);
 
   return { data, loading, error };
 }

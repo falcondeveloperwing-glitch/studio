@@ -4,6 +4,7 @@ import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
 import { firebaseConfig } from './config';
+import { useMemo } from 'react';
 
 export function initializeFirebase(): {
   app: FirebaseApp;
@@ -15,6 +16,14 @@ export function initializeFirebase(): {
   const auth = getAuth(app);
 
   return { app, db, auth };
+}
+
+/**
+ * useMemoFirebase
+ * Custom hook to stabilize Firebase references/queries to prevent infinite render loops.
+ */
+export function useMemoFirebase<T>(factory: () => T, deps: any[]): T {
+  return useMemo(factory, deps);
 }
 
 export * from './provider';

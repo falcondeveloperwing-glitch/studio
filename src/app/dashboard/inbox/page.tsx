@@ -1,28 +1,22 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useDemo } from '@/components/demo/demo-context';
 import { 
   Search, 
   Send, 
   MoreVertical, 
-  Zap,
-  Filter,
   ArrowLeft,
-  Clock,
   History,
   Loader2,
-  User as UserIcon
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import { useUser, useFirestore, useCollection } from '@/firebase';
-import { collection, query, orderBy, doc, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { collection, query, orderBy, doc, addDoc, updateDoc, serverTimestamp, limit } from 'firebase/firestore';
 
 export default function InboxPage() {
   const { toast } = useToast();
@@ -33,18 +27,26 @@ export default function InboxPage() {
   const [inputText, setInputText] = useState('');
   const [sending, setSending] = useState(false);
 
-  // Real-time conversations fetch
-  const conversationsQuery = useMemo(() => {
+  // Paginated conversations fetch (Truth Sprint improvement)
+  const conversationsQuery = useMemoFirebase(() => {
     if (!user) return null;
-    return query(collection(db, 'users', user.uid, 'conversations'), orderBy('updatedAt', 'desc'));
+    return query(
+      collection(db, 'users', user.uid, 'conversations'), 
+      orderBy('updatedAt', 'desc'),
+      limit(25) // Sane MVP scaling limit
+    );
   }, [user, db]);
 
   const { data: conversations, loading: conversationsLoading } = useCollection(conversationsQuery);
 
   // Messages fetch for active chat
-  const messagesQuery = useMemo(() => {
+  const messagesQuery = useMemoFirebase(() => {
     if (!user || !activeChatId) return null;
-    return query(collection(db, 'users', user.uid, 'conversations', activeChatId, 'messages'), orderBy('timestamp', 'asc'));
+    return query(
+      collection(db, 'users', user.uid, 'conversations', activeChatId, 'messages'), 
+      orderBy('timestamp', 'asc'),
+      limit(50) // Paginated history
+    );
   }, [user, activeChatId, db]);
 
   const { data: messages, loading: messagesLoading } = useCollection(messagesQuery);
@@ -66,7 +68,7 @@ export default function InboxPage() {
 
     try {
       // Add message to subcollection
-      await addDoc(collection(db, 'users', user.uid, 'conversations', activeChatId, 'messages'), {
+      addDoc(collection(db, 'users', user.uid, 'conversations', activeChatId, 'messages'), {
         role: 'business',
         content: text,
         type: 'text',
@@ -74,7 +76,7 @@ export default function InboxPage() {
       });
 
       // Update last message in conversation
-      await updateDoc(doc(db, 'users', user.uid, 'conversations', activeChatId), {
+      updateDoc(doc(db, 'users', user.uid, 'conversations', activeChatId), {
         lastMessage: text,
         updatedAt: serverTimestamp(),
         unread: false
@@ -92,7 +94,7 @@ export default function InboxPage() {
         <div className="flex items-center gap-4">
           <h1 className="text-sm font-bold tracking-tight">Inbox</h1>
           <Badge variant="outline" className="text-[9px] uppercase tracking-widest border-white/10 text-zinc-500 font-bold px-2 py-0">
-            {conversations.length} Threads
+            {conversations.length} Active Threads
           </Badge>
         </div>
         <div className="flex items-center gap-2">
