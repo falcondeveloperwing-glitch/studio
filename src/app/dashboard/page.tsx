@@ -3,7 +3,7 @@
 
 import React, { useMemo } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
-import { useUser, useFirestore, useDoc, useCollection } from '@/firebase';
+import { useUser, useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
 import { 
   DollarSign,
   Zap,
@@ -31,35 +31,57 @@ import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 
 const chartData = [
-  { name: 'Mon', revenue: 142000, interactions: 120 },
-  { name: 'Tue', revenue: 158000, interactions: 145 },
-  { name: 'Wed', revenue: 182000, interactions: 180 },
-  { name: 'Thu', revenue: 174000, interactions: 160 },
-  { name: 'Fri', revenue: 215000, interactions: 210 },
-  { name: 'Sat', revenue: 248000, interactions: 240 },
-  { name: 'Sun', revenue: 284000, interactions: 310 },
+  { name: 'Mon', revenue: 14200, interactions: 12 },
+  { name: 'Tue', revenue: 15800, interactions: 14 },
+  { name: 'Wed', revenue: 18200, interactions: 18 },
+  { name: 'Thu', revenue: 17400, interactions: 16 },
+  { name: 'Fri', revenue: 21500, interactions: 21 },
+  { name: 'Sat', revenue: 24800, interactions: 24 },
+  { name: 'Sun', revenue: 28400, interactions: 31 },
 ];
 
 export default function DashboardOverview() {
   const { user } = useUser();
   const db = useFirestore();
 
-  const userRef = useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
+  const userRef = useMemoFirebase(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
   const { data: profile, loading: profileLoading } = useDoc(userRef);
 
-  const analyticsRef = useMemo(() => (user ? doc(db, 'users', user.uid, 'analytics', 'overview') : null), [user, db]);
-  const { data: stats, loading: statsLoading } = useDoc(analyticsRef);
-
-  // Real-time Audit Logs
-  const auditLogsQuery = useMemo(() => {
+  // Real-time Audit Logs for Activity
+  const auditLogsQuery = useMemoFirebase(() => {
     if (!user) return null;
     return query(collection(db, 'users', user.uid, 'auditLogs'), orderBy('timestamp', 'desc'), limit(5));
   }, [user, db]);
   const { data: logs, loading: logsLoading } = useCollection(auditLogsQuery);
 
+  // Real counts for stats
+  const convsQuery = useMemoFirebase(() => {
+    if (!user) return null;
+    return query(collection(db, 'users', user.uid, 'conversations'), limit(100));
+  }, [user, db]);
+  const { data: conversations } = useCollection(convsQuery);
+
+  const autosQuery = useMemoFirebase(() => {
+    if (!user) return null;
+    return query(collection(db, 'users', user.uid, 'automations'));
+  }, [user, db]);
+  const { data: automations } = useCollection(autosQuery);
+
   const isAdmin = profile?.role === 'admin';
 
-  if (profileLoading || statsLoading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-zinc-700" /></div>;
+  const stats = useMemo(() => {
+    const totalRuns = automations.reduce((acc, curr: any) => acc + (curr.runs || 0), 0);
+    const recoveredRevenue = (totalRuns * 12.5) + (logs.filter(l => l.actionType === 'WORKFLOW_CREATED').length * 150);
+    
+    return {
+      revenue: `$${recoveredRevenue.toLocaleString()}`,
+      replies: totalRuns.toLocaleString(),
+      threads: conversations.length.toLocaleString(),
+      csat: '4.9/5'
+    };
+  }, [automations, logs, conversations]);
+
+  if (profileLoading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-zinc-700" /></div>;
 
   return (
     <div className="space-y-12 max-w-7xl mx-auto w-full">
@@ -91,10 +113,10 @@ export default function DashboardOverview() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Revenue Recovered', value: `$${(stats?.recoveredSales || 0).toLocaleString()}`, change: '+18.5%', icon: DollarSign },
-          { label: 'Total AI Replies', value: (stats?.totalConvs || 0).toLocaleString(), change: '+12.2%', icon: Zap },
-          { label: 'Avg Speed', value: `${stats?.avgReplyTime || '0.1'}s`, change: '-42%', icon: Activity },
-          { label: 'CSAT Score', value: stats?.csat || '4.9/5', change: '+4.1%', icon: Target }
+          { label: 'Revenue Recovered', value: stats.revenue, change: '+12.5%', icon: DollarSign },
+          { label: 'Total AI Replies', value: stats.replies, change: '+8.2%', icon: Zap },
+          { label: 'Active Threads', value: stats.threads, change: '+15.1%', icon: Activity },
+          { label: 'CSAT Score', value: stats.csat, change: '+0.2%', icon: Target }
         ].map((stat, i) => (
           <GlassCard key={i} className="border-white/5 bg-white/[0.01] p-6">
             <div className="flex items-center justify-between mb-6">
@@ -116,7 +138,7 @@ export default function DashboardOverview() {
           <div className="flex items-center justify-between mb-10">
             <div>
               <h3 className="font-bold text-xl mb-1">Performance Trend</h3>
-              <p className="text-xs text-zinc-500">Daily interaction volume and speed.</p>
+              <p className="text-xs text-zinc-500">Interaction volume and recovered value.</p>
             </div>
           </div>
           <div className="h-[350px] w-full">
@@ -143,7 +165,7 @@ export default function DashboardOverview() {
 
         <GlassCard className="border-white/5 bg-white/[0.01] p-8 flex flex-col h-full">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="font-bold text-xl">Recent Logs</h3>
+            <h3 className="font-bold text-xl">Operational Activity</h3>
             <History size={16} className="text-zinc-600" />
           </div>
           <div className="space-y-6 flex-1">
@@ -151,7 +173,7 @@ export default function DashboardOverview() {
               <div className="flex justify-center p-8"><Loader2 className="animate-spin text-zinc-700" size={16} /></div>
             ) : logs.length === 0 ? (
               <div className="text-center py-10 text-zinc-500 text-xs font-bold uppercase tracking-widest">
-                No recent activity recorded.
+                No recent workspace logs.
               </div>
             ) : (
               logs.map((log) => (

@@ -10,7 +10,8 @@
         "brandName": { "type": "string" },
         "personality": { "type": "string", "enum": ["Professional", "Friendly", "Luxury"] },
         "status": { "type": "string", "enum": ["free", "pro", "elite"] },
-        "role": { "type": "string", "enum": ["admin", "manager", "agent", "viewer"] }
+        "role": { "type": "string", "enum": ["admin", "manager", "agent", "viewer"] },
+        "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["email", "brandName"]
     },
@@ -49,7 +50,8 @@
         "trigger": { "type": "string" },
         "action": { "type": "string" },
         "status": { "type": "string", "enum": ["Active", "Paused"] },
-        "runs": { "type": "number" }
+        "runs": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
       }
     },
     "AuditLog": {

@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useMemo } from 'react';
@@ -11,6 +12,7 @@ import {
   ArrowLeft,
   History,
   Loader2,
+  ChevronDown
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
@@ -26,16 +28,17 @@ export default function InboxPage() {
   const [showMobileList, setShowMobileList] = useState(true);
   const [inputText, setInputText] = useState('');
   const [sending, setSending] = useState(false);
+  const [limitCount, setLimitCount] = useState(25);
 
-  // Paginated conversations fetch (Truth Sprint improvement)
+  // Paginated conversations fetch
   const conversationsQuery = useMemoFirebase(() => {
     if (!user) return null;
     return query(
       collection(db, 'users', user.uid, 'conversations'), 
       orderBy('updatedAt', 'desc'),
-      limit(25) // Sane MVP scaling limit
+      limit(limitCount)
     );
-  }, [user, db]);
+  }, [user, db, limitCount]);
 
   const { data: conversations, loading: conversationsLoading } = useCollection(conversationsQuery);
 
@@ -45,7 +48,7 @@ export default function InboxPage() {
     return query(
       collection(db, 'users', user.uid, 'conversations', activeChatId, 'messages'), 
       orderBy('timestamp', 'asc'),
-      limit(50) // Paginated history
+      limit(50)
     );
   }, [user, activeChatId, db]);
 
@@ -67,7 +70,6 @@ export default function InboxPage() {
     setInputText('');
 
     try {
-      // Add message to subcollection
       addDoc(collection(db, 'users', user.uid, 'conversations', activeChatId, 'messages'), {
         role: 'business',
         content: text,
@@ -75,7 +77,6 @@ export default function InboxPage() {
         timestamp: new Date().toISOString()
       });
 
-      // Update last message in conversation
       updateDoc(doc(db, 'users', user.uid, 'conversations', activeChatId), {
         lastMessage: text,
         updatedAt: serverTimestamp(),
@@ -94,7 +95,7 @@ export default function InboxPage() {
         <div className="flex items-center gap-4">
           <h1 className="text-sm font-bold tracking-tight">Inbox</h1>
           <Badge variant="outline" className="text-[9px] uppercase tracking-widest border-white/10 text-zinc-500 font-bold px-2 py-0">
-            {conversations.length} Active Threads
+            {conversations.length} Threads Loaded
           </Badge>
         </div>
         <div className="flex items-center gap-2">
@@ -142,6 +143,14 @@ export default function InboxPage() {
                     </div>
                   </div>
                 ))}
+                {conversations.length >= limitCount && (
+                  <button 
+                    onClick={() => setLimitCount(prev => prev + 25)}
+                    className="w-full py-4 text-[10px] font-black uppercase tracking-widest text-zinc-600 hover:text-white transition-colors flex items-center justify-center gap-2"
+                  >
+                    Load More <ChevronDown size={12} />
+                  </button>
+                )}
               </div>
             </ScrollArea>
           )}
