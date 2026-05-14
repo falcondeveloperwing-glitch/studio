@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useDemo } from '@/components/demo/demo-context';
@@ -10,48 +11,55 @@ import {
   ArrowRight, 
   MessageSquare, 
   TrendingUp,
-  ChevronRight,
   ShieldCheck,
-  Clock,
   CheckCircle2,
   Target,
-  Play
+  Play,
+  Globe,
+  Users,
+  Database,
+  Search,
+  History
 } from 'lucide-react';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function LandingPage() {
   const { startDemo } = useDemo();
 
+  const heroImage = PlaceHolderImages.find(img => img.id === 'hero-dashboard');
+  const inboxImage = PlaceHolderImages.find(img => img.id === 'feature-inbox');
+  const automationImage = PlaceHolderImages.find(img => img.id === 'feature-automation');
+
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-white/10 font-body">
+    <div className="min-h-screen bg-[#020203] text-white selection:bg-white/10 font-body overflow-x-hidden">
       {/* Navigation */}
-      <nav className="border-b border-zinc-900 bg-black/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="container max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+      <nav className="border-b border-white/5 bg-black/50 backdrop-blur-xl sticky top-0 z-50">
+        <div className="container max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-zinc-950 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:border-white/20 shadow-2xl">
-              <Zap className="text-white fill-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" size={20} />
+            <div className="w-9 h-9 rounded-xl bg-zinc-950 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:border-white/20 shadow-2xl">
+              <Zap className="text-white fill-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]" size={18} />
             </div>
-            <span className="font-headline text-xl font-bold tracking-tight text-white uppercase">
+            <span className="font-headline text-lg font-bold tracking-tight text-white uppercase">
               Reply<span className="text-zinc-500">Rush</span>
             </span>
           </Link>
           
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-500">
-            <Link href="/dashboard" className="hover:text-white transition-colors">Platform</Link>
+          <div className="hidden md:flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">
+            <Link href="#platform" className="hover:text-white transition-colors">Platform</Link>
             <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
-            <Link href="/login" className="hover:text-white transition-colors">Sign In</Link>
+            <Link href="/dashboard/status" className="flex items-center gap-2 hover:text-white transition-colors">
+              <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+              Status
+            </Link>
           </div>
 
           <div className="flex items-center gap-3">
-            <Button 
-              onClick={startDemo}
-              variant="outline" 
-              className="hidden sm:flex border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-lg px-4 h-10 text-xs font-bold gap-2"
-            >
-              <Play size={14} fill="currentColor" /> Start Demo
-            </Button>
+            <Link href="/login" className="hidden sm:block text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-white mr-4 transition-colors">
+              Sign In
+            </Link>
             <Link href="/signup">
-              <Button className="bg-white text-black hover:bg-zinc-200 rounded-lg px-6 h-10 text-xs font-bold">
-                Start Free Trial
+              <Button className="bg-white text-black hover:bg-zinc-200 rounded-lg px-6 h-10 text-[11px] font-black uppercase tracking-widest shadow-xl">
+                Deploy Now
               </Button>
             </Link>
           </div>
@@ -59,84 +67,326 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="container max-w-6xl mx-auto px-6 pt-24 pb-32 text-center">
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="max-w-3xl mx-auto"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-900 bg-zinc-900/40 text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-8">
-            Infrastructure for Instagram Commerce
-          </div>
-          <h1 className="text-5xl md:text-7xl font-bold font-headline tracking-tight mb-8">
-            Automate your Instagram sales.
-          </h1>
-          <p className="text-lg text-zinc-500 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
-            Respond to customer inquiries instantly, recover abandoned leads, and increase your conversion rate with automated sales logic.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/signup">
-              <Button size="lg" className="bg-white text-black hover:bg-zinc-200 rounded-lg px-8 h-12 text-sm font-bold group">
-                Start Free Trial <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={16} />
+      <section className="relative pt-24 pb-32 overflow-hidden">
+        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[100%] h-[100%] bg-white/[0.02] blur-[150px] rounded-full pointer-events-none" />
+        
+        <div className="container max-w-7xl mx-auto px-6 text-center relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-4xl mx-auto"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/5 bg-white/[0.03] text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] mb-10">
+              <Globe size={12} className="text-zinc-600" /> Infrastructure for Instagram Commerce
+            </div>
+            <h1 className="text-6xl md:text-8xl font-bold font-headline tracking-tighter mb-10 leading-[0.9]">
+              Turn Instagram DMs into a <span className="text-zinc-600">revenue engine.</span>
+            </h1>
+            <p className="text-xl text-zinc-500 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+              The operating system for high-volume Instagram commerce. Recover abandoned leads, qualify inquiries, and close sales automatically.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-24">
+              <Link href="/signup">
+                <Button size="lg" className="bg-white text-black hover:bg-zinc-200 rounded-xl px-10 h-14 text-sm font-bold group shadow-2xl">
+                  Start Free Trial <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={16} />
+                </Button>
+              </Link>
+              <Button 
+                onClick={startDemo}
+                variant="outline" 
+                size="lg" 
+                className="border-white/5 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl px-10 h-14 text-sm font-bold gap-3 transition-all"
+              >
+                <Play size={16} fill="currentColor" /> Watch Live Demo
               </Button>
-            </Link>
-            <Button 
-              onClick={startDemo}
-              variant="outline" 
-              size="lg" 
-              className="border-zinc-800 text-zinc-400 hover:text-white rounded-lg px-8 h-12 text-sm font-medium bg-zinc-900/20 gap-2"
-            >
-              <Play size={16} fill="currentColor" /> Watch Cinematic Demo
-            </Button>
-          </div>
-        </motion.div>
+            </div>
+
+            {/* Main Product Showcase */}
+            <div className="relative group mx-auto max-w-6xl">
+              <div className="absolute -inset-1 bg-gradient-to-b from-white/10 to-transparent rounded-[2.5rem] blur-2xl opacity-20 group-hover:opacity-30 transition-opacity" />
+              <div className="relative rounded-[2rem] border border-white/10 bg-zinc-950 overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)]">
+                {heroImage && (
+                  <Image 
+                    src={heroImage.imageUrl} 
+                    alt={heroImage.description}
+                    width={1200}
+                    height={800}
+                    data-ai-hint={heroImage.imageHint}
+                    className="w-full h-auto"
+                  />
+                )}
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
-      {/* Value Section */}
-      <section className="py-24 border-y border-zinc-900 bg-zinc-950">
-        <div className="container max-w-6xl mx-auto px-6">
-          <div className="max-w-3xl mx-auto text-center mb-20">
+      {/* Trust Section */}
+      <section className="py-20 border-y border-white/5 bg-[#050507]">
+        <div className="container max-w-7xl mx-auto px-6">
+          <p className="text-center text-[10px] font-black uppercase tracking-[0.4em] text-zinc-600 mb-12">
+            Trusted by modern commerce teams
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-30 grayscale transition-all hover:grayscale-0 hover:opacity-100">
+            {['NIKE', 'SHOPIFY', 'ZARA', 'H&M', 'SUPREME'].map((brand) => (
+              <span key={brand} className="text-2xl font-black font-headline tracking-tighter text-white">{brand}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Capabilities Section */}
+      <section id="platform" className="py-32 bg-black">
+        <div className="container max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-24 items-center mb-40">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-8">
+                <MessageSquare size={24} />
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold font-headline tracking-tight mb-8">
+                Intelligent Inbox.<br/>
+                <span className="text-zinc-600">Zero response latency.</span>
+              </h2>
+              <p className="text-lg text-zinc-500 mb-10 leading-relaxed font-medium">
+                Our DM infrastructure analyzes customer intent in real-time. Respond to sizing, pricing, and availability queries in under 2 seconds.
+              </p>
+              <ul className="space-y-4 mb-10">
+                {[
+                  'Real-time intent detection',
+                  'Automated response suggestions',
+                  'Unified team collaboration',
+                  'Sentiment analysis pipeline'
+                ].map((feature) => (
+                  <li key={feature} className="flex items-center gap-3 text-sm font-bold text-zinc-300">
+                    <CheckCircle2 size={16} className="text-white" /> {feature}
+                  </li>
+                ))}
+              </ul>
+              <Button variant="link" className="text-white font-bold p-0 group">
+                Explore Inbox Infrastructure <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </div>
+            <div className="rounded-3xl border border-white/10 overflow-hidden shadow-2xl bg-zinc-950">
+              {inboxImage && (
+                <Image 
+                  src={inboxImage.imageUrl} 
+                  alt={inboxImage.description}
+                  width={800}
+                  height={600}
+                  data-ai-hint={inboxImage.imageHint}
+                  className="w-full h-auto"
+                />
+              )}
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-24 items-center mb-40">
+            <div className="order-2 lg:order-1 rounded-3xl border border-white/10 overflow-hidden shadow-2xl bg-zinc-950">
+              {automationImage && (
+                <Image 
+                  src={automationImage.imageUrl} 
+                  alt={automationImage.description}
+                  width={800}
+                  height={600}
+                  data-ai-hint={automationImage.imageHint}
+                  className="w-full h-auto"
+                />
+              )}
+            </div>
+            <div className="order-1 lg:order-2">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white mb-8">
+                <Zap size={24} />
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold font-headline tracking-tight mb-8">
+                Visual Automations.<br/>
+                <span className="text-zinc-600">Revenue-driven logic.</span>
+              </h2>
+              <p className="text-lg text-zinc-500 mb-10 leading-relaxed font-medium">
+                Build sophisticated sales workflows without code. Trigger automated follow-ups, apply loyalty discounts, and recover abandoned leads.
+              </p>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Response Speed</p>
+                  <p className="text-2xl font-bold">0.08s</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Recovery Rate</p>
+                  <p className="text-2xl font-bold">31.4%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Section */}
+      <section className="py-32 border-t border-white/5 bg-[#050507]">
+        <div className="container max-w-7xl mx-auto px-6">
+          <div className="max-w-3xl mx-auto text-center mb-24">
             <h2 className="text-3xl md:text-4xl font-bold font-headline tracking-tight mb-6">
-              How ReplyRush recovers lost Instagram sales
+              The Conversion Pipeline
             </h2>
             <p className="text-zinc-500 text-lg font-medium">
-              Businesses lose up to 40% of customers due to slow response times. We bridge the gap between inquiry and checkout.
+              From incoming DM to revenue. A fully automated infrastructure.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-4 gap-8">
             {[
-              { title: "Instant Conversion", desc: "Respond to inquiries in under 1 second to capture high-intent purchase interest.", icon: Clock },
-              { title: "Lead Recovery", desc: "Automatically follow up with customers who didn't complete their initial inquiry.", icon: Target },
-              { title: "Sales Automation", desc: "Instantly provide pricing, sizing, and availability for your entire inventory.", icon: CheckCircle2 },
-              { title: "24/7 Availability", desc: "Qualify leads and close sales even when your manual support team is offline.", icon: TrendingUp }
-            ].map((item, i) => (
-              <div key={i} className="p-6 rounded-xl border border-zinc-900 bg-black hover:border-zinc-800 transition-colors group">
-                <div className="w-9 h-9 rounded-lg bg-zinc-900 flex items-center justify-center mb-6 text-zinc-500 group-hover:text-white transition-colors">
-                  <item.icon size={18} />
+              { title: "Ingestion", desc: "Real-time DM ingestion from Meta APIs.", icon: Globe },
+              { title: "Analysis", desc: "Neural analysis of buying intent.", icon: Search },
+              { title: "Execution", desc: "Workflow-driven response logic.", icon: Zap },
+              { title: "Conversion", desc: "Checkout link & sales closure.", icon: TrendingUp }
+            ].map((step, i) => (
+              <div key={i} className="relative group">
+                <div className="p-8 rounded-2xl border border-white/5 bg-zinc-950 hover:border-white/10 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-zinc-500 mb-6 group-hover:text-white transition-colors">
+                    <step.icon size={20} />
+                  </div>
+                  <h3 className="text-base font-bold mb-3">{step.title}</h3>
+                  <p className="text-zinc-500 text-xs leading-relaxed font-medium">{step.desc}</p>
                 </div>
-                <h3 className="text-base font-bold mb-2">{item.title}</h3>
-                <p className="text-zinc-500 text-xs leading-relaxed font-medium">{item.desc}</p>
+                {i < 3 && (
+                  <ArrowRight className="hidden md:block absolute top-1/2 -right-4 -translate-y-1/2 text-zinc-800 z-10" size={16} />
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* Enterprise Infrastructure Section */}
+      <section className="py-32 bg-black">
+        <div className="container max-w-7xl mx-auto px-6">
+          <div className="rounded-3xl border border-white/5 bg-zinc-950/50 p-12 md:p-20 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-1/2 h-full bg-white/[0.01] blur-3xl rounded-full" />
+            <div className="grid lg:grid-cols-2 gap-16 relative z-10">
+              <div>
+                <h2 className="text-4xl font-bold font-headline tracking-tight mb-8">Enterprise Infrastructure</h2>
+                <p className="text-zinc-500 mb-12 font-medium">Designed for scaling commerce teams who demand reliability and absolute data control.</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-white font-bold text-sm">
+                      <ShieldCheck size={18} /> Audit Logs
+                    </div>
+                    <p className="text-xs text-zinc-600 font-medium">Full non-repudiable logs of all operator and AI actions.</p>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-white font-bold text-sm">
+                      <Users size={18} /> Role-Based Access
+                    </div>
+                    <p className="text-xs text-zinc-600 font-medium">Define granular permissions for agents, managers, and admins.</p>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-white font-bold text-sm">
+                      <History size={18} /> System Health
+                    </div>
+                    <p className="text-xs text-zinc-600 font-medium">Real-time infrastructure monitoring and global status.</p>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-white font-bold text-sm">
+                      <Database size={18} /> Data Isolation
+                    </div>
+                    <p className="text-xs text-zinc-600 font-medium">Isolated workspace environments with end-to-end security.</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center justify-center">
+                <div className="w-full max-w-md aspect-square rounded-full border border-white/5 flex items-center justify-center relative">
+                  <div className="absolute inset-0 border border-white/5 rounded-full scale-[0.7]" />
+                  <div className="absolute inset-0 border border-white/5 rounded-full scale-[0.4]" />
+                  <Zap className="text-white opacity-20" size={120} />
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-zinc-950 px-4 py-2 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-widest">Global Sync</div>
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 bg-zinc-950 px-4 py-2 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-widest text-emerald-500">Active</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="py-40 relative">
+        <div className="absolute inset-0 bg-white/[0.01]" />
+        <div className="container max-w-7xl mx-auto px-6 text-center relative z-10">
+          <h2 className="text-5xl md:text-7xl font-bold font-headline tracking-tighter mb-12 max-w-4xl mx-auto leading-[0.9]">
+            Turn Instagram conversations into <span className="text-zinc-600">revenue infrastructure.</span>
+          </h2>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/signup">
+              <Button size="lg" className="bg-white text-black hover:bg-zinc-200 rounded-xl px-12 h-16 text-base font-bold group shadow-2xl">
+                Start Free Trial <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+            <Button 
+              onClick={startDemo}
+              variant="outline" 
+              size="lg" 
+              className="border-white/5 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl px-12 h-16 text-base font-bold transition-all"
+            >
+              Watch Live Demo
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="py-20 bg-black">
-        <div className="container max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-3">
-            <Zap size={14} className="text-zinc-500" />
-            <span className="font-bold text-sm tracking-tight text-zinc-400">ReplyRush</span>
+      <footer className="py-24 bg-[#050507] border-t border-white/5">
+        <div className="container max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 mb-20">
+            <div className="col-span-2">
+              <Link href="/" className="flex items-center gap-3 mb-8">
+                <Zap className="text-white fill-white" size={18} />
+                <span className="font-headline text-lg font-bold tracking-tight uppercase">ReplyRush</span>
+              </Link>
+              <p className="text-sm text-zinc-600 max-w-xs leading-relaxed font-medium">
+                Enterprise infrastructure for high-performance Instagram commerce. Every inquiry is a checkout opportunity.
+              </p>
+            </div>
+            <div>
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-white mb-6">Platform</h4>
+              <ul className="space-y-4 text-xs font-bold text-zinc-600">
+                <li><Link href="#platform" className="hover:text-white transition-colors">Inbox</Link></li>
+                <li><Link href="#platform" className="hover:text-white transition-colors">Automations</Link></li>
+                <li><Link href="/dashboard/analytics" className="hover:text-white transition-colors">Analytics</Link></li>
+                <li><Link href="/dashboard/status" className="hover:text-white transition-colors">System Health</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-white mb-6">Support</h4>
+              <ul className="space-y-4 text-xs font-bold text-zinc-600">
+                <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Documentation</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Guides</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">API Reference</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-white mb-6">Legal</h4>
+              <ul className="space-y-4 text-xs font-bold text-zinc-600">
+                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
+                <li><Link href="/terms" className="hover:text-white transition-colors">Terms</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Security</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">SLA</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-white mb-6">Connect</h4>
+              <ul className="space-y-4 text-xs font-bold text-zinc-600">
+                <li><Link href="#" className="hover:text-white transition-colors">Twitter</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">LinkedIn</Link></li>
+                <li><Link href="#" className="hover:text-white transition-colors">Instagram</Link></li>
+              </ul>
+            </div>
           </div>
-          <div className="flex gap-10 text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
-            <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
-            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-            <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-10 border-t border-white/5">
+            <p className="text-[10px] text-zinc-800 font-black uppercase tracking-widest">© 2025 ReplyRush AI Infrastructure.</p>
+            <div className="flex gap-8 text-[10px] font-black text-zinc-800 uppercase tracking-widest">
+              <span>Cloud Status: Optimal</span>
+              <span>Region: Global</span>
+            </div>
           </div>
-          <p className="text-[10px] text-zinc-800 font-bold uppercase tracking-widest">© 2025 ReplyRush</p>
         </div>
       </footer>
     </div>
