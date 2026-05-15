@@ -2,21 +2,21 @@
   "placeholderImages": [
     {
       "id": "hero-dashboard",
-      "description": "High-fidelity AI Dashboard with real-time neural logs",
-      "imageUrl": "https://picsum.photos/seed/replyrush_hero/1200/800",
-      "imageHint": "SaaS analytics"
+      "description": "Premium Enterprise Commerce Infrastructure Dashboard showing high-volume transaction metrics",
+      "imageUrl": "https://picsum.photos/seed/replyrush_enterprise_core/1200/800",
+      "imageHint": "enterprise analytics"
     },
     {
       "id": "feature-automation",
-      "description": "Premium visual node automation builder",
-      "imageUrl": "https://picsum.photos/seed/replyrush_nodes/800/600",
-      "imageHint": "node workflow"
+      "description": "Sophisticated visual sales automation workflow with logic nodes",
+      "imageUrl": "https://picsum.photos/seed/replyrush_automation_node/800/600",
+      "imageHint": "workflow node"
     },
     {
       "id": "feature-inbox",
-      "description": "Real-time AI DM inbox ecosystem",
-      "imageUrl": "https://picsum.photos/seed/replyrush_chat/800/600",
-      "imageHint": "chat dashboard"
+      "description": "High-performance intelligent DM inbox ecosystem for commerce teams",
+      "imageUrl": "https://picsum.photos/seed/replyrush_smart_inbox/800/600",
+      "imageHint": "inbox interface"
     },
     {
       "id": "user-avatar-1",
