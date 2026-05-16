@@ -10,13 +10,31 @@ import {
 } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError, type SecurityRuleContext } from '@/firebase/errors';
+import { useDemo } from '@/components/demo/demo-context';
+import { MOCK_CHATS, MOCK_WORKFLOWS, MOCK_LIVE_FEED } from '@/lib/mock-data';
 
 export function useCollection<T = DocumentData>(query: Query<T> | null) {
+  const { isDemoMode } = useDemo();
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<FirestoreError | null>(null);
 
   useEffect(() => {
+    if (isDemoMode) {
+      // Deterministic demo data fallback
+      let mockData: any[] = [];
+      const queryPath = (query as any)?._query?.path?.segments?.join('/') || '';
+
+      if (queryPath.includes('conversations')) mockData = MOCK_CHATS;
+      else if (queryPath.includes('automations')) mockData = MOCK_WORKFLOWS;
+      else if (queryPath.includes('auditLogs')) mockData = MOCK_LIVE_FEED;
+      else if (queryPath.includes('notifications')) mockData = MOCK_LIVE_FEED.map(f => ({ ...f, unread: true, timestamp: new Date().toISOString() }));
+
+      setData(mockData as T[]);
+      setLoading(false);
+      return;
+    }
+
     if (!query) {
       setLoading(false);
       return;
@@ -35,7 +53,6 @@ export function useCollection<T = DocumentData>(query: Query<T> | null) {
         setLoading(false);
       },
       async (serverError: FirestoreError) => {
-        // Create contextual error for the developer overlay
         const permissionError = new FirestorePermissionError({
           path: 'Collection Query',
           operation: 'list',
@@ -43,14 +60,12 @@ export function useCollection<T = DocumentData>(query: Query<T> | null) {
 
         setError(serverError);
         setLoading(false);
-        
-        // Emit for central error listener
         errorEmitter.emit('permission-error', permissionError);
       }
     );
 
     return () => unsubscribe();
-  }, [query]);
+  }, [query, isDemoMode]);
 
   return { data, loading, error };
 }

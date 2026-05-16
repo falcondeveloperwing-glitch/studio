@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
@@ -8,8 +7,10 @@ import {
   DocumentSnapshot,
   DocumentData,
 } from 'firebase/firestore';
+import { useDemo } from '@/components/demo/demo-context';
 
 export function useDoc<T = DocumentData>(ref: DocumentReference<T> | null) {
+  const { isDemoMode, demoUser } = useDemo();
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -20,6 +21,21 @@ export function useDoc<T = DocumentData>(ref: DocumentReference<T> | null) {
   }, [ref]);
 
   useEffect(() => {
+    if (isDemoMode) {
+      if (demoUser && ref?.path?.includes(demoUser.uid)) {
+        setData({
+          brandName: 'Demo Brand',
+          personality: 'Professional',
+          status: 'elite',
+          role: demoUser.role,
+          email: demoUser.email,
+          ...demoUser
+        } as T);
+      }
+      setLoading(false);
+      return;
+    }
+
     if (!docRef.current) {
       setLoading(false);
       return;
@@ -39,7 +55,7 @@ export function useDoc<T = DocumentData>(ref: DocumentReference<T> | null) {
     );
 
     return () => unsubscribe();
-  }, [ref]);
+  }, [ref, isDemoMode, demoUser]);
 
   return { data, loading, error };
 }

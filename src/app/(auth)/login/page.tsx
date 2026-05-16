@@ -7,32 +7,38 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { GlassCard } from '@/components/ui/glass-card';
-import { Zap, ArrowRight, Loader2 } from 'lucide-react';
+import { Zap, ArrowRight, Loader2, ShieldAlert } from 'lucide-react';
 import { useAuth, useFirestore } from '@/firebase';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
+import { useDemo } from '@/components/demo/demo-context';
 
 export default function LoginPage() {
   const auth = useAuth();
   const db = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
+  const { switchDemoRole } = useDemo();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const ensureUserProfile = async (userId: string, userEmail: string | null) => {
-    const userDoc = await getDoc(doc(db, 'users', userId));
-    if (!userDoc.exists()) {
-      await setDoc(doc(db, 'users', userId), {
-        email: userEmail,
-        brandName: 'New Brand',
-        personality: 'Professional',
-        status: 'free',
-        role: 'admin',
-        createdAt: new Date().toISOString()
-      });
+    try {
+      const userDoc = await getDoc(doc(db, 'users', userId));
+      if (!userDoc.exists()) {
+        await setDoc(doc(db, 'users', userId), {
+          email: userEmail,
+          brandName: 'New Brand',
+          personality: 'Professional',
+          status: 'free',
+          role: 'admin',
+          createdAt: new Date().toISOString()
+        });
+      }
+    } catch (e) {
+      console.warn("Profile creation failed, likely in restricted environment.");
     }
   };
 
@@ -72,6 +78,12 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDemoAccess = (role: 'admin' | 'manager' | 'agent') => {
+    switchDemoRole(role);
+    toast({ title: "Demo Mode Active", description: `Accessing as ${role.toUpperCase()}` });
+    router.push('/dashboard');
   };
 
   return (
@@ -146,16 +158,35 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-8 flex flex-col items-center gap-4">
-            <p className="text-[10px] uppercase font-black text-zinc-600 tracking-[0.4em]">Quick Demo Access</p>
-            <div className="flex gap-2">
+          <div className="mt-12 p-6 rounded-2xl bg-white/[0.02] border border-white/5">
+            <div className="flex items-center gap-3 mb-6 text-zinc-500">
+              <ShieldAlert size={14} />
+              <p className="text-[10px] uppercase font-black tracking-[0.3em]">Instant Demo Access</p>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
               <Button 
                 variant="outline" 
-                className="h-9 px-4 border-white/5 bg-white/[0.02] hover:bg-white/10 rounded-lg font-black text-[9px] uppercase tracking-widest text-white"
-                onClick={() => { setEmail('demo@replyrush.ai'); setPassword('ReplyRush123'); }}
+                className="h-10 border-white/5 bg-white/[0.02] hover:bg-white/10 rounded-lg font-black text-[9px] uppercase tracking-widest text-white"
+                onClick={() => handleDemoAccess('admin')}
                 type="button"
               >
-                Demo Acc
+                Admin
+              </Button>
+              <Button 
+                variant="outline" 
+                className="h-10 border-white/5 bg-white/[0.02] hover:bg-white/10 rounded-lg font-black text-[9px] uppercase tracking-widest text-white"
+                onClick={() => handleDemoAccess('manager')}
+                type="button"
+              >
+                Manager
+              </Button>
+              <Button 
+                variant="outline" 
+                className="h-10 border-white/5 bg-white/[0.02] hover:bg-white/10 rounded-lg font-black text-[9px] uppercase tracking-widest text-white"
+                onClick={() => handleDemoAccess('agent')}
+                type="button"
+              >
+                Agent
               </Button>
             </div>
           </div>

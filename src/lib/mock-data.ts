@@ -73,10 +73,10 @@ export const MOCK_STATS = {
 };
 
 export const MOCK_LIVE_FEED = [
-  { id: 'f1', title: 'Payment Confirmed', description: 'Elena (Agent) closed a $1,020 bulk order with Marcus Sterling.', timestamp: 'Just now', type: 'sale', operator: 'Elena Rossi' },
-  { id: 'f2', title: 'New Inquiry', description: 'System detected inquiry from @elenar_designs.', timestamp: '4m ago', type: 'lead', operator: 'Autopilot' },
-  { id: 'f3', title: 'Cart Recovered', description: 'Sarah Jenkins completed checkout via automated follow-up.', timestamp: '12m ago', type: 'sale', operator: 'Autopilot' },
-  { id: 'f4', title: 'Escalated', description: 'Marcus (Admin) moved #8492 to priority queue.', timestamp: '22m ago', type: 'info', operator: 'Marcus Sterling' }
+  { id: 'f1', title: 'Payment Confirmed', actorName: 'Elena Rossi', description: 'Elena (Agent) closed a $1,020 bulk order with Marcus Sterling.', timestamp: new Date().toISOString(), type: 'sale' },
+  { id: 'f2', title: 'New Inquiry', actorName: 'Autopilot', description: 'System detected inquiry from @elenar_designs.', timestamp: new Date(Date.now() - 240000).toISOString(), type: 'lead' },
+  { id: 'f3', title: 'Cart Recovered', actorName: 'Autopilot', description: 'Sarah Jenkins completed checkout via automated follow-up.', timestamp: new Date(Date.now() - 720000).toISOString(), type: 'sale' },
+  { id: 'f4', title: 'Escalated', actorName: 'Marcus Sterling', description: 'Marcus (Admin) moved #8492 to priority queue.', timestamp: new Date(Date.now() - 1320000).toISOString(), type: 'info' }
 ];
 
 export const MOCK_WORKFLOWS = [
