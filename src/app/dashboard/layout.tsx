@@ -1,7 +1,8 @@
+
 'use client';
 
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
 import { useUser, useFirestore, useDoc } from '@/firebase';
 import { Loader2, Menu, X, Zap } from 'lucide-react';
@@ -10,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { CommandPalette } from '@/components/dashboard/command-palette';
 import { NotificationsPanel } from '@/components/dashboard/notifications-panel';
 import Link from 'next/link';
+import { doc } from 'firebase/firestore';
 
 export default function DashboardLayout({
   children,
@@ -19,6 +21,7 @@ export default function DashboardLayout({
   const { user, loading: authLoading } = useUser();
   const db = useFirestore();
   const router = useRouter();
+  const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   // Use useDoc to get user profile (including role)
@@ -30,6 +33,24 @@ export default function DashboardLayout({
       router.push('/login');
     }
   }, [user, authLoading, router]);
+
+  // Real Route Guard Logic
+  useEffect(() => {
+    if (!profileLoading && profile) {
+      const isAdmin = profile.role === 'admin';
+      const isManager = profile.role === 'manager';
+      
+      const adminRoutes = ['/dashboard/settings', '/dashboard/automations'];
+      const managerRoutes = ['/dashboard/analytics'];
+
+      if (adminRoutes.some(r => pathname.startsWith(r)) && !isAdmin) {
+        router.push('/dashboard');
+      }
+      if (managerRoutes.some(r => pathname.startsWith(r)) && !isAdmin && !isManager) {
+        router.push('/dashboard');
+      }
+    }
+  }, [profile, profileLoading, pathname, router]);
 
   if (authLoading || profileLoading) {
     return (
@@ -113,5 +134,3 @@ export default function DashboardLayout({
     </div>
   );
 }
-
-import { doc } from 'firebase/firestore';
