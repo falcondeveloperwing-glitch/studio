@@ -13,7 +13,6 @@ import {
   TrendingUp,
   ShieldCheck,
   CheckCircle2,
-  Target,
   Play,
   Globe,
   Users,
@@ -47,7 +46,7 @@ export default function LandingPage() {
           <div className="hidden md:flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">
             <Link href="#platform" className="hover:text-white transition-colors">Platform</Link>
             <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
-            <Link href="/dashboard/status" className="flex items-center gap-2 hover:text-white transition-colors">
+            <Link href="/status" className="flex items-center gap-2 hover:text-white transition-colors">
               <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
               Status
             </Link>
@@ -350,7 +349,7 @@ export default function LandingPage() {
                 <li><Link href="#platform" className="hover:text-white transition-colors">Inbox</Link></li>
                 <li><Link href="#platform" className="hover:text-white transition-colors">Automations</Link></li>
                 <li><Link href="/dashboard/analytics" className="hover:text-white transition-colors">Analytics</Link></li>
-                <li><Link href="/dashboard/status" className="hover:text-white transition-colors">System Health</Link></li>
+                <li><Link href="/status" className="hover:text-white transition-colors">System Health</Link></li>
               </ul>
             </div>
             <div>
