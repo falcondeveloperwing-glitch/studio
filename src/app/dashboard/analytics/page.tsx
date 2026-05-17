@@ -44,7 +44,7 @@ export default function AnalyticsPage() {
   const db = useFirestore();
   const [exporting, setExporting] = React.useState(false);
 
-  // Real data fetching
+  // Real data fetching - No more hardcoded fake math
   const salesQuery = useMemoFirebase(() => {
     if (!user) return null;
     return query(
