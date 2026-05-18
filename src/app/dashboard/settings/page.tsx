@@ -12,7 +12,8 @@ import {
   Plus,
   Mail,
   CheckCircle2,
-  ExternalLink
+  ExternalLink,
+  ShieldAlert
 } from 'lucide-react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
@@ -20,22 +21,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { useUser, useFirestore, useDoc } from '@/firebase';
+import { useUser, useFirestore } from '@/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 import { logActivity } from '@/lib/activity-logger';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { useDashboard } from '../dashboard-context';
 
 export default function SettingsPage() {
   const { user } = useUser();
   const db = useFirestore();
   const { toast } = useToast();
+  const { profile, loading, isAdmin } = useDashboard();
   const [activeTab, setActiveTab] = useState('general');
   const [savingProfile, setSavingProfile] = useState(false);
-
-  // User profile data
-  const userRef = useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
-  const { data: profile, loading } = useDoc(userRef);
 
   const [localProfile, setLocalProfile] = useState<any>({});
 
@@ -44,7 +43,7 @@ export default function SettingsPage() {
   }, [profile]);
 
   const handleSaveProfile = async () => {
-    if (!user || !profile) return;
+    if (!user || !profile || !isAdmin) return;
     setSavingProfile(true);
     try {
       await updateDoc(doc(db, 'users', user.uid), {
@@ -70,8 +69,6 @@ export default function SettingsPage() {
     }
   };
 
-  const isAdmin = profile?.role === 'admin';
-
   if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-zinc-700" /></div>;
 
   return (
@@ -81,6 +78,11 @@ export default function SettingsPage() {
           <h1 className="text-4xl font-bold tracking-tight mb-2 text-white">Settings</h1>
           <p className="text-zinc-500 font-medium">Manage your workspace configuration and infrastructure.</p>
         </div>
+        {!isAdmin && (
+          <Badge variant="outline" className="h-8 border-amber-500/20 bg-amber-500/5 text-amber-500 font-bold px-4 gap-2">
+            <ShieldAlert size={14} /> Read-Only Access
+          </Badge>
+        )}
       </div>
 
       <Tabs defaultValue="general" className="w-full" value={activeTab} onValueChange={setActiveTab}>
@@ -114,7 +116,8 @@ export default function SettingsPage() {
                     <div className="space-y-3">
                       <Label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-1">Brand Name</Label>
                       <Input 
-                        className="bg-white/5 border-white/10 rounded-lg h-11 text-white" 
+                        disabled={!isAdmin}
+                        className="bg-white/5 border-white/10 rounded-lg h-11 text-white disabled:opacity-50" 
                         value={localProfile.brandName || ''} 
                         onChange={(e) => setLocalProfile({...localProfile, brandName: e.target.value})}
                       />
@@ -122,21 +125,24 @@ export default function SettingsPage() {
                     <div className="space-y-3">
                       <Label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-1">Contact Email</Label>
                       <Input 
-                        className="bg-white/5 border-white/10 rounded-lg h-11 text-white" 
+                        disabled={!isAdmin}
+                        className="bg-white/5 border-white/10 rounded-lg h-11 text-white disabled:opacity-50" 
                         value={localProfile.email || ''} 
                         onChange={(e) => setLocalProfile({...localProfile, email: e.target.value})}
                       />
                     </div>
                   </div>
-                  <div className="mt-10 flex justify-end">
-                    <Button 
-                      onClick={handleSaveProfile} 
-                      disabled={savingProfile}
-                      className="bg-white text-black hover:bg-zinc-200 rounded-lg px-8 h-11 font-bold text-xs"
-                    >
-                      {savingProfile ? <Loader2 className="animate-spin mr-2" size={14} /> : 'Save Profile Changes'}
-                    </Button>
-                  </div>
+                  {isAdmin && (
+                    <div className="mt-10 flex justify-end">
+                      <Button 
+                        onClick={handleSaveProfile} 
+                        disabled={savingProfile}
+                        className="bg-white text-black hover:bg-zinc-200 rounded-lg px-8 h-11 font-bold text-xs"
+                      >
+                        {savingProfile ? <Loader2 className="animate-spin mr-2" size={14} /> : 'Save Profile Changes'}
+                      </Button>
+                    </div>
+                  )}
                 </GlassCard>
 
                 <GlassCard className="border-white/5 bg-zinc-950/50 p-8">
@@ -153,7 +159,7 @@ export default function SettingsPage() {
                         </div>
                       </div>
                     </div>
-                    <Button variant="outline" className="border-white/10 bg-white/5 h-10 rounded-lg px-6 text-xs font-bold text-white">Sync Workspace</Button>
+                    {isAdmin && <Button variant="outline" className="border-white/10 bg-white/5 h-10 rounded-lg px-6 text-xs font-bold text-white">Sync Workspace</Button>}
                   </div>
                 </GlassCard>
               </div>

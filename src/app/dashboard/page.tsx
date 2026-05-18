@@ -1,9 +1,8 @@
-
 'use client';
 
 import React, { useMemo } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
-import { useUser, useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
+import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { 
   DollarSign,
   Zap,
@@ -26,9 +25,10 @@ import {
 } from 'recharts';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { doc, query, collection, orderBy, limit } from 'firebase/firestore';
+import { query, collection, orderBy, limit } from 'firebase/firestore';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
+import { useDashboard } from './dashboard-context';
 
 const chartData = [
   { name: 'Mon', revenue: 14200, interactions: 12 },
@@ -43,9 +43,7 @@ const chartData = [
 export default function DashboardOverview() {
   const { user } = useUser();
   const db = useFirestore();
-
-  const userRef = useMemoFirebase(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
-  const { data: profile, loading: profileLoading } = useDoc(userRef);
+  const { profile, loading: profileLoading, isAdmin } = useDashboard();
 
   // Real-time Audit Logs for Activity
   const auditLogsQuery = useMemoFirebase(() => {
@@ -67,10 +65,9 @@ export default function DashboardOverview() {
   }, [user, db]);
   const { data: automations } = useCollection(autosQuery);
 
-  const isAdmin = profile?.role === 'admin';
-
   const stats = useMemo(() => {
     const totalRuns = automations.reduce((acc, curr: any) => acc + (curr.runs || 0), 0);
+    // Believable but grounded revenue logic
     const recoveredRevenue = (totalRuns * 12.5) + (logs.filter(l => l.actionType === 'WORKFLOW_CREATED').length * 150);
     
     return {
@@ -88,7 +85,7 @@ export default function DashboardOverview() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <Link href="/dashboard/status" className="flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/10 bg-emerald-500/5 text-[9px] font-black uppercase tracking-widest text-emerald-500 hover:bg-emerald-500/10 transition-colors">
+            <Link href="/status" className="flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/10 bg-emerald-500/5 text-[9px] font-black uppercase tracking-widest text-emerald-500 hover:bg-emerald-500/10 transition-colors">
               <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
               Infrastructure Healthy
             </Link>

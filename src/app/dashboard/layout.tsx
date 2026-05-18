@@ -11,21 +11,14 @@ import { CommandPalette } from '@/components/dashboard/command-palette';
 import { NotificationsPanel } from '@/components/dashboard/notifications-panel';
 import Link from 'next/link';
 import { doc } from 'firebase/firestore';
+import { DashboardProvider, useDashboard } from './dashboard-context';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
   const { user, loading: authLoading } = useUser();
-  const db = useFirestore();
+  const { profile, loading: profileLoading, isAdmin, isManager } = useDashboard();
   const router = useRouter();
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
-
-  // Unified Profile State for Performance
-  const userRef = useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
-  const { data: profile, loading: profileLoading } = useDoc(userRef);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -36,9 +29,6 @@ export default function DashboardLayout({
   // Real-time Route Security Enforcement
   useEffect(() => {
     if (!profileLoading && profile) {
-      const isAdmin = profile.role === 'admin';
-      const isManager = profile.role === 'manager';
-      
       const adminOnlyPaths = ['/dashboard/settings', '/dashboard/automations'];
       const managerPlusPaths = ['/dashboard/analytics'];
 
@@ -49,7 +39,7 @@ export default function DashboardLayout({
         router.push('/dashboard');
       }
     }
-  }, [profile, profileLoading, pathname, router]);
+  }, [profile, profileLoading, pathname, router, isAdmin, isManager]);
 
   if (authLoading || profileLoading) {
     return (
@@ -107,7 +97,7 @@ export default function DashboardLayout({
             </div>
 
             <div className="flex items-center gap-2">
-              <Link href="/dashboard/status" className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/5 transition-all group border border-transparent hover:border-white/5">
+              <Link href="/status" className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/5 transition-all group border border-transparent hover:border-white/5">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)] animate-pulse" />
                 <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">Operational</span>
               </Link>
@@ -137,5 +127,13 @@ export default function DashboardLayout({
         </div>
       </main>
     </div>
+  );
+}
+
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <DashboardProvider>
+      <DashboardLayoutContent>{children}</DashboardLayoutContent>
+    </DashboardProvider>
   );
 }
