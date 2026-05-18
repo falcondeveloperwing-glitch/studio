@@ -19,7 +19,8 @@ import {
   Users,
   Database,
   Search,
-  History
+  History,
+  Clock
 } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -48,7 +49,7 @@ export default function LandingPage() {
             <Link href="/platform" className="hover:text-white transition-colors">Platform</Link>
             <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
             <Link href="/status" className="flex items-center gap-2 hover:text-white transition-colors">
-              <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               Status
             </Link>
           </div>
@@ -84,7 +85,7 @@ export default function LandingPage() {
               Turn Instagram DMs into a <span className="text-zinc-600">revenue engine.</span>
             </h1>
             <p className="text-xl text-zinc-500 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
-              The operating system for high-volume Instagram commerce. Recover abandoned leads, qualify inquiries, and close sales automatically.
+              The operating system for high-volume Instagram commerce. Recover abandoned leads, qualify inquiries, and close sales automatically with deterministic AI logic.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-24">
               <Link href="/signup">
@@ -146,16 +147,16 @@ export default function LandingPage() {
               </div>
               <h2 className="text-4xl md:text-5xl font-bold font-headline tracking-tight mb-8">
                 Intelligent Inbox.<br/>
-                <span className="text-zinc-600">Zero response latency.</span>
+                <span className="text-zinc-600">Sub-second data sync.</span>
               </h2>
               <p className="text-lg text-zinc-500 mb-10 leading-relaxed font-medium">
-                Our DM infrastructure analyzes customer intent in real-time. Respond to sizing, pricing, and availability queries in under 2 seconds.
+                Our DM infrastructure analyzes customer intent in real-time. Respond to sizing, pricing, and availability queries with AI-assisted precision.
               </p>
               <ul className="space-y-4 mb-10">
                 {[
-                  'Real-time intent detection',
-                  'Automated response suggestions',
-                  'Unified team collaboration',
+                  'Neural buying intent detection',
+                  'Deterministic response logic',
+                  'Unified fleet collaboration',
                   'Sentiment analysis pipeline'
                 ].map((feature) => (
                   <li key={feature} className="flex items-center gap-3 text-sm font-bold text-zinc-300">
@@ -202,14 +203,14 @@ export default function LandingPage() {
               </div>
               <h2 className="text-4xl md:text-5xl font-bold font-headline tracking-tight mb-8">
                 Visual Automations.<br/>
-                <span className="text-zinc-600">Revenue-driven logic.</span>
+                <span className="text-zinc-600">Stateful revenue logic.</span>
               </h2>
               <p className="text-lg text-zinc-500 mb-10 leading-relaxed font-medium">
-                Build sophisticated sales workflows without code. Trigger automated follow-ups, apply loyalty discounts, and recover abandoned leads.
+                Build sophisticated sales workflows without code. Trigger automated follow-ups, apply loyalty discounts, and recover abandoned leads with non-repudiable logic.
               </p>
               <div className="grid grid-cols-2 gap-6 mb-10">
                 <div className="space-y-2">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Response Speed</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Response Offset</p>
                   <p className="text-2xl font-bold">0.08s</p>
                 </div>
                 <div className="space-y-2">
@@ -235,14 +236,14 @@ export default function LandingPage() {
               The Conversion Pipeline
             </h2>
             <p className="text-zinc-500 text-lg font-medium">
-              From incoming DM to revenue. A fully automated infrastructure.
+              From incoming DM to revenue. A deterministic infrastructure.
             </p>
           </div>
           
           <div className="grid md:grid-cols-4 gap-8">
             {[
-              { title: "Ingestion", desc: "Real-time DM ingestion from Meta APIs.", icon: Globe },
-              { title: "Analysis", desc: "Neural analysis of buying intent.", icon: Search },
+              { title: "Ingestion", desc: "Real-time DM ingestion via Meta Webhooks.", icon: Globe },
+              { title: "Analysis", desc: "Neural scoring of buying intent.", icon: Search },
               { title: "Execution", desc: "Workflow-driven response logic.", icon: Zap },
               { title: "Conversion", desc: "Checkout link & sales closure.", icon: TrendingUp }
             ].map((step, i) => (
@@ -271,31 +272,31 @@ export default function LandingPage() {
             <div className="grid lg:grid-cols-2 gap-16 relative z-10">
               <div>
                 <h2 className="text-4xl font-bold font-headline tracking-tight mb-8">Enterprise Infrastructure</h2>
-                <p className="text-zinc-500 mb-12 font-medium">Designed for scaling commerce teams who demand reliability and absolute data control.</p>
+                <p className="text-zinc-500 mb-12 font-medium">Designed for commerce fleets who demand absolute reliability and non-repudiable data control.</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-white font-bold text-sm">
-                      <ShieldCheck size={18} /> Audit Logs
+                      <ShieldCheck size={18} /> Audit Integrity
                     </div>
-                    <p className="text-xs text-zinc-600 font-medium">Full non-repudiable logs of all operator and AI actions.</p>
+                    <p className="text-xs text-zinc-600 font-medium">Full historical logs of all operator and AI mutations.</p>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-white font-bold text-sm">
-                      <Users size={18} /> Role-Based Access
+                      <Users size={18} /> RBAC Permissions
                     </div>
-                    <p className="text-xs text-zinc-600 font-medium">Define granular permissions for agents, managers, and admins.</p>
+                    <p className="text-xs text-zinc-600 font-medium">Granular access control for Agents, Managers, and Admins.</p>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-white font-bold text-sm">
-                      <History size={18} /> System Health
+                      <History size={18} /> System Monitoring
                     </div>
-                    <p className="text-xs text-zinc-600 font-medium">Real-time infrastructure monitoring and global status.</p>
+                    <p className="text-xs text-zinc-600 font-medium">Real-time infrastructure health and global status.</p>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-white font-bold text-sm">
                       <Database size={18} /> Data Isolation
                     </div>
-                    <p className="text-xs text-zinc-600 font-medium">Isolated workspace environments with end-to-end security.</p>
+                    <p className="text-xs text-zinc-600 font-medium">Isolated tenant environments with end-to-end security.</p>
                   </div>
                 </div>
               </div>
@@ -323,14 +324,14 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/signup">
               <Button size="lg" className="bg-white text-black hover:bg-zinc-200 rounded-xl px-12 h-16 text-base font-bold group shadow-2xl">
-                Start Free Trial <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                Deploy Free Trial <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
             <Button 
               onClick={startDemo}
               variant="outline" 
               size="lg" 
-              className="border-white/5 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl px-12 h-16 text-base font-bold transition-all"
+              className="border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 rounded-xl px-12 h-16 text-base font-bold transition-all"
             >
               Watch Live Demo
             </Button>

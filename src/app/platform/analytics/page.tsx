@@ -5,7 +5,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { GlassCard } from '@/components/ui/glass-card';
-import { TrendingUp, Database, ArrowLeft, ShieldCheck, History, BarChart3 } from 'lucide-react';
+import { TrendingUp, Database, ArrowLeft, ShieldCheck, History, BarChart3, Activity } from 'lucide-react';
 
 export default function AnalyticsMarketingPage() {
   return (
@@ -26,31 +26,31 @@ export default function AnalyticsMarketingPage() {
           <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white mx-auto mb-8">
             <BarChart3 size={24} />
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold font-headline tracking-tighter mb-8">Grounded Analytics</h1>
+          <h1 className="text-5xl md:text-6xl font-bold font-headline tracking-tighter mb-8 text-white">Grounded Analytics</h1>
           <p className="text-xl text-zinc-500 max-w-2xl mx-auto leading-relaxed">
             Non-repudiable performance data. Every metric is derived from real-time Firestore aggregation, ensuring absolute accuracy for your commerce fleet.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-32">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-32">
           <GlassCard className="border-white/5 bg-zinc-950/50 p-10">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-zinc-400">
                 <TrendingUp size={20} />
               </div>
-              <h3 className="font-bold text-xl">Revenue Attribution</h3>
+              <h3 className="font-bold text-xl text-white">Revenue Attribution</h3>
             </div>
-            <p className="text-zinc-500 text-sm leading-relaxed mb-6">
-              Track exactly how much revenue is recovered through AI automated responses and follow-ups. No more guessing the impact of your DM strategy.
+            <p className="text-zinc-500 text-sm leading-relaxed mb-8">
+              Track exactly how much revenue is recovered through AI-driven responses. No simulated projections—only real conversion data.
             </p>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Recovery Rate</p>
-                <p className="text-2xl font-bold">31.4%</p>
+                <p className="text-3xl font-bold text-white">31.4%</p>
               </div>
               <div className="space-y-1">
                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Avg Lift</p>
-                <p className="text-2xl font-bold">+18.5%</p>
+                <p className="text-3xl font-bold text-emerald-500">+18.5%</p>
               </div>
             </div>
           </GlassCard>
@@ -60,15 +60,18 @@ export default function AnalyticsMarketingPage() {
               <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-zinc-400">
                 <History size={20} />
               </div>
-              <h3 className="font-bold text-xl">Operational Audit</h3>
+              <h3 className="font-bold text-xl text-white">Operational Audit</h3>
             </div>
-            <p className="text-zinc-500 text-sm leading-relaxed mb-6">
-              Every AI interaction and human operator action is recorded in a permanent audit log. Full transparency for your entire workspace.
+            <p className="text-zinc-500 text-sm leading-relaxed mb-8">
+              Every automated interaction and operator mutation is recorded in a permanent audit log for full workspace accountability.
             </p>
-            <div className="space-y-3">
-              {[1, 2].map((i) => (
-                <div key={i} className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                  <div className="h-full bg-zinc-700 w-2/3" />
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
+                  <div className="h-1.5 flex-1 bg-white/[0.05] rounded-full overflow-hidden">
+                    <div className="h-full bg-zinc-600 rounded-full" style={{ width: i === 1 ? '70%' : i === 2 ? '40%' : '85%' }} />
+                  </div>
                 </div>
               ))}
             </div>
@@ -76,13 +79,14 @@ export default function AnalyticsMarketingPage() {
         </div>
 
         <section className="py-24 border-t border-white/5 text-center">
-          <h2 className="text-3xl font-bold font-headline mb-8">Built on honest infrastructure.</h2>
+          <h2 className="text-3xl font-bold font-headline mb-8 text-white">Built on stateful infrastructure.</h2>
           <p className="text-zinc-500 mb-12 text-sm max-w-lg mx-auto">
-            We don't simulate your growth. Our analytics engine aggregates live activity logs to give you the most accurate view of your business performance.
+            We don't project your growth. Our analytics engine aggregates live activity logs to give you the most accurate view of your fleet's performance.
           </p>
-          <div className="flex flex-wrap justify-center gap-12 opacity-30 grayscale grayscale transition-all hover:grayscale-0 hover:opacity-100">
-            <div className="flex items-center gap-2 font-bold text-sm"><Database size={16} /> Firestore Aggregation</div>
-            <div className="flex items-center gap-2 font-bold text-sm"><ShieldCheck size={16} /> Data Isolation</div>
+          <div className="flex flex-wrap justify-center gap-12 opacity-40">
+            <div className="flex items-center gap-2 font-bold text-[10px] uppercase tracking-[0.2em] text-zinc-500"><Database size={14} /> Firestore Aggregation</div>
+            <div className="flex items-center gap-2 font-bold text-[10px] uppercase tracking-[0.2em] text-zinc-500"><ShieldCheck size={14} /> Data Isolation</div>
+            <div className="flex items-center gap-2 font-bold text-[10px] uppercase tracking-[0.2em] text-zinc-500"><Activity size={14} /> Live Stream</div>
           </div>
         </section>
       </div>
