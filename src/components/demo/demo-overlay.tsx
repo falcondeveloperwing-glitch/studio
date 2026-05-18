@@ -30,18 +30,20 @@ export function DemoOverlay() {
           animate={{ 
             x: `${cursorPos.x}vw`, 
             y: `${cursorPos.y}vh`,
-            scale: isClicking ? 0.8 : 1
+            scale: isClicking ? 0.8 : 1,
+            // Subtle "jitter" to simulate human motor control
+            rotate: isClicking ? -5 : 0
           }}
           transition={{ 
             type: "spring", 
-            damping: 30, 
-            stiffness: 100,
-            mass: 0.8,
-            scale: { duration: 0.1 }
+            damping: 35, 
+            stiffness: 90,
+            mass: 1.2,
+            scale: { duration: 0.15 }
           }}
-          className="absolute top-0 left-0 text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)] z-[10001]"
+          className="absolute top-0 left-0 text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.8)] z-[10001]"
         >
-          <MousePointer2 size={24} fill="white" strokeWidth={1.5} />
+          <MousePointer2 size={24} fill="white" strokeWidth={1.2} />
           {isClicking && (
             <div className="click-ripple absolute top-0 left-0" />
           )}
@@ -80,7 +82,7 @@ export function DemoOverlay() {
                   className="bg-white text-black hover:bg-zinc-200 rounded-xl px-10 h-14 text-sm font-bold group shadow-2xl transition-all active:scale-95"
                   onClick={stopDemo}
                 >
-                  Start Free Trial <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  Start Free Trial <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={16} />
                 </Button>
                 <Button 
                   variant="outline" 
@@ -103,7 +105,7 @@ export function DemoOverlay() {
             exit={{ y: 60, opacity: 0 }}
             className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-lg px-6 pointer-events-auto"
           >
-            <div className="bg-zinc-950/95 backdrop-blur-3xl border border-white/10 rounded-3xl p-5 shadow-[0_24px_64px_rgba(0,0,0,0.6)] flex items-center justify-between gap-10">
+            <div className="bg-zinc-950/95 backdrop-blur-3xl border border-white/10 rounded-3xl p-5 shadow-[0_32px_80px_rgba(0,0,0,0.8)] flex items-center justify-between gap-10">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center relative">
                   <Play size={18} className="text-white fill-white animate-pulse" />

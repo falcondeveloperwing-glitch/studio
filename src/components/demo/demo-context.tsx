@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
@@ -40,25 +39,25 @@ const DemoContext = createContext<DemoContextType | undefined>(undefined);
 
 const DEMO_TIMINGS: Record<DemoStep, number> = {
   idle: 0,
-  landing: 5000,
-  login: 4000,
-  dashboard: 7000,
-  inbox: 16000,
-  automations: 10000,
-  analytics: 8000,
-  pricing: 6000,
-  complete: 12000
+  landing: 6000,
+  login: 5000,
+  dashboard: 8000,
+  inbox: 18000,
+  automations: 12000,
+  analytics: 9000,
+  pricing: 7000,
+  complete: 15000
 };
 
 const CURSOR_TARGETS: Record<DemoStep, CursorPos> = {
   idle: { x: 50, y: 50 },
-  landing: { x: 55, y: 45 },
-  login: { x: 50, y: 68 },
-  dashboard: { x: 88, y: 22 },
-  inbox: { x: 18, y: 42 },
-  automations: { x: 78, y: 18 },
-  analytics: { x: 82, y: 14 },
-  pricing: { x: 50, y: 78 },
+  landing: { x: 58, y: 42 },
+  login: { x: 50, y: 72 },
+  dashboard: { x: 92, y: 18 },
+  inbox: { x: 22, y: 48 },
+  automations: { x: 74, y: 22 },
+  analytics: { x: 80, y: 12 },
+  pricing: { x: 50, y: 82 },
   complete: { x: 50, y: 50 }
 };
 
@@ -73,12 +72,9 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const stepTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Initialize Demo Mode from storage or environment
   useEffect(() => {
     const saved = localStorage.getItem('rr_demo_mode');
     const savedUser = localStorage.getItem('rr_demo_user');
-    
-    // Auto-enable demo mode if Firebase is not fully configured
     const isMockConfig = process.env.NEXT_PUBLIC_FIREBASE_API_KEY === 'demo-key' || !process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
     
     if (saved === 'true' || isMockConfig) {
@@ -137,7 +133,9 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     if (nextIdx < steps.length) {
       const next = steps[nextIdx];
       setIsDwelling(true);
-      const randomDwell = 400 + Math.random() * 300;
+      
+      // Simulate "thinking" or reading time
+      const dwellTime = 800 + Math.random() * 600;
 
       setTimeout(() => {
         setIsClicking(true);
@@ -157,15 +155,18 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
             case 'complete': break;
           }
         }, 300);
-      }, randomDwell);
+      }, dwellTime);
     }
   }, [currentStep, router]);
 
   useEffect(() => {
     if (!isActive) return;
+    
+    // Add human-like hesitation before movement
     const moveTimer = setTimeout(() => {
       setCursorPos(CURSOR_TARGETS[currentStep]);
-    }, 1200);
+    }, 1400);
+    
     return () => clearTimeout(moveTimer);
   }, [currentStep, isActive]);
 

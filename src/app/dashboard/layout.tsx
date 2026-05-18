@@ -1,11 +1,10 @@
-
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
 import { useUser, useFirestore, useDoc } from '@/firebase';
-import { Loader2, Menu, X, Zap } from 'lucide-react';
+import { Loader2, Menu, X, Zap, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { CommandPalette } from '@/components/dashboard/command-palette';
@@ -24,8 +23,8 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
-  // Use useDoc to get user profile (including role)
-  const userRef = React.useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
+  // Unified Profile State for Performance
+  const userRef = useMemo(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
   const { data: profile, loading: profileLoading } = useDoc(userRef);
 
   useEffect(() => {
@@ -34,19 +33,19 @@ export default function DashboardLayout({
     }
   }, [user, authLoading, router]);
 
-  // Real Route Guard Logic
+  // Real-time Route Security Enforcement
   useEffect(() => {
     if (!profileLoading && profile) {
       const isAdmin = profile.role === 'admin';
       const isManager = profile.role === 'manager';
       
-      const adminRoutes = ['/dashboard/settings', '/dashboard/automations'];
-      const managerRoutes = ['/dashboard/analytics'];
+      const adminOnlyPaths = ['/dashboard/settings', '/dashboard/automations'];
+      const managerPlusPaths = ['/dashboard/analytics'];
 
-      if (adminRoutes.some(r => pathname.startsWith(r)) && !isAdmin) {
+      if (adminOnlyPaths.some(r => pathname.startsWith(r)) && !isAdmin) {
         router.push('/dashboard');
       }
-      if (managerRoutes.some(r => pathname.startsWith(r)) && !isAdmin && !isManager) {
+      if (managerPlusPaths.some(r => pathname.startsWith(r)) && !isAdmin && !isManager) {
         router.push('/dashboard');
       }
     }
@@ -54,9 +53,10 @@ export default function DashboardLayout({
 
   if (authLoading || profileLoading) {
     return (
-      <div className="min-h-screen bg-[#020203] flex flex-col items-center justify-center gap-6">
-        <Loader2 className="w-12 h-12 text-zinc-500 animate-spin" />
-        <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-zinc-600 animate-pulse">Initializing Neural Link</p>
+      <div className="min-h-screen bg-[#020203] flex flex-col items-center justify-center gap-8 relative overflow-hidden">
+        <div className="absolute inset-0 noise z-0" />
+        <Loader2 className="w-12 h-12 text-zinc-800 animate-spin relative z-10" />
+        <p className="text-[10px] font-black uppercase tracking-[0.5em] text-zinc-600 animate-pulse relative z-10">Initializing Neural Link</p>
       </div>
     );
   }
@@ -64,7 +64,7 @@ export default function DashboardLayout({
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-[#09090b] text-zinc-50 relative overflow-hidden w-full">
+    <div className="flex min-h-screen bg-[#09090b] text-zinc-50 relative overflow-hidden w-full selection:bg-white/10">
       <div className="fixed inset-0 bg-[#09090b] z-0" />
       
       <AnimatePresence>
@@ -74,13 +74,13 @@ export default function DashboardLayout({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsSidebarOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] lg:hidden"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[60] lg:hidden"
           />
         )}
       </AnimatePresence>
 
       <div className={`
-        fixed inset-y-0 left-0 z-[70] transition-transform duration-300 transform lg:relative lg:translate-x-0
+        fixed inset-y-0 left-0 z-[70] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:relative lg:translate-x-0
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <DashboardSidebar user={user} profile={profile} />
@@ -94,14 +94,12 @@ export default function DashboardLayout({
         </Button>
       </div>
       
-      <main className="flex-1 h-screen overflow-y-auto relative z-10 flex flex-col w-full">
-        <header className="h-16 border-b border-white/5 bg-zinc-950/50 backdrop-blur-xl sticky top-0 z-50 shrink-0 w-full">
+      <main className="flex-1 h-screen overflow-y-auto relative z-10 flex flex-col w-full scrollbar-hide">
+        <header className="h-16 border-b border-white/5 bg-zinc-950/40 backdrop-blur-2xl sticky top-0 z-50 shrink-0 w-full">
           <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-10 flex items-center justify-between">
             <div className="flex items-center gap-4 flex-1">
               <div className="lg:hidden flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-zinc-950 border border-white/10 flex items-center justify-center">
-                  <Zap className="text-white fill-white" size={16} />
-                </div>
+                <Zap className="text-white fill-white" size={18} />
               </div>
               <div className="hidden lg:block w-full max-w-md">
                 <CommandPalette />
@@ -109,8 +107,8 @@ export default function DashboardLayout({
             </div>
 
             <div className="flex items-center gap-2">
-              <Link href="/dashboard/status" className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/5 transition-colors group">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <Link href="/dashboard/status" className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/5 transition-all group border border-transparent hover:border-white/5">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)] animate-pulse" />
                 <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-zinc-300">Operational</span>
               </Link>
               <div className="h-4 w-px bg-white/10 mx-2 hidden sm:block" />
@@ -119,16 +117,23 @@ export default function DashboardLayout({
                 variant="ghost" 
                 size="icon" 
                 onClick={() => setIsSidebarOpen(true)}
-                className="lg:hidden bg-white/5 rounded-lg h-9 w-9 ml-2"
+                className="lg:hidden bg-white/5 rounded-xl h-10 w-10 ml-2"
               >
-                <Menu size={18} />
+                <Menu size={20} />
               </Button>
             </div>
           </div>
         </header>
 
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10 flex-1 flex flex-col overflow-x-hidden">
-          {children}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex-1 flex flex-col"
+          >
+            {children}
+          </motion.div>
         </div>
       </main>
     </div>

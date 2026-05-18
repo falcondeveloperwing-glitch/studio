@@ -1,7 +1,6 @@
-
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,7 +11,9 @@ import {
   ArrowLeft,
   History,
   Loader2,
-  ChevronDown
+  ChevronDown,
+  CheckCheck,
+  Clock
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
@@ -28,6 +29,7 @@ export default function InboxPage() {
   const [showMobileList, setShowMobileList] = useState(true);
   const [inputText, setInputText] = useState('');
   const [sending, setSending] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const [limitCount, setLimitCount] = useState(25);
 
   // Paginated conversations fetch
@@ -82,6 +84,13 @@ export default function InboxPage() {
         updatedAt: serverTimestamp(),
         unread: false
       });
+
+      // Simulate AI typing response if in demo context
+      if (activeChatId === '1') {
+        setTimeout(() => setIsTyping(true), 1500);
+        setTimeout(() => setIsTyping(false), 4500);
+      }
+
     } catch (err) {
       toast({ title: "Error", description: "Failed to send message.", variant: "destructive" });
     } finally {
@@ -90,16 +99,16 @@ export default function InboxPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-140px)] flex flex-col bg-zinc-950 border border-white/5 rounded-2xl overflow-hidden w-full max-w-7xl mx-auto transition-all duration-300">
-      <div className="h-14 border-b border-white/5 flex items-center justify-between px-4 sm:px-6 shrink-0 bg-zinc-950/50 backdrop-blur-md z-20">
+    <div className="h-[calc(100vh-140px)] flex flex-col bg-zinc-950 border border-white/5 rounded-2xl overflow-hidden w-full max-w-7xl mx-auto transition-all duration-500 shadow-2xl">
+      <div className="h-14 border-b border-white/5 flex items-center justify-between px-4 sm:px-6 shrink-0 bg-zinc-950/50 backdrop-blur-xl z-20">
         <div className="flex items-center gap-4">
           <h1 className="text-sm font-bold tracking-tight">Inbox</h1>
           <Badge variant="outline" className="text-[9px] uppercase tracking-widest border-white/10 text-zinc-500 font-bold px-2 py-0">
-            {conversations.length} Threads Loaded
+            {conversations.length} Active Threads
           </Badge>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="text-zinc-500 h-8 w-8 hover:bg-white/5">
+          <Button variant="ghost" size="icon" className="text-zinc-500 h-8 w-8 hover:bg-white/5 transition-colors">
             <MoreVertical size={14} />
           </Button>
         </div>
@@ -121,14 +130,14 @@ export default function InboxPage() {
                     key={chat.id} 
                     onClick={() => handleSelectChat(chat.id)} 
                     className={cn(
-                      "p-4 flex items-start gap-3 cursor-pointer transition-colors relative active:bg-white/[0.08]",
+                      "p-4 flex items-start gap-3 cursor-pointer transition-all relative active:scale-[0.98]",
                       activeChatId === chat.id ? "bg-white/5" : "hover:bg-white/[0.02]"
                     )}
                   >
-                    <div className="w-9 h-9 rounded-full bg-zinc-900 border border-white/5 shrink-0 overflow-hidden relative grayscale">
+                    <div className="w-10 h-10 rounded-full bg-zinc-900 border border-white/5 shrink-0 overflow-hidden relative grayscale">
                       <img src={`https://picsum.photos/seed/${chat.avatarSeed || chat.id}/100/100`} alt="" className="w-full h-full object-cover" />
                       {chat.unread && (
-                        <div className="absolute top-0 right-0 w-2 h-2 rounded-full bg-white border-2 border-zinc-950" />
+                        <div className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-white border-2 border-zinc-950 shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -136,6 +145,7 @@ export default function InboxPage() {
                         <p className={cn("text-xs truncate font-bold", chat.unread ? "text-white" : "text-zinc-400")}>
                           {chat.customerName}
                         </p>
+                        <span className="text-[9px] text-zinc-600 font-bold uppercase">Now</span>
                       </div>
                       <p className={cn("text-[11px] truncate leading-tight", chat.unread ? "text-zinc-300" : "text-zinc-500")}>
                         {chat.lastMessage}
@@ -163,7 +173,7 @@ export default function InboxPage() {
         )}>
           {activeChat ? (
             <div className="flex flex-col h-full relative">
-              <div className="px-6 py-3 border-b border-white/5 flex items-center justify-between bg-zinc-950 shrink-0 z-10">
+              <div className="px-6 py-3 border-b border-white/5 flex items-center justify-between bg-zinc-950/80 backdrop-blur-md shrink-0 z-10">
                 <div className="flex items-center gap-3">
                   <Button variant="ghost" size="icon" onClick={() => setShowMobileList(true)} className="lg:hidden h-8 w-8 text-zinc-500">
                     <ArrowLeft size={16} />
@@ -173,13 +183,13 @@ export default function InboxPage() {
                   </div>
                   <div>
                     <h2 className="text-[11px] font-black text-white uppercase tracking-wider">{activeChat.customerName}</h2>
-                    <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-[0.2em]">@{activeChat.customerUsername}</p>
+                    <p className="text-[9px] text-emerald-500 font-bold uppercase tracking-[0.2em]">Active Now</p>
                   </div>
                 </div>
               </div>
 
               <ScrollArea className="flex-1 p-4 sm:p-6">
-                <div className="space-y-4 max-w-2xl mx-auto w-full">
+                <div className="space-y-6 max-w-2xl mx-auto w-full">
                   {messagesLoading ? (
                     <div className="flex justify-center"><Loader2 className="animate-spin text-zinc-700" /></div>
                   ) : (
@@ -187,43 +197,61 @@ export default function InboxPage() {
                       <div key={i} className={cn(
                         "flex flex-col", 
                         msg.role === 'customer' ? "items-start" : "items-end",
-                        "mt-4"
+                        "group"
                       )}>
-                        <div className="max-w-[90%] relative group">
+                        <div className="max-w-[85%] relative">
                           <div className={cn(
-                            "rounded-xl px-4 py-2.5 text-xs leading-relaxed break-words",
+                            "rounded-2xl px-4 py-2.5 text-xs leading-relaxed break-words shadow-sm",
                             msg.role === 'customer' 
-                              ? "bg-zinc-900 text-zinc-400 border border-white/5" 
+                              ? "bg-zinc-900 text-zinc-300 border border-white/5" 
                               : "bg-white text-zinc-950 font-medium"
                           )}>
                             {msg.content}
+                          </div>
+                          <div className={cn(
+                            "mt-1.5 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity",
+                            msg.role === 'customer' ? "justify-start" : "justify-end"
+                          )}>
+                            <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">
+                              {msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Now'}
+                            </span>
+                            {msg.role !== 'customer' && <CheckCheck size={10} className="text-emerald-500" />}
                           </div>
                         </div>
                       </div>
                     ))
                   )}
+                  {isTyping && (
+                    <div className="flex flex-col items-start mt-4">
+                      <div className="bg-zinc-900/50 border border-white/5 rounded-2xl px-4 py-2.5 flex items-center gap-1.5">
+                        <span className="w-1 h-1 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-1 h-1 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-1 h-1 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </div>
+                    </div>
+                  )}
                   {sending && (
                     <div className="flex flex-col items-end mt-4">
-                      <div className="bg-white/5 border border-white/5 rounded-xl px-4 py-2.5 flex items-center gap-3">
-                        <Loader2 size={12} className="animate-spin text-zinc-500" />
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-600">Syncing...</span>
+                      <div className="bg-white/5 border border-white/5 rounded-2xl px-4 py-2.5 flex items-center gap-3">
+                        <Loader2 size={10} className="animate-spin text-zinc-500" />
+                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-600">Sending...</span>
                       </div>
                     </div>
                   )}
                 </div>
               </ScrollArea>
 
-              <div className="p-4 border-t border-white/5 bg-zinc-950/50 backdrop-blur-xl shrink-0">
+              <div className="p-6 border-t border-white/5 bg-zinc-950/50 backdrop-blur-2xl shrink-0">
                 <div className="max-w-2xl mx-auto">
-                  <form className="relative flex items-center gap-2" onSubmit={handleSendMessage}>
+                  <form className="relative flex items-center gap-3" onSubmit={handleSendMessage}>
                     <Input 
-                      className="flex-1 h-11 bg-white/5 border-white/10 rounded-xl text-xs px-5" 
+                      className="flex-1 h-12 bg-white/5 border-white/10 rounded-2xl text-xs px-6 focus-visible:ring-zinc-700 transition-all" 
                       placeholder="Type a manual response..." 
                       value={inputText}
                       onChange={(e) => setInputText(e.target.value)}
                     />
-                    <Button type="submit" disabled={!inputText.trim()} size="icon" className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-xl w-11 h-11 shrink-0 shadow-2xl">
-                      <Send size={16} />
+                    <Button type="submit" disabled={!inputText.trim() || sending} size="icon" className="bg-white text-zinc-950 hover:bg-zinc-200 rounded-2xl w-12 h-12 shrink-0 shadow-xl transition-all active:scale-90">
+                      <Send size={18} />
                     </Button>
                   </form>
                 </div>
@@ -231,9 +259,9 @@ export default function InboxPage() {
             </div>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 p-8 text-center bg-[#09090b]">
-              <History size={32} className="text-zinc-900 mb-6" />
-              <h2 className="text-[11px] font-black text-white uppercase tracking-[0.3em] mb-2">Workspace Idle</h2>
-              <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest max-w-[200px]">Select a thread to begin</p>
+              <History size={40} className="text-zinc-900 mb-8" />
+              <h2 className="text-[12px] font-black text-white uppercase tracking-[0.4em] mb-3">Workspace Idle</h2>
+              <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest max-w-[240px] leading-relaxed">Neural link active. Select a conversation thread to begin engagement.</p>
             </div>
           )}
         </div>

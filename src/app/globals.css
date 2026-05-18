@@ -41,15 +41,15 @@
   }
 }
 
-/* Premium SaaS Scrollbar - Linear Style */
+/* Premium SaaS Scrollbar - Stealth Mode */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #27272a transparent;
+  scrollbar-color: #18181b transparent;
 }
 
 *::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
 }
 
 *::-webkit-scrollbar-track {
@@ -57,14 +57,13 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #27272a;
-  border-radius: 20px;
-  border: 1px solid transparent;
-  background-clip: content-box;
+  background: #18181b;
+  border-radius: 10px;
+  transition: background 0.2s ease;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: #27272a;
 }
 
 .font-headline {
@@ -73,26 +72,31 @@
 
 .noise {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  opacity: 0.02;
+  opacity: 0.015;
   pointer-events: none;
 }
 
 @keyframes ripple {
-  0% { transform: scale(0); opacity: 0.8; }
+  0% { transform: scale(0); opacity: 0.6; }
   100% { transform: scale(3); opacity: 0; }
 }
 
 .click-ripple {
-  @apply absolute top-0 left-0 w-8 h-8 rounded-full border border-white pointer-events-none;
-  animation: ripple 0.5s ease-out;
+  @apply absolute top-0 left-0 w-10 h-10 rounded-full border border-white/40 pointer-events-none;
+  animation: ripple 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .processing-blur {
-  filter: blur(4px);
-  transition: filter 0.3s ease;
+  filter: blur(8px);
+  transition: filter 0.5s ease;
 }
 
 /* Layout Containment Classes */
 .content-container {
-  @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10;
+}
+
+/* Tactile Surface Effects */
+.tactile-card {
+  @apply transition-all duration-300 hover:border-white/10 active:scale-[0.99] active:brightness-95;
 }
