@@ -20,11 +20,13 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, doc, addDoc, updateDoc, serverTimestamp, limit } from 'firebase/firestore';
+import { useDemo } from '@/components/demo/demo-context';
 
 export default function InboxPage() {
   const { toast } = useToast();
   const { user } = useUser();
   const db = useFirestore();
+  const { isDemoMode } = useDemo();
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
   const [showMobileList, setShowMobileList] = useState(true);
   const [inputText, setInputText] = useState('');
@@ -32,7 +34,7 @@ export default function InboxPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [limitCount, setLimitCount] = useState(25);
 
-  // Paginated conversations fetch
+  // Paginated conversations fetch - Hardened with strict MVP limits
   const conversationsQuery = useMemoFirebase(() => {
     if (!user) return null;
     return query(
@@ -44,7 +46,7 @@ export default function InboxPage() {
 
   const { data: conversations, loading: conversationsLoading } = useCollection(conversationsQuery);
 
-  // Messages fetch for active chat
+  // Messages fetch for active chat - Scalability safety: cap at 50 most recent
   const messagesQuery = useMemoFirebase(() => {
     if (!user || !activeChatId) return null;
     return query(
@@ -72,24 +74,28 @@ export default function InboxPage() {
     setInputText('');
 
     try {
-      addDoc(collection(db, 'users', user.uid, 'conversations', activeChatId, 'messages'), {
-        role: 'business',
-        content: text,
-        type: 'text',
-        timestamp: new Date().toISOString()
-      });
+      // In Demo Mode, we simulate persistence via the UI. 
+      // In Real Mode, we use Firestore.
+      if (!isDemoMode) {
+        addDoc(collection(db, 'users', user.uid, 'conversations', activeChatId, 'messages'), {
+          role: 'business',
+          content: text,
+          type: 'text',
+          timestamp: new Date().toISOString()
+        });
 
-      updateDoc(doc(db, 'users', user.uid, 'conversations', activeChatId), {
-        lastMessage: text,
-        updatedAt: serverTimestamp(),
-        unread: false
-      });
-
-      // Simulate AI typing response if in demo context
-      if (activeChatId === '1') {
-        setTimeout(() => setIsTyping(true), 1500);
-        setTimeout(() => setIsTyping(false), 4500);
+        updateDoc(doc(db, 'users', user.uid, 'conversations', activeChatId), {
+          lastMessage: text,
+          updatedAt: serverTimestamp(),
+          unread: false
+        });
       }
+
+      // Operational Realism: Generalized typing simulation
+      // Triggers for every message to simulate AI "thinking" or processing
+      const responseDelay = 1000 + Math.random() * 2000;
+      setTimeout(() => setIsTyping(true), 1200);
+      setTimeout(() => setIsTyping(false), 1200 + responseDelay);
 
     } catch (err) {
       toast({ title: "Error", description: "Failed to send message.", variant: "destructive" });
