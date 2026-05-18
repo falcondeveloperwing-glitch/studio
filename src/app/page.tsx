@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -44,7 +45,7 @@ export default function LandingPage() {
           </Link>
           
           <div className="hidden md:flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">
-            <Link href="#platform" className="hover:text-white transition-colors">Platform</Link>
+            <Link href="/platform" className="hover:text-white transition-colors">Platform</Link>
             <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
             <Link href="/status" className="flex items-center gap-2 hover:text-white transition-colors">
               <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
@@ -162,9 +163,11 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <Button variant="link" className="text-white font-bold p-0 group">
-                Explore Inbox Infrastructure <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link href="/platform/inbox">
+                <Button variant="link" className="text-white font-bold p-0 group">
+                  Explore Inbox Infrastructure <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </div>
             <div className="rounded-3xl border border-white/10 overflow-hidden shadow-2xl bg-zinc-950">
               {inboxImage && (
@@ -204,7 +207,7 @@ export default function LandingPage() {
               <p className="text-lg text-zinc-500 mb-10 leading-relaxed font-medium">
                 Build sophisticated sales workflows without code. Trigger automated follow-ups, apply loyalty discounts, and recover abandoned leads.
               </p>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-6 mb-10">
                 <div className="space-y-2">
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Response Speed</p>
                   <p className="text-2xl font-bold">0.08s</p>
@@ -214,6 +217,11 @@ export default function LandingPage() {
                   <p className="text-2xl font-bold">31.4%</p>
                 </div>
               </div>
+              <Link href="/platform/automations">
+                <Button variant="link" className="text-white font-bold p-0 group">
+                  Explore Sales Logic <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -346,9 +354,9 @@ export default function LandingPage() {
             <div>
               <h4 className="text-[10px] font-black uppercase tracking-widest text-white mb-6">Platform</h4>
               <ul className="space-y-4 text-xs font-bold text-zinc-600">
-                <li><Link href="#platform" className="hover:text-white transition-colors">Inbox</Link></li>
-                <li><Link href="#platform" className="hover:text-white transition-colors">Automations</Link></li>
-                <li><Link href="/dashboard/analytics" className="hover:text-white transition-colors">Analytics</Link></li>
+                <li><Link href="/platform" className="hover:text-white transition-colors">Platform Overview</Link></li>
+                <li><Link href="/platform/inbox" className="hover:text-white transition-colors">Intelligent Inbox</Link></li>
+                <li><Link href="/platform/automations" className="hover:text-white transition-colors">Visual Automations</Link></li>
                 <li><Link href="/status" className="hover:text-white transition-colors">System Health</Link></li>
               </ul>
             </div>
@@ -356,9 +364,9 @@ export default function LandingPage() {
               <h4 className="text-[10px] font-black uppercase tracking-widest text-white mb-6">Support</h4>
               <ul className="space-y-4 text-xs font-bold text-zinc-600">
                 <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Documentation</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Guides</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">API Reference</Link></li>
+                <li><Link href="/docs" className="hover:text-white transition-colors">Documentation</Link></li>
+                <li><Link href="/guides" className="hover:text-white transition-colors">Guides</Link></li>
+                <li><Link href="/api-reference" className="hover:text-white transition-colors">API Reference</Link></li>
               </ul>
             </div>
             <div>
@@ -366,16 +374,16 @@ export default function LandingPage() {
               <ul className="space-y-4 text-xs font-bold text-zinc-600">
                 <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
                 <li><Link href="/terms" className="hover:text-white transition-colors">Terms</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Security</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">SLA</Link></li>
+                <li><Link href="/security" className="hover:text-white transition-colors">Security</Link></li>
+                <li><Link href="/sla" className="hover:text-white transition-colors">SLA</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="text-[10px] font-black uppercase tracking-widest text-white mb-6">Connect</h4>
               <ul className="space-y-4 text-xs font-bold text-zinc-600">
-                <li><Link href="#" className="hover:text-white transition-colors">Twitter</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">LinkedIn</Link></li>
-                <li><Link href="#" className="hover:text-white transition-colors">Instagram</Link></li>
+                <li><span className="opacity-50 cursor-not-allowed">Twitter</span></li>
+                <li><span className="opacity-50 cursor-not-allowed">LinkedIn</span></li>
+                <li><span className="opacity-50 cursor-not-allowed">Instagram</span></li>
               </ul>
             </div>
           </div>
