@@ -1,16 +1,15 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { DashboardSidebar } from '@/components/dashboard/dashboard-sidebar';
-import { useUser, useFirestore, useDoc } from '@/firebase';
-import { Loader2, Menu, X, Zap, ShieldCheck } from 'lucide-react';
+import { useUser } from '@/firebase';
+import { Loader2, Menu, X, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { CommandPalette } from '@/components/dashboard/command-palette';
 import { NotificationsPanel } from '@/components/dashboard/notifications-panel';
 import Link from 'next/link';
-import { doc } from 'firebase/firestore';
 import { DashboardProvider, useDashboard } from './dashboard-context';
 
 function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
@@ -18,9 +17,11 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
   const { profile, loading: profileLoading, isAdmin, isManager } = useDashboard();
   const router = useRouter();
   const pathname = usePathname();
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     if (!authLoading && !user) {
       router.push('/login');
     }
@@ -28,7 +29,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
 
   // Real-time Route Security Enforcement
   useEffect(() => {
-    if (!profileLoading && profile) {
+    if (!profileLoading && profile && isMounted) {
       const adminOnlyPaths = ['/dashboard/settings', '/dashboard/automations'];
       const managerPlusPaths = ['/dashboard/analytics'];
 
@@ -39,9 +40,9 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         router.push('/dashboard');
       }
     }
-  }, [profile, profileLoading, pathname, router, isAdmin, isManager]);
+  }, [profile, profileLoading, pathname, router, isAdmin, isManager, isMounted]);
 
-  if (authLoading || profileLoading) {
+  if (authLoading || profileLoading || !isMounted) {
     return (
       <div className="min-h-screen bg-[#020203] flex flex-col items-center justify-center gap-8 relative overflow-hidden">
         <div className="absolute inset-0 noise z-0" />

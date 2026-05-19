@@ -7,9 +7,9 @@ import { Zap, Loader2, X, ChevronRight, ArrowRight, MousePointer2, Play } from '
 import { Button } from '@/components/ui/button';
 
 export function DemoOverlay() {
-  const { isActive, currentStep, stopDemo, nextStep, cursorPos, isClicking } = useDemo();
+  const { isActive, currentStep, stopDemo, nextStep, cursorPos, isClicking, isMounted } = useDemo();
 
-  if (!isActive) return null;
+  if (!isActive || !isMounted) return null;
 
   const stepLabels: Record<string, string> = {
     landing: "Converting DMs into Revenue",
@@ -31,7 +31,6 @@ export function DemoOverlay() {
             x: `${cursorPos.x}vw`, 
             y: `${cursorPos.y}vh`,
             scale: isClicking ? 0.8 : 1,
-            // Subtle "jitter" to simulate human motor control
             rotate: isClicking ? -5 : 0
           }}
           transition={{ 

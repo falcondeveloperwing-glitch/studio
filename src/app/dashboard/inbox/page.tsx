@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
@@ -24,6 +23,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, doc, addDoc, updateDoc, serverTimestamp, limit } from 'firebase/firestore';
 import { useDemo } from '@/components/demo/demo-context';
+import Link from 'next/link';
 
 export default function InboxPage() {
   const { toast } = useToast();
@@ -92,7 +92,7 @@ export default function InboxPage() {
         });
       }
 
-      // Universal typing simulation for operational realism
+      // Universal typing simulation for operational realism across ANY thread
       const responseDelay = 1500 + Math.random() * 2500;
       setTimeout(() => setIsTyping(true), 800);
       setTimeout(() => setIsTyping(false), 800 + responseDelay);

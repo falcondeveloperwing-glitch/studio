@@ -41,7 +41,7 @@ cp .env.example .env
 1. Create a project in the [Firebase Console](https://console.firebase.google.com/).
 2. Enable **Authentication** (Google & Email/Password).
 3. Enable **Cloud Firestore**.
-4. Apply the security rules structure documented in `docs/ARCHITECTURE.md`.
+4. Configure standard security rules for UID isolation.
 
 ### 3. Installation
 ```bash

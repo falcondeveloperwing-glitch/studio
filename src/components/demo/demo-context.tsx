@@ -23,6 +23,7 @@ interface CursorPos {
 interface DemoContextType {
   isActive: boolean;
   isDemoMode: boolean;
+  isMounted: boolean;
   demoUser: any | null;
   currentStep: DemoStep;
   cursorPos: CursorPos;
@@ -64,6 +65,7 @@ const CURSOR_TARGETS: Record<DemoStep, CursorPos> = {
 export function DemoProvider({ children }: { children: React.ReactNode }) {
   const [isActive, setIsActive] = useState(false);
   const [isDemoMode, setIsDemoMode] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [demoUser, setDemoUser] = useState<any>(null);
   const [currentStep, setCurrentStep] = useState<DemoStep>('idle');
   const [cursorPos, setCursorPos] = useState<CursorPos>({ x: 50, y: 50 });
@@ -73,6 +75,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const stepTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    setIsMounted(true);
     const saved = localStorage.getItem('rr_demo_mode');
     const savedUser = localStorage.getItem('rr_demo_user');
     const isMockConfig = process.env.NEXT_PUBLIC_FIREBASE_API_KEY === 'demo-key' || !process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
@@ -134,7 +137,6 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
       const next = steps[nextIdx];
       setIsDwelling(true);
       
-      // Simulate "thinking" or reading time
       const dwellTime = 800 + Math.random() * 600;
 
       setTimeout(() => {
@@ -161,12 +163,9 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isActive) return;
-    
-    // Add human-like hesitation before movement
     const moveTimer = setTimeout(() => {
       setCursorPos(CURSOR_TARGETS[currentStep]);
     }, 1400);
-    
     return () => clearTimeout(moveTimer);
   }, [currentStep, isActive]);
 
@@ -184,6 +183,7 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     <DemoContext.Provider value={{ 
       isActive, 
       isDemoMode, 
+      isMounted,
       demoUser, 
       currentStep, 
       cursorPos, 
