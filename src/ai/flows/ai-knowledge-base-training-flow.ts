@@ -66,25 +66,20 @@ const aiKnowledgeBaseTrainingFlow = ai.defineFlow(
     inputSchema: AIKnowledgeBaseTrainingInputSchema,
     outputSchema: AIKnowledgeBaseTrainingOutputSchema,
   },
-  async input => {
+  async (input) => {
     const {output} = await aiKnowledgeBaseTrainingPrompt({
       textInput: input.textInput,
       documentDataUris: input.documentDataUris,
     });
 
-    if (!output) {
-      return {status: 'failure', message: 'AI did not provide a valid response.'};
-    }
-
-    // Defensive Sanitization: Ensure status strictly matches the enum
-    const validatedStatus: 'success' | 'failure' = 
-      output.status === 'success' || output.status === 'failure' 
-        ? output.status 
-        : 'failure';
+    // Mandatory Fix: Explicitly type and sanitize the return status
+    // This prevents TypeScript from widening the type to 'string'
+    const safeStatus: 'success' | 'failure' = 
+      output?.status === 'success' ? 'success' : 'failure';
 
     return {
-      status: validatedStatus,
-      message: output.message || 'No confirmation message received from the system.',
+      status: safeStatus,
+      message: output?.message || (safeStatus === 'success' ? 'Training completed' : 'AI did not provide a valid response.'),
     };
   }
 );
