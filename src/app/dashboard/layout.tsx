@@ -22,10 +22,13 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setIsMounted(true);
-    if (!authLoading && !user) {
+  }, []);
+
+  useEffect(() => {
+    if (!authLoading && !user && isMounted) {
       router.push('/login');
     }
-  }, [user, authLoading, router]);
+  }, [user, authLoading, router, isMounted]);
 
   // Real-time Route Security Enforcement
   useEffect(() => {
@@ -33,10 +36,13 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
       const adminOnlyPaths = ['/dashboard/settings', '/dashboard/automations'];
       const managerPlusPaths = ['/dashboard/analytics'];
 
-      if (adminOnlyPaths.some(r => pathname.startsWith(r)) && !isAdmin) {
+      const isAccessingAdmin = adminOnlyPaths.some(r => pathname.startsWith(r));
+      const isAccessingManager = managerPlusPaths.some(r => pathname.startsWith(r));
+
+      if (isAccessingAdmin && !isAdmin) {
         router.push('/dashboard');
       }
-      if (managerPlusPaths.some(r => pathname.startsWith(r)) && !isAdmin && !isManager) {
+      if (isAccessingManager && !isAdmin && !isManager) {
         router.push('/dashboard');
       }
     }

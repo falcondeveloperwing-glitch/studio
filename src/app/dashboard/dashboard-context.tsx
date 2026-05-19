@@ -18,6 +18,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
   const { user } = useUser();
   const db = useFirestore();
 
+  // Unified single listener for the entire dashboard session
   const userRef = useMemoFirebase(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
   const { data: profile, loading: profileLoading } = useDoc(userRef);
 
