@@ -56,7 +56,7 @@ Documents:
 ----------------------------
 
 Based on the above content, please confirm your understanding and readiness. Structure your response as a JSON object with 'status' and 'message' fields.
-The 'status' should be 'success' if you processed the information, or 'failure' otherwise.
+The 'status' must be exactly 'success' if you processed the information, or 'failure' otherwise.
 The 'message' should provide a brief confirmation or detail any issues encountered.`,
 });
 
@@ -76,7 +76,16 @@ const aiKnowledgeBaseTrainingFlow = ai.defineFlow(
       return {status: 'failure', message: 'AI did not provide a valid response.'};
     }
 
-    return output;
+    // Defensive Sanitization: Ensure status strictly matches the enum
+    const validatedStatus: 'success' | 'failure' = 
+      output.status === 'success' || output.status === 'failure' 
+        ? output.status 
+        : 'failure';
+
+    return {
+      status: validatedStatus,
+      message: output.message || 'No confirmation message received from the system.',
+    };
   }
 );
 
