@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
@@ -13,7 +14,9 @@ import {
   Loader2,
   ChevronDown,
   CheckCheck,
-  Clock
+  Clock,
+  MessageSquare,
+  Sparkles
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
@@ -34,7 +37,7 @@ export default function InboxPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [limitCount, setLimitCount] = useState(25);
 
-  // Paginated conversations fetch - Hardened with strict MVP limits
+  // Paginated conversations fetch
   const conversationsQuery = useMemoFirebase(() => {
     if (!user) return null;
     return query(
@@ -46,7 +49,7 @@ export default function InboxPage() {
 
   const { data: conversations, loading: conversationsLoading } = useCollection(conversationsQuery);
 
-  // Messages fetch for active chat - Scalability safety: cap at 50 most recent
+  // Messages fetch for active chat
   const messagesQuery = useMemoFirebase(() => {
     if (!user || !activeChatId) return null;
     return query(
@@ -74,8 +77,6 @@ export default function InboxPage() {
     setInputText('');
 
     try {
-      // In Demo Mode, we simulate persistence via the UI. 
-      // In Real Mode, we use Firestore.
       if (!isDemoMode) {
         addDoc(collection(db, 'users', user.uid, 'conversations', activeChatId, 'messages'), {
           role: 'business',
@@ -91,11 +92,10 @@ export default function InboxPage() {
         });
       }
 
-      // Operational Realism: Generalized typing simulation
-      // Triggers for every message to simulate AI "thinking" or processing
-      const responseDelay = 1000 + Math.random() * 2000;
-      setTimeout(() => setIsTyping(true), 1200);
-      setTimeout(() => setIsTyping(false), 1200 + responseDelay);
+      // Universal typing simulation for operational realism
+      const responseDelay = 1500 + Math.random() * 2500;
+      setTimeout(() => setIsTyping(true), 800);
+      setTimeout(() => setIsTyping(false), 800 + responseDelay);
 
     } catch (err) {
       toast({ title: "Error", description: "Failed to send message.", variant: "destructive" });
@@ -128,6 +128,14 @@ export default function InboxPage() {
         )}>
           {conversationsLoading ? (
             <div className="flex-1 flex items-center justify-center"><Loader2 className="animate-spin text-zinc-700" /></div>
+          ) : conversations.length === 0 ? (
+            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-zinc-600">
+              <div className="w-12 h-12 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-center mb-4">
+                <MessageSquare size={20} />
+              </div>
+              <p className="text-[10px] font-bold uppercase tracking-widest">No Threads Yet</p>
+              <p className="text-[9px] mt-1 max-w-[180px]">Your Instagram DMs will appear here once connected.</p>
+            </div>
           ) : (
             <ScrollArea className="flex-1">
               <div className="divide-y divide-white/[0.02]">
@@ -265,9 +273,18 @@ export default function InboxPage() {
             </div>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-zinc-600 p-8 text-center bg-[#09090b]">
-              <History size={40} className="text-zinc-900 mb-8" />
-              <h2 className="text-[12px] font-black text-white uppercase tracking-[0.4em] mb-3">Workspace Idle</h2>
-              <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest max-w-[240px] leading-relaxed">Neural link active. Select a conversation thread to begin engagement.</p>
+              <div className="w-20 h-20 rounded-3xl bg-white/[0.02] border border-white/5 flex items-center justify-center mb-8">
+                <Sparkles size={40} className="text-zinc-800" />
+              </div>
+              <h2 className="text-[12px] font-black text-white uppercase tracking-[0.4em] mb-3">Awaiting First Engagement</h2>
+              <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest max-w-[280px] leading-relaxed">
+                Connect your business account to begin receiving real-time customer inquiries.
+              </p>
+              <Link href="/dashboard/settings" className="mt-8">
+                <Button variant="outline" className="border-white/5 bg-white/5 h-10 px-6 text-[10px] font-black uppercase tracking-widest text-white">
+                  Configure Fleet
+                </Button>
+              </Link>
             </div>
           )}
         </div>

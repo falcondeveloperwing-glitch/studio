@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -10,7 +11,9 @@ import {
   ArrowRight, 
   Instagram,
   Loader2,
-  Terminal
+  Terminal,
+  ShieldCheck,
+  AlertCircle
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -25,7 +28,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { collection, query, orderBy, addDoc, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, orderBy, addDoc, doc, updateDoc, limit } from 'firebase/firestore';
 import { logActivity } from '@/lib/activity-logger';
 
 export default function AutomationsPage() {
@@ -46,7 +49,7 @@ export default function AutomationsPage() {
 
   const automationsQuery = useMemoFirebase(() => {
     if (!user) return null;
-    return query(collection(db, 'users', user.uid, 'automations'), orderBy('name', 'asc'));
+    return query(collection(db, 'users', user.uid, 'automations'), orderBy('name', 'asc'), limit(50));
   }, [user, db]);
 
   const { data: automations, loading } = useCollection(automationsQuery);
@@ -169,6 +172,13 @@ export default function AutomationsPage() {
         </Dialog>
       </div>
 
+      <GlassCard className="p-4 border-amber-500/20 bg-amber-500/[0.03] flex items-center gap-3">
+        <AlertCircle size={16} className="text-amber-500" />
+        <p className="text-[10px] font-bold uppercase tracking-widest text-amber-500/80">
+          Automations are currently in Sandbox Mode. Workflows will trigger for demo chats and test payloads.
+        </p>
+      </GlassCard>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 ml-1">
@@ -177,6 +187,11 @@ export default function AutomationsPage() {
           
           {loading ? (
             <div className="flex justify-center p-12"><Loader2 className="animate-spin text-zinc-700" /></div>
+          ) : automations.length === 0 ? (
+            <div className="p-20 text-center border border-dashed border-white/5 rounded-2xl">
+              <p className="text-xs font-bold text-zinc-600 uppercase tracking-widest">No Active Workflows</p>
+              <p className="text-[10px] text-zinc-700 mt-2">Create your first trigger-action pair to begin.</p>
+            </div>
           ) : (
             automations.map((workflow: any) => (
               <GlassCard key={workflow.id} className="border-white/5 p-6 hover:border-white/10 transition-colors">
@@ -218,11 +233,17 @@ export default function AutomationsPage() {
         </div>
 
         <div className="space-y-4">
-          <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-1">Infrastructure Logs</div>
+          <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest ml-1">Infrastructure Status</div>
           <GlassCard className="border-white/5 p-6 bg-zinc-950/20 h-fit">
-            <div className="flex items-center gap-2 mb-6">
-              <Terminal size={14} className="text-zinc-600" />
-              <h3 className="text-xs font-bold uppercase tracking-widest">Webhook Listeners</h3>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <Terminal size={14} className="text-zinc-600" />
+                <h3 className="text-xs font-bold uppercase tracking-widest">Webhook Listeners</h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[8px] font-black uppercase text-emerald-500">Live</span>
+              </div>
             </div>
             <div className="space-y-4 font-mono text-[10px]">
               <div className="flex justify-between text-zinc-500">
@@ -232,6 +253,16 @@ export default function AutomationsPage() {
               <div className="flex justify-between text-zinc-500">
                 <span>GET /api/webhooks/verify</span>
                 <span className="text-emerald-500">ACTIVE</span>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-white/5">
+              <div className="flex items-center gap-3 mb-4">
+                <ShieldCheck size={14} className="text-zinc-500" />
+                <p className="text-[9px] font-black uppercase tracking-widest text-zinc-600">Verification Token</p>
+              </div>
+              <div className="p-3 rounded-lg bg-black text-[10px] font-mono text-zinc-500 break-all border border-white/5">
+                rr_live_v1_84920...
               </div>
             </div>
           </GlassCard>

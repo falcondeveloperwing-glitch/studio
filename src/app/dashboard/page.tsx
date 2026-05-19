@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useMemo } from 'react';
@@ -12,7 +13,11 @@ import {
   Loader2,
   History,
   Target,
-  User as UserIcon
+  User as UserIcon,
+  CheckCircle2,
+  ArrowRight,
+  ShieldCheck,
+  MessageSquare
 } from 'lucide-react';
 import { 
   XAxis, 
@@ -31,13 +36,13 @@ import { formatDistanceToNow } from 'date-fns';
 import { useDashboard } from './dashboard-context';
 
 const chartData = [
-  { name: 'Mon', revenue: 14200, interactions: 12 },
-  { name: 'Tue', revenue: 15800, interactions: 14 },
-  { name: 'Wed', revenue: 18200, interactions: 18 },
-  { name: 'Thu', revenue: 17400, interactions: 16 },
-  { name: 'Fri', revenue: 21500, interactions: 21 },
-  { name: 'Sat', revenue: 24800, interactions: 24 },
-  { name: 'Sun', revenue: 28400, interactions: 31 },
+  { name: 'Mon', revenue: 0, interactions: 0 },
+  { name: 'Tue', revenue: 0, interactions: 0 },
+  { name: 'Wed', revenue: 0, interactions: 0 },
+  { name: 'Thu', revenue: 0, interactions: 0 },
+  { name: 'Fri', revenue: 0, interactions: 0 },
+  { name: 'Sat', revenue: 0, interactions: 0 },
+  { name: 'Sun', revenue: 0, interactions: 0 },
 ];
 
 export default function DashboardOverview() {
@@ -67,18 +72,19 @@ export default function DashboardOverview() {
 
   const stats = useMemo(() => {
     const totalRuns = automations.reduce((acc, curr: any) => acc + (curr.runs || 0), 0);
-    // Believable but grounded revenue logic
     const recoveredRevenue = (totalRuns * 12.5) + (logs.filter(l => l.actionType === 'WORKFLOW_CREATED').length * 150);
     
     return {
       revenue: `$${recoveredRevenue.toLocaleString()}`,
       replies: totalRuns.toLocaleString(),
       threads: conversations.length.toLocaleString(),
-      csat: '4.9/5'
+      csat: conversations.length > 0 ? '4.9/5' : '--'
     };
   }, [automations, logs, conversations]);
 
   if (profileLoading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin text-zinc-700" /></div>;
+
+  const isNewUser = conversations.length === 0 && automations.length === 0;
 
   return (
     <div className="space-y-12 max-w-7xl mx-auto w-full">
@@ -108,19 +114,45 @@ export default function DashboardOverview() {
         </div>
       </div>
 
+      {isNewUser && (
+        <GlassCard className="border-emerald-500/20 bg-emerald-500/[0.02] p-8">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
+              <ShieldCheck size={32} />
+            </div>
+            <div className="flex-1 text-center md:text-left">
+              <h3 className="text-xl font-bold mb-2">Welcome to ReplyRush AI</h3>
+              <p className="text-zinc-400 text-sm max-w-xl">Your workspace is isolated and ready. Follow these steps to begin automating your Instagram commerce fleet.</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full md:w-auto">
+              <Link href="/dashboard/knowledge">
+                <Button variant="outline" className="w-full border-white/5 bg-white/5 h-12 text-xs font-bold gap-2">
+                  <CheckCircle2 size={14} className="text-emerald-500" /> Train AI Node
+                </Button>
+              </Link>
+              <Link href="/dashboard/automations">
+                <Button variant="outline" className="w-full border-white/5 bg-white/5 h-12 text-xs font-bold gap-2">
+                  <CheckCircle2 size={14} className="text-emerald-500" /> Create Workflow
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </GlassCard>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Revenue Recovered', value: stats.revenue, change: '+12.5%', icon: DollarSign },
-          { label: 'Total AI Replies', value: stats.replies, change: '+8.2%', icon: Zap },
-          { label: 'Active Threads', value: stats.threads, change: '+15.1%', icon: Activity },
-          { label: 'CSAT Score', value: stats.csat, change: '+0.2%', icon: Target }
+          { label: 'Revenue Recovered', value: stats.revenue, change: '+0.0%', icon: DollarSign },
+          { label: 'Total AI Replies', value: stats.replies, change: '+0.0%', icon: Zap },
+          { label: 'Active Threads', value: stats.threads, change: '+0.0%', icon: Activity },
+          { label: 'CSAT Score', value: stats.csat, change: '0.0%', icon: Target }
         ].map((stat, i) => (
           <GlassCard key={i} className="border-white/5 bg-white/[0.01] p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="w-8 h-8 rounded-lg bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-500">
                 <stat.icon size={16} />
               </div>
-              <Badge variant="outline" className="border-none font-bold text-[10px] px-2 text-emerald-500 bg-emerald-500/10">
+              <Badge variant="outline" className="border-none font-bold text-[10px] px-2 text-zinc-500 bg-zinc-500/10">
                 {stat.change}
               </Badge>
             </div>
@@ -138,25 +170,32 @@ export default function DashboardOverview() {
               <p className="text-xs text-zinc-500">Interaction volume and recovered value.</p>
             </div>
           </div>
-          <div className="h-[350px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData}>
-                <defs>
-                  <linearGradient id="colorMain" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ffffff" stopOpacity={0.05}/>
-                    <stop offset="95%" stopColor="#ffffff" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
-                <XAxis dataKey="name" stroke="#3f3f46" fontSize={11} tickLine={false} axisLine={false} dy={10} />
-                <YAxis hide />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#09090b', border: '1px solid #18181b', borderRadius: '8px', fontSize: '12px' }}
-                  itemStyle={{ color: '#fff' }}
-                />
-                <Area type="monotone" dataKey="revenue" stroke="#ffffff" fillOpacity={1} fill="url(#colorMain)" strokeWidth={1.5} />
-              </AreaChart>
-            </ResponsiveContainer>
+          <div className="h-[350px] w-full flex items-center justify-center">
+            {isNewUser ? (
+              <div className="text-center space-y-4 opacity-50">
+                <TrendingUp size={40} className="mx-auto text-zinc-800" />
+                <p className="text-xs font-bold uppercase tracking-widest text-zinc-600">Awaiting Data Stream</p>
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="colorMain" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#ffffff" stopOpacity={0.05}/>
+                      <stop offset="95%" stopColor="#ffffff" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                  <XAxis dataKey="name" stroke="#3f3f46" fontSize={11} tickLine={false} axisLine={false} dy={10} />
+                  <YAxis hide />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#09090b', border: '1px solid #18181b', borderRadius: '8px', fontSize: '12px' }}
+                    itemStyle={{ color: '#fff' }}
+                  />
+                  <Area type="monotone" dataKey="revenue" stroke="#ffffff" fillOpacity={1} fill="url(#colorMain)" strokeWidth={1.5} />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </GlassCard>
 
@@ -169,8 +208,12 @@ export default function DashboardOverview() {
             {logsLoading ? (
               <div className="flex justify-center p-8"><Loader2 className="animate-spin text-zinc-700" size={16} /></div>
             ) : logs.length === 0 ? (
-              <div className="text-center py-10 text-zinc-500 text-xs font-bold uppercase tracking-widest">
-                No recent workspace logs.
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="w-12 h-12 rounded-xl bg-white/[0.02] border border-white/5 flex items-center justify-center text-zinc-700 mb-4">
+                  <Activity size={20} />
+                </div>
+                <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest">No Recent Logs</p>
+                <p className="text-[9px] text-zinc-700 mt-1 max-w-[150px]">Activity will appear here as you manage your fleet.</p>
               </div>
             ) : (
               logs.map((log) => (
