@@ -1,19 +1,16 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
-  Search, 
   Send, 
   MoreVertical, 
   ArrowLeft,
-  History,
   Loader2,
   ChevronDown,
   CheckCheck,
-  Clock,
   MessageSquare,
   Sparkles
 } from 'lucide-react';
@@ -24,6 +21,7 @@ import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebas
 import { collection, query, orderBy, doc, addDoc, updateDoc, serverTimestamp, limit } from 'firebase/firestore';
 import { useDemo } from '@/components/demo/demo-context';
 import Link from 'next/link';
+import { Conversation, Message } from '@/lib/types';
 
 export default function InboxPage() {
   const { toast } = useToast();
@@ -47,7 +45,7 @@ export default function InboxPage() {
     );
   }, [user, db, limitCount]);
 
-  const { data: conversations, loading: conversationsLoading } = useCollection(conversationsQuery);
+  const { data: conversations, loading: conversationsLoading } = useCollection<Conversation>(conversationsQuery);
 
   // Messages fetch for active chat
   const messagesQuery = useMemoFirebase(() => {
@@ -59,7 +57,7 @@ export default function InboxPage() {
     );
   }, [user, activeChatId, db]);
 
-  const { data: messages, loading: messagesLoading } = useCollection(messagesQuery);
+  const { data: messages, loading: messagesLoading } = useCollection<Message>(messagesQuery);
 
   const activeChat = conversations.find(c => c.id === activeChatId);
 
@@ -139,7 +137,7 @@ export default function InboxPage() {
           ) : (
             <ScrollArea className="flex-1">
               <div className="divide-y divide-white/[0.02]">
-                {conversations.map((chat: any) => (
+                {conversations.map((chat) => (
                   <div 
                     key={chat.id} 
                     onClick={() => handleSelectChat(chat.id)} 
@@ -207,7 +205,7 @@ export default function InboxPage() {
                   {messagesLoading ? (
                     <div className="flex justify-center"><Loader2 className="animate-spin text-zinc-700" /></div>
                   ) : (
-                    messages.map((msg: any, i: number) => (
+                    messages.map((msg, i: number) => (
                       <div key={i} className={cn(
                         "flex flex-col", 
                         msg.role === 'customer' ? "items-start" : "items-end",

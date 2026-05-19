@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -19,12 +18,13 @@ import {
   Activity
 } from 'lucide-react';
 import { useAuth } from '@/firebase';
-import { signOut } from 'firebase/auth';
+import { signOut, User } from 'firebase/auth';
 import { WorkspaceSwitcher } from './workspace-switcher';
+import { UserProfile } from '@/lib/types';
 
 interface DashboardSidebarProps {
-  user: any;
-  profile: any;
+  user: User;
+  profile: UserProfile | null;
 }
 
 const adminGroups = [

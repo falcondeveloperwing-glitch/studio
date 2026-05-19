@@ -4,9 +4,10 @@ import React, { createContext, useContext, useMemo } from 'react';
 import { useUser, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { useFirestore } from '@/firebase';
+import { UserProfile } from '@/lib/types';
 
 interface DashboardContextType {
-  profile: any;
+  profile: UserProfile | null;
   loading: boolean;
   isAdmin: boolean;
   isManager: boolean;
@@ -20,7 +21,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
 
   // Unified single listener for the entire dashboard session
   const userRef = useMemoFirebase(() => (user ? doc(db, 'users', user.uid) : null), [user, db]);
-  const { data: profile, loading: profileLoading } = useDoc(userRef);
+  const { data: profile, loading: profileLoading } = useDoc<UserProfile>(userRef);
 
   const isAdmin = profile?.role === 'admin';
   const isManager = profile?.role === 'manager';

@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useMemo } from 'react';
@@ -7,7 +6,6 @@ import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebas
 import { 
   DollarSign,
   Zap,
-  TrendingUp,
   Activity,
   ChevronRight,
   Loader2,
@@ -15,9 +13,8 @@ import {
   Target,
   User as UserIcon,
   CheckCircle2,
-  ArrowRight,
   ShieldCheck,
-  MessageSquare
+  TrendingUp
 } from 'lucide-react';
 import { 
   XAxis, 
@@ -34,6 +31,7 @@ import { query, collection, orderBy, limit } from 'firebase/firestore';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import { useDashboard } from './dashboard-context';
+import { AuditLog, Conversation, Automation } from '@/lib/types';
 
 const chartData = [
   { name: 'Mon', revenue: 0, interactions: 0 },
@@ -50,28 +48,26 @@ export default function DashboardOverview() {
   const db = useFirestore();
   const { profile, loading: profileLoading, isAdmin } = useDashboard();
 
-  // Real-time Audit Logs for Activity
   const auditLogsQuery = useMemoFirebase(() => {
     if (!user) return null;
     return query(collection(db, 'users', user.uid, 'auditLogs'), orderBy('timestamp', 'desc'), limit(5));
   }, [user, db]);
-  const { data: logs, loading: logsLoading } = useCollection(auditLogsQuery);
+  const { data: logs, loading: logsLoading } = useCollection<AuditLog>(auditLogsQuery);
 
-  // Real counts for stats
   const convsQuery = useMemoFirebase(() => {
     if (!user) return null;
     return query(collection(db, 'users', user.uid, 'conversations'), limit(100));
   }, [user, db]);
-  const { data: conversations } = useCollection(convsQuery);
+  const { data: conversations } = useCollection<Conversation>(convsQuery);
 
   const autosQuery = useMemoFirebase(() => {
     if (!user) return null;
     return query(collection(db, 'users', user.uid, 'automations'));
   }, [user, db]);
-  const { data: automations } = useCollection(autosQuery);
+  const { data: automations } = useCollection<Automation>(autosQuery);
 
   const stats = useMemo(() => {
-    const totalRuns = automations.reduce((acc, curr: any) => acc + (curr.runs || 0), 0);
+    const totalRuns = automations.reduce((acc, curr) => acc + (curr.runs || 0), 0);
     const recoveredRevenue = (totalRuns * 12.5) + (logs.filter(l => l.actionType === 'WORKFLOW_CREATED').length * 150);
     
     return {
