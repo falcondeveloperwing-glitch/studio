@@ -1,46 +1,38 @@
 # ReplyRush AI | Enterprise Conversation Infrastructure
 
-ReplyRush AI is a high-performance SaaS platform designed to automate Instagram DM sales and customer engagement. Built with a "Trust-First" architecture, it provides businesses with the tools to capture leads, provide instant support, and recover lost revenue using advanced GenAI logic.
+ReplyRush AI is a high-performance SaaS platform built for high-volume Instagram DM sales and customer engagement. Designed as a "Commerce Operating System," it bridges the gap between customer inquiry and revenue through grounded AI logic and real-time collaboration tools.
 
-## 🚀 Vision
-In the modern commerce landscape, speed is the ultimate competitive advantage. ReplyRush AI bridges the gap between customer inquiry and checkout by deploying intelligent "AI Sales Agents" directly into the DM inbox.
+## 🚀 Product Vision
+In modern commerce, speed is the ultimate differentiator. ReplyRush AI enables brands to capture every DM opportunity by deploying intelligent "AI Sales Agents" directly into the Instagram inbox.
 
 ## 🛠 Tech Stack
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 15 (App Router, Turbopack)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS + ShadCN UI
-- **Backend/Auth**: Firebase (Auth, Firestore)
+- **Styling**: Tailwind CSS + ShadCN UI + Framer Motion
+- **Backend/Auth**: Firebase (Authentication, Cloud Firestore)
 - **AI Engine**: Genkit (Google Gemini 2.5 Flash)
-- **Motion**: Framer Motion
-- **Icons**: Lucide React
+- **Deployment**: Vercel / Firebase App Hosting
 
-## 💎 Key Features
-- **Intelligent Inbox**: Real-time Firestore-backed DM ecosystem with automated pagination.
-- **Automation Engine**: Deployable "Triggers & Actions" for sales and support logic.
-- **Knowledge Base Training**: Train AI nodes on product catalogs, shipping policies, and FAQs.
-- **Enterprise RBAC**: Real Role-Based Access Control (Admin, Manager, Agent, Viewer).
-- **Operational Audit Logs**: Persistent, non-repudiable logs of all workspace activity.
-- **Grounded Analytics**: Real-time data aggregation from workspace activity collections.
-- **Cinematic Demo Mode**: Built-in guided walkthrough system for high-conversion demos.
+## 💎 Core Features
+- **Intelligent Inbox**: Real-time Firestore-backed DM ecosystem with operator assignment and sentiment tagging.
+- **Automation Logic**: Visual CRUD for trigger-action pairs designed for sales and support.
+- **Business Knowledge Base**: Training node for ingesting product catalogs, policies, and FAQs.
+- **Enterprise RBAC**: Native Role-Based Access Control (Admin, Manager, Agent, Viewer).
+- **Audit Logging**: Non-repudiable logs of all workspace mutations for compliance and accountability.
+- **Grounded Analytics**: Real-time performance metrics derived from actual Firestore collection scope.
+- **Cinematic Demo Mode**: A fully isolated, human-like guided walkthrough environment for sales presentations.
 
 ## 📁 Project Structure
-- `src/app`: Next.js 15 application routes and layouts.
-- `src/ai`: Genkit flows and prompt definitions.
-- `src/firebase`: Core Firebase configuration, providers, and specialized hooks.
-- `src/components`: Atomic UI components and dashboard modules.
-- `src/lib`: Shared utilities, activity loggers, and service schemas.
+- `src/app`: Next.js App Router filesystem routing.
+- `src/ai`: Genkit flows for suggested replies and knowledge training.
+- `src/firebase`: Core initialization and custom hooks (`useCollection`, `useDoc`).
+- `src/components`: Atomic UI components, dashboard modules, and demo overlays.
+- `docs/`: Technical due-diligence and deployment manuals.
 
-## 🏗 Architecture Summary
-- **Authentication**: Managed via Firebase Auth with persistence for long-lived operator sessions.
-- **Persistence**: Multi-tenant isolation at the Firestore level using User UID path partitioning.
-- **Security**: Layout-level route guards prevent privilege escalation for restricted dashboards (Analytics/Settings).
-- **Audit System**: A non-repudiable mutation logger that records every administrative and AI action.
-- **Failover**: Intelligent "Demo Mode" that allows the application to operate as a self-contained environment if Firebase is unavailable.
-
-## ⚙️ Setup & Deployment
+## 🏗 Setup & Deployment
 
 ### 1. Environment Variables
-Copy `.env.example` to `.env` and provide your credentials:
+Copy `.env.example` and provide your Firebase credentials:
 ```bash
 cp .env.example .env
 ```
@@ -49,24 +41,23 @@ cp .env.example .env
 1. Create a project in the [Firebase Console](https://console.firebase.google.com/).
 2. Enable **Authentication** (Google & Email/Password).
 3. Enable **Cloud Firestore**.
-4. Register a Web App and add your config to `src/firebase/config.ts`.
+4. Apply the security rules structure documented in `docs/ARCHITECTURE.md`.
 
-### 3. Installation & Development
+### 3. Installation
 ```bash
 npm install
-npm run dev
+npm run dev # Runs on port 9002
 ```
 
 ## 🛡 Security & Reliability
-- **Workspace Isolation**: Data is partitioned by User UID at the Firestore level.
-- **Route Guards**: Next.js layout-level auth validation for protected routes.
-- **Audit Logs**: Every mutation is logged with actor identity and timestamp.
+- **Data Isolation**: Multi-tenant partitioning at the Firestore level via User UID paths.
+- **Route Guards**: Layout-level role enforcement preventing privilege escalation.
+- **Failsafe**: Automatic fallback to "Demo Mode" when Firebase configuration is missing or unstable.
 
 ## 🗺 Roadmap
-- **Phase 1**: Full Meta Webhook handshake and event-driven ingestion.
+- **Phase 1**: Full Meta Webhook handshake completion.
 - **Phase 2**: Background worker implementation for autonomous responses.
 - **Phase 3**: Thread virtualization for ultra-high volume inbox performance.
-- **Phase 4**: Firebase App Check integration for production-grade API protection.
 
 ---
 © 2025 ReplyRush AI. All rights reserved.
