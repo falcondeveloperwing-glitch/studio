@@ -72,15 +72,14 @@ const aiKnowledgeBaseTrainingFlow = ai.defineFlow(
       documentDataUris: input.documentDataUris,
     });
 
-    // Mandatory Fix: Explicitly type and sanitize the return status
-    // This prevents TypeScript from widening the type to 'string'
-    const safeStatus: 'success' | 'failure' = 
-      output?.status === 'success' ? 'success' : 'failure';
-
-    return {
-      status: safeStatus,
-      message: output?.message || (safeStatus === 'success' ? 'Training completed' : 'AI did not provide a valid response.'),
+    // CRITICAL FIX: Explicitly type the result to prevent type widening to 'string'.
+    // This ensures the return value strictly matches the "success" | "failure" union required by the schema.
+    const result: AIKnowledgeBaseTrainingOutput = {
+      status: output?.status === 'success' ? 'success' : 'failure',
+      message: output?.message || (output?.status === 'success' ? 'Training completed' : 'AI training failed or returned invalid status.'),
     };
+
+    return result;
   }
 );
 
