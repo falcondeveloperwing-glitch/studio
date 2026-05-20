@@ -66,20 +66,24 @@ const aiKnowledgeBaseTrainingFlow = ai.defineFlow(
     inputSchema: AIKnowledgeBaseTrainingInputSchema,
     outputSchema: AIKnowledgeBaseTrainingOutputSchema,
   },
-  async (input) => {
+  async (
+    input
+  ): Promise<{
+    status: 'success' | 'failure';
+    message: string;
+  }> => {
     const {output} = await aiKnowledgeBaseTrainingPrompt({
       textInput: input.textInput,
       documentDataUris: input.documentDataUris,
     });
 
-    // CRITICAL FIX: Explicitly type the result to prevent type widening to 'string'.
-    // This ensures the return value strictly matches the "success" | "failure" union required by the schema.
-    const result: AIKnowledgeBaseTrainingOutput = {
-      status: output?.status === 'success' ? 'success' : 'failure',
-      message: output?.message || (output?.status === 'success' ? 'Training completed' : 'AI training failed or returned invalid status.'),
-    };
+    const safeStatus: 'success' | 'failure' =
+      output?.status === 'success' ? 'success' : 'failure';
 
-    return result;
+    return {
+      status: safeStatus,
+      message: output?.message ?? 'Training completed',
+    };
   }
 );
 
